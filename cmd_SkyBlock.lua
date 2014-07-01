@@ -9,11 +9,6 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
 		a_Player:SendMessage("/skyblock play - Get an island and start playing.")
 		return true
 	end
-    
-    if (a_Split[2] == "test") then
-        Doit(a_Player)
-        return true
-    end
 
 	if (a_Split[2] == "join") then -- Join the world skyblock
 		if (a_Player:MoveToWorld("skyblock")) then
