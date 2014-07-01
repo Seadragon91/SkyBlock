@@ -16,6 +16,9 @@ function Initialize(Plugin)
 	ISLAND_NUMBER = 0
 	ISLAND_DISTANCE = 100
     PLAYERS = {}
+
+	-- Create players folder
+	cFile:CreateFolder(PLUGIN:GetLocalDirectory() .. "/players/")
 	
     -- Load Config file
     LoadConfiguration(PLUGIN:GetLocalDirectory() .. "/Config.ini")
