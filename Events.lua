@@ -1,7 +1,7 @@
 function OnChunkGenerating(a_World, a_ChunkX, a_ChunkZ, a_ChunkDesc) -- Air generator
-	if a_World:GetName() == "skyblock" then
-		 FillBlocks(a_ChunkDesc) -- fill entire chunk with air
-	end
+    if a_World:GetName() == "skyblock" then
+        FillBlocks(a_ChunkDesc) -- fill entire chunk with air
+    end
 end
 
 function FillBlocks(a_ChunkDesc)
@@ -57,4 +57,3 @@ function OnWorldLoaded(a_World) -- Create Spawn in world skyblock
         end
     end
 end
-

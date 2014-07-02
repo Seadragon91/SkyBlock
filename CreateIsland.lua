@@ -1,27 +1,33 @@
-function CreateIsland(Player) -- Creates a island for the player. Returns island number, positions x and z
-	local posX = 0
-	local posZ = 0
-	
-	-- Increase island number
-	ISLAND_NUMBER = ISLAND_NUMBER + 1
-	
-	-- Get island position
-	posX, posZ = GetIslandPosition(ISLAND_NUMBER)
-	
-	-- Create island at position
-	CreateLayer(posX, 148, posZ, E_BLOCK_DIRT)
-	CreateLayer(posX, 149, posZ, E_BLOCK_DIRT)
-	CreateLayer(posX, 150, posZ, E_BLOCK_GRASS)
-	
-	-- Plant a tree
-	SKYBLOCK:GrowTreeFromSapling(5 + posX, 151, posZ, E_META_SAPLING_APPLE)
-	
-	-- Create a chest and add items
-	SKYBLOCK:SetBlock(posX, 151, 4 + posZ, E_BLOCK_CHEST, 2)
-	SKYBLOCK:DoWithChestAt(posX, 151, 4 + posZ,
-		function(a_ChestEntity)
+function CreateIsland(a_Player, a_IslandNumber) -- Creates a island for the player, a_islandNuber for restart. Returns island number, positions x and z
+    local posX = 0
+    local posZ = 0
+    
+    if (a_IslandNumber == -1) then -- New island for a player, use his island number, not a new one
+        -- Increase island number
+        ISLAND_NUMBER = ISLAND_NUMBER + 1
+    end
+    
+    if (a_IslandNumber == -1) then
+        -- Get island position
+        posX, posZ = GetIslandPosition(ISLAND_NUMBER)
+    else
+        posX, posZ = GetIslandPosition(a_IslandNumber)
+    end
+    
+    -- Create island at position
+    CreateLayer(posX, 148, posZ, E_BLOCK_DIRT)
+    CreateLayer(posX, 149, posZ, E_BLOCK_DIRT)
+    CreateLayer(posX, 150, posZ, E_BLOCK_GRASS)
+    
+    -- Plant a tree
+    SKYBLOCK:GrowTreeFromSapling(5 + posX, 151, posZ, E_META_SAPLING_APPLE)
+    
+    -- Create a chest and add items
+    SKYBLOCK:SetBlock(posX, 151, 4 + posZ, E_BLOCK_CHEST, 2)
+    SKYBLOCK:DoWithChestAt(posX, 151, 4 + posZ,
+        function(a_ChestEntity)
             a_ChestEntity:SetSlot(0, 0, cItem(E_ITEM_LAVA_BUCKET, 1));
-			a_ChestEntity:SetSlot(1, 0, cItem(E_BLOCK_ICE, 2));
+            a_ChestEntity:SetSlot(1, 0, cItem(E_BLOCK_ICE, 2));
             a_ChestEntity:SetSlot(2, 0, cItem(E_ITEM_MELON_SLICE, 1));
             a_ChestEntity:SetSlot(3, 0, cItem(E_BLOCK_CACTUS, 1));
             a_ChestEntity:SetSlot(4, 0, cItem(E_BLOCK_BROWN_MUSHROOM, 1));
@@ -31,24 +37,24 @@ function CreateIsland(Player) -- Creates a island for the player. Returns island
             a_ChestEntity:SetSlot(8, 0, cItem(E_ITEM_CARROT, 1));
             a_ChestEntity:SetSlot(0, 1, cItem(E_ITEM_POTATO, 1));
             a_ChestEntity:SetSlot(1, 1, cItem(E_ITEM_BONE, 3));
-		end
-	);
-	
-	return ISLAND_NUMBER, posX, posZ
+        end
+    );
+    
+    return ISLAND_NUMBER, posX, posZ
 end
 
 function CreateLayer(posX, posY, posZ, material) -- Creates a layer for the island
-	for x = -1,6 do
-		for z = -1,1 do
-			SKYBLOCK:SetBlock(x + posX, posY, z + posZ, material, 0)
-		end 
-	end
-	
-	for x = -1,1 do
-		for z = 2,4 do
-			SKYBLOCK:SetBlock(x + posX, posY, z + posZ, material, 0)
-		end 
-	end
+    for x = -1,6 do
+        for z = -1,1 do
+            SKYBLOCK:SetBlock(x + posX, posY, z + posZ, material, 0)
+        end 
+    end
+    
+    for x = -1,1 do
+        for z = 2,4 do
+            SKYBLOCK:SetBlock(x + posX, posY, z + posZ, material, 0)
+        end 
+    end
 end
 
 function GetIslandPosition(n) -- Calculates with the island number the positions of the island. Returns x and z
@@ -88,7 +94,7 @@ function GetIslandPosition(n) -- Calculates with the island number the positions
     return posX, posZ
 end
 
-function GetIslandNumber(posX, posZ) -- Calculates with the positions x and z a island number. Returns the island number
+function GetIslandNumber(posX, posZ) -- Calculates with the positions x and z an island number. Returns the island number
     local px = posX
     local pz = posZ
     local distance = ISLAND_DISTANCE
@@ -122,4 +128,16 @@ function GetIslandNumber(posX, posZ) -- Calculates with the positions x and z a 
     local nAufRing = posSeite + 1 + (seite - 1) * ring
     local n = nAufRing + 2 * ring * (ring - 1)
     return n
+end
+
+function RemoveIsland(posX, posZ) -- Regenerates all chunks in the area
+    radius = ISLAND_DISTANCE / 2
+    
+    for x = -radius,radius,16 do
+        for z = -radius,radius,16 do
+            cx = (posX + x) / 16
+            cz = (posZ + z) / 16
+            SKYBLOCK:RegenerateChunk(cx, cz)
+        end
+    end
 end

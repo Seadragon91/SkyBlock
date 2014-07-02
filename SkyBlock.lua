@@ -9,64 +9,64 @@ SKYBLOCK = nil -- Instance of world skyblock
 PLAYERS = nil -- A table that contains player names and PlayerInfos
 
 function Initialize(Plugin)
-	Plugin:SetName("SkyBlock")
-	Plugin:SetVersion(1)
-	
-	PLUGIN = Plugin
-	ISLAND_NUMBER = 0
-	ISLAND_DISTANCE = 100
+    Plugin:SetName("SkyBlock")
+    Plugin:SetVersion(1)
+    
+    PLUGIN = Plugin
+    ISLAND_NUMBER = 0
+    ISLAND_DISTANCE = 96
     PLAYERS = {}
-
-	-- Create players folder
-	cFile:CreateFolder(PLUGIN:GetLocalDirectory() .. "/players/")
-	
+    
+    -- Create players folder
+    cFile:CreateFolder(PLUGIN:GetLocalDirectory() .. "/players/")
+    
     -- Load Config file
     LoadConfiguration(PLUGIN:GetLocalDirectory() .. "/Config.ini")
-	
-	-- Get instance of world skyblock
-	SKYBLOCK = cRoot:Get():GetWorld("skyblock")
+    
+    -- Get instance of world skyblock
+    SKYBLOCK = cRoot:Get():GetWorld("skyblock")
     
     -- Load all PlayerInfos from players who are online
     LoadAllPlayerInfos()
-	
-	-- register hooks
-	cPluginManager.AddHook(cPluginManager.HOOK_CHUNK_GENERATING, OnChunkGenerating)
+    
+    -- register hooks
+    cPluginManager.AddHook(cPluginManager.HOOK_CHUNK_GENERATING, OnChunkGenerating)
     cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_JOINED, OnPlayerJoin)
     cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerQuit)
     -- cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
     cPluginManager.AddHook(cPluginManager.HOOK_WORLD_STARTED, OnWorldLoaded)
     cPluginManager.AddHook(cPluginManager.HOOK_KILLING, OnKilling)
-	
-	-- Command Bindings
-	cPluginManager.BindCommand("/skyblock", "skyblock", CommandSkyBlock , " - Access to the skyblock plugin")
-
-	LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
-	return true
+    
+    -- Command Bindings
+    cPluginManager.BindCommand("/skyblock", "skyblock", CommandSkyBlock , " - Access to the skyblock plugin")
+    
+    LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
+    return true
 end
 
 function OnDisable()
-	-- Save configuration
-	SaveConfiguration(PLUGIN:GetLocalDirectory() .. "/Config.ini")
+    -- Save configuration
+    SaveConfiguration(PLUGIN:GetLocalDirectory() .. "/Config.ini")
     
     -- Save all PlayerInfos
     SaveAllPlayerInfos()
-
-	LOG(PLUGIN:GetName() .. " is shutting down...")
+    
+    LOG(PLUGIN:GetName() .. " is shutting down...")
 end
 
 function LoadConfiguration(a_Config)
-	local ConfigIni = cIniFile()
-	ConfigIni:ReadFile(a_Config)
-	ISLAND_NUMBER = ConfigIni:GetValueI("Island", "Number")
-	ISLAND_DISTANCE = ConfigIni:GetValueI("Island", "Distance")
+    local ConfigIni = cIniFile()
+    ConfigIni:ReadFile(a_Config)
+    ISLAND_NUMBER = ConfigIni:GetValueI("Island", "Number")
+    ISLAND_DISTANCE = ConfigIni:GetValueI("Island", "Distance")
 end
 
 function SaveConfiguration(a_Config)
-	local ConfigIni = cIniFile()
-	ConfigIni:ReadFile(a_Config)
-	ConfigIni:SetValue("Island", "Number", ISLAND_NUMBER, true)
-	ConfigIni:SetValue("Island", "Distance", ISLAND_DISTANCE, true)
-	ConfigIni:WriteFile(a_Config)
+    local ConfigIni = cIniFile()
+    ConfigIni:ReadFile(a_Config)
+    ConfigIni:SetValue("Island", "Number", ISLAND_NUMBER, true)
+    ConfigIni:SetValue("Island", "Distance", ISLAND_DISTANCE, true)
+    ConfigIni:WriteFile(a_Config)
 end
 
 function LoadAllPlayerInfos()
