@@ -82,13 +82,14 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
         RemoveIsland(posX, posZ) -- Recreates all chunks in the area of the island
         
         playerName = a_Player:GetName()
-        a_Player:SendMessage("Please wait 5s...");
+        a_Player:SendMessage("Please wait 10s...");
         
-        a_Player:GetWorld():ScheduleTask(100, function() -- Run task 5s later for chunk regenerating
+        a_Player:GetWorld():ScheduleTask(200, function() -- Run task 10s later for chunk regenerating
             if (PLAYERS[playerName] == nil) then -- Avoid self termination, if Player has logged out
                 return
             end
-        
+            
+            a_Player:GetInventory():Clear()
             islandNumber, posX, posZ = CreateIsland(a_Player, pi:GetIslandNumber());
             a_Player:TeleportToCoords(posX, 151, posZ);
             a_Player:SendMessage("Good luck with your new island.");

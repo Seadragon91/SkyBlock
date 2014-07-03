@@ -19,8 +19,10 @@ function CreateIsland(a_Player, a_IslandNumber) -- Creates a island for the play
     CreateLayer(posX, 149, posZ, E_BLOCK_DIRT)
     CreateLayer(posX, 150, posZ, E_BLOCK_GRASS)
     
-    -- Plant a tree
-    SKYBLOCK:GrowTreeFromSapling(5 + posX, 151, posZ, E_META_SAPLING_APPLE)
+    -- Plant a tree, 10 ticks later...
+    a_Player:GetWorld():ScheduleTask(10, function()
+        SKYBLOCK:GrowTreeFromSapling(5 + posX, 151, posZ, E_META_SAPLING_APPLE);
+    end);
     
     -- Create a chest and add items
     SKYBLOCK:SetBlock(posX, 151, 4 + posZ, E_BLOCK_CHEST, 2)
@@ -45,14 +47,16 @@ end
 
 function CreateLayer(posX, posY, posZ, material) -- Creates a layer for the island
     for x = -1,6 do
+        local X = x + posX
         for z = -1,1 do
-            SKYBLOCK:SetBlock(x + posX, posY, z + posZ, material, 0)
+            SKYBLOCK:SetBlock(X, posY, z + posZ, material, 0)
         end 
     end
     
     for x = -1,1 do
+        local X = x + posX
         for z = 2,4 do
-            SKYBLOCK:SetBlock(x + posX, posY, z + posZ, material, 0)
+            SKYBLOCK:SetBlock(X, posY, z + posZ, material, 0)
         end 
     end
 end
@@ -134,9 +138,9 @@ function RemoveIsland(posX, posZ) -- Regenerates all chunks in the area
     radius = ISLAND_DISTANCE / 2
     
     for x = -radius,radius,16 do
+        local cx = (posX + x) / 16
         for z = -radius,radius,16 do
-            cx = (posX + x) / 16
-            cz = (posZ + z) / 16
+            local cz = (posZ + z) / 16
             SKYBLOCK:RegenerateChunk(cx, cz)
         end
     end

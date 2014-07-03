@@ -21,6 +21,20 @@ function OnPlayerQuit(a_Player) -- Save file and remove PlayerInfo
     PLAYERS[a_Player:GetName()] = nil
 end
 
+--[[function OnPlayerSpawn(a_Player) -- This should be used instead of the function below
+    if (a_Player:GetWorld():GetName() ~= "skyblock") then
+        return
+    end    
+    
+    local pi = PLAYERS[a_Player:GetName()]
+    if (pi:GetIslandNumber() == -1) then -- no island
+        a_Player:TeleportToCoords(0, 170, 0)
+    else
+        posX, posZ = GetIslandPosition(pi:GetIslandNumber())
+        a_Player:TeleportToCoords(posX, 151, posZ)
+    end
+end]]
+
 function OnKilling(a_Victim, a_Killer) -- Fix for respawn bug, respawns and send player back to his island
     if (a_Victim:IsPlayer() == false) then
         return
