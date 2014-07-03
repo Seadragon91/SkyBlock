@@ -88,13 +88,39 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
         
         posX, posZ = GetIslandPosition(pi:GetIslandNumber())
         RemoveIsland(posX, posZ) -- Recreates all chunks in the area of the island
-        
-        local playerName = a_Player:GetName()
+
         a_Player:SendMessage("Please wait 10s...");
+        local playerName = a_Player:GetName()
         
-        a_Player:GetWorld():ScheduleTask(200, function() -- Run task 10s later for chunk regenerating
+        local Callback = function (a_World)
+            a_World:DoWithPlayer(playerName, 
+                function(a_FoundPlayer)                
+                    a_FoundPlayer:GetInventory():Clear()
+                    
+                    local pi = PLAYERS[a_FoundPlayer:GetName()]
+                    local islandNumber = -1
+                    local posX = 0
+                    local posZ = 0
+                
+                    islandNumber, posX, posZ = CreateIsland(a_FoundPlayer, pi:GetIslandNumber());
+                    a_FoundPlayer:TeleportToCoords(posX, 151, posZ);
+                    a_FoundPlayer:SendMessage("Good luck with your new island.");
+                    pi:SetIsRestarting(false)
+                end)
+            end
+        
+        a_Player:GetWorld():ScheduleTask(200, Callback)
+        
+        
+        --[[a_Player:GetWorld():ScheduleTask(200, function(a_World) -- Run task 10s later for chunk regenerating
             if (PLAYERS[playerName] == nil) then -- Avoid self termination, if Player has logged out
                 return
+            end
+            
+            -- Get Player
+            SKYBLOCK:DoWithPlayer(playerName, 
+                function (a_Spectator)
+                
             end
             
             a_Player:GetInventory():Clear()
@@ -107,7 +133,7 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
             a_Player:TeleportToCoords(posX, 151, posZ);
             a_Player:SendMessage("Good luck with your new island.");
             pi:SetIsRestarting(false)
-        end);
+        end);]]
         
         return true
     end
