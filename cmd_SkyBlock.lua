@@ -31,8 +31,12 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
     end
     
     if (a_Split[2] == "play") then
-    pi = PLAYERS[a_Player:GetName()]
-    if (pi:GetIslandNumber() == -1) then -- Player has no island
+        local pi = PLAYERS[a_Player:GetName()]
+        if (pi:GetIslandNumber() == -1) then -- Player has no island
+            local islandNumber = -1
+            local posX = 0
+            local posZ = 0
+            
             islandNumber, posX, posZ = CreateIsland(a_Player, -1)
             pi:SetIslandNumber(islandNumber)
             
@@ -43,8 +47,10 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
             a_Player:TeleportToCoords(posX, 151, posZ)
             a_Player:SendMessage("Welcome to your island. Do not fall and make no obsidian :-)")
             return true
-        else -- Player has an island
-            pi = PLAYERS[a_Player:GetName()]
+        else -- Player has an island            
+            local posX = 0
+            local posZ = 0
+            
             posX, posZ = GetIslandPosition(pi:GetIslandNumber())
             
             if (a_Player:GetWorld():GetName() ~= SKYBLOCK:GetName()) then
@@ -58,7 +64,7 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
     end
     
     if (a_Split[2] == "restart") then -- Let the player restarts his island
-        pi = PLAYERS[a_Player:GetName()]
+        local pi = PLAYERS[a_Player:GetName()]
         if (a_Player:GetWorld():GetName() ~= "skyblock") then
             a_Player:SendMessage("This command works only in the world skyblock.")
             return true
@@ -75,13 +81,15 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
         end
         
         pi:SetIsRestarting(true)
-        
         a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
+        
+        local posX = 0
+        local posZ = 0
         
         posX, posZ = GetIslandPosition(pi:GetIslandNumber())
         RemoveIsland(posX, posZ) -- Recreates all chunks in the area of the island
         
-        playerName = a_Player:GetName()
+        local playerName = a_Player:GetName()
         a_Player:SendMessage("Please wait 10s...");
         
         a_Player:GetWorld():ScheduleTask(200, function() -- Run task 10s later for chunk regenerating
@@ -90,6 +98,11 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
             end
             
             a_Player:GetInventory():Clear()
+            
+            local islandNumber = -1
+            local posX = 0
+            local posZ = 0
+            
             islandNumber, posX, posZ = CreateIsland(a_Player, pi:GetIslandNumber());
             a_Player:TeleportToCoords(posX, 151, posZ);
             a_Player:SendMessage("Good luck with your new island.");
@@ -99,5 +112,3 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
         return true
     end
 end
-
-

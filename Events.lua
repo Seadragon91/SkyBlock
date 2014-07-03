@@ -51,6 +51,9 @@ function OnKilling(a_Victim, a_Killer) -- Fix for respawn bug, respawns and send
     if (pi:GetIslandNumber() == -1) then -- no island
         Player:TeleportToCoords(0, 170, 0)
     else
+        local posX = 0
+        local posZ = 0
+    
         posX, posZ = GetIslandPosition(pi:GetIslandNumber())
         Player:TeleportToCoords(posX, 151, posZ)
     end

@@ -135,7 +135,7 @@ function GetIslandNumber(posX, posZ) -- Calculates with the positions x and z an
 end
 
 function RemoveIsland(posX, posZ) -- Regenerates all chunks in the area
-    radius = ISLAND_DISTANCE / 2
+    local radius = ISLAND_DISTANCE / 2
     
     for x = -radius,radius,16 do
         local cx = (posX + x) / 16
