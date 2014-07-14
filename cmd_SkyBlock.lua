@@ -110,31 +110,9 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
             end
         
         a_Player:GetWorld():ScheduleTask(200, Callback)
-        
-        
-        --[[a_Player:GetWorld():ScheduleTask(200, function(a_World) -- Run task 10s later for chunk regenerating
-            if (PLAYERS[playerName] == nil) then -- Avoid self termination, if Player has logged out
-                return
-            end
-            
-            -- Get Player
-            SKYBLOCK:DoWithPlayer(playerName, 
-                function (a_Spectator)
-                
-            end
-            
-            a_Player:GetInventory():Clear()
-            
-            local islandNumber = -1
-            local posX = 0
-            local posZ = 0
-            
-            islandNumber, posX, posZ = CreateIsland(a_Player, pi:GetIslandNumber());
-            a_Player:TeleportToCoords(posX, 151, posZ);
-            a_Player:SendMessage("Good luck with your new island.");
-            pi:SetIsRestarting(false)
-        end);]]
-        
         return true
     end
+    
+    a_Player:SendMessage("Unknown argument.")
+    return true
 end

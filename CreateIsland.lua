@@ -5,15 +5,35 @@ function CreateIsland(a_Player, a_IslandNumber) -- Creates a island for the play
     if (a_IslandNumber == -1) then -- New island for a player, use his island number, not a new one
         -- Increase island number
         ISLAND_NUMBER = ISLAND_NUMBER + 1
-    end
-    
-    if (a_IslandNumber == -1) then
         -- Get island position
         posX, posZ = GetIslandPosition(ISLAND_NUMBER)
     else
         posX, posZ = GetIslandPosition(a_IslandNumber)
     end
     
+    -- Check for schematic file, if exists use it
+    local area = cBlockArea()
+    if (area:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. ISLAND_SCHEMATIC) == true) then
+        local weOffset = area:GetWEOffset()
+        local wex = weOffset.x
+        local wey = weOffset.y
+        local wez = weOffset.z
+        
+        area:Write(a_Player:GetWorld(), posX - wex, 150 - wey, posZ - wez) -- Place the schematic at the island position
+
+        -- Add items to player inventory
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(0, 0, cItem(E_ITEM_LAVA_BUCKET, 1));
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(1, 0, cItem(E_BLOCK_ICE, 2));
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(2, 0, cItem(E_ITEM_MELON_SLICE, 1));
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(3, 0, cItem(E_BLOCK_CACTUS, 1));
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(4, 0, cItem(E_BLOCK_BROWN_MUSHROOM, 1));
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(5, 0, cItem(E_BLOCK_RED_MUSHROOM, 1));
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(6, 0, cItem(E_BLOCK_PUMPKIN, 1));
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(7, 0, cItem(E_ITEM_SUGARCANE, 1));
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(8, 0, cItem(E_ITEM_CARROT, 1));
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(0, 1, cItem(E_ITEM_POTATO, 1));
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(1, 1, cItem(E_ITEM_BONE, 3));
+    else -- no schematic found, use defaul island as fallback
     -- Create island at position
     CreateLayer(posX, 148, posZ, E_BLOCK_DIRT)
     CreateLayer(posX, 149, posZ, E_BLOCK_DIRT)
@@ -41,6 +61,7 @@ function CreateIsland(a_Player, a_IslandNumber) -- Creates a island for the play
             a_ChestEntity:SetSlot(1, 1, cItem(E_ITEM_BONE, 3));
         end
     );
+    end
     
     return ISLAND_NUMBER, posX, posZ
 end

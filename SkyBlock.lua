@@ -5,6 +5,7 @@
 PLUGIN = nil
 ISLAND_NUMBER = nil -- Gets increased, before a new island is created
 ISLAND_DISTANCE = nil -- Distance betweens the islands
+ISLAND_SCHEMATIC = nil -- Schematic file for islands
 SKYBLOCK = nil -- Instance of world skyblock
 PLAYERS = nil -- A table that contains player names and PlayerInfos
 
@@ -15,6 +16,7 @@ function Initialize(Plugin)
     PLUGIN = Plugin
     ISLAND_NUMBER = 0
     ISLAND_DISTANCE = 96
+    ISLAND_SCHEMATIC = ""
     PLAYERS = {}
     
     -- Create players folder
@@ -30,11 +32,11 @@ function Initialize(Plugin)
     LoadAllPlayerInfos()
     
     -- register hooks
-    cPluginManager.AddHook(cPluginManager.HOOK_CHUNK_GENERATING, OnChunkGenerating)
-    cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_JOINED, OnPlayerJoin)
-    cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerQuit)
-    -- cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
-    cPluginManager.AddHook(cPluginManager.HOOK_WORLD_STARTED, OnWorldLoaded)
+    cPluginManager:AddHook(cPluginManager.HOOK_CHUNK_GENERATING, OnChunkGenerating)
+    cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_JOINED, OnPlayerJoin)
+    cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerQuit)
+    -- cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
+    cPluginManager:AddHook(cPluginManager.HOOK_WORLD_STARTED, OnWorldLoaded)
     cPluginManager.AddHook(cPluginManager.HOOK_KILLING, OnKilling)
     
     -- Command Bindings
@@ -59,6 +61,7 @@ function LoadConfiguration(a_Config)
     ConfigIni:ReadFile(a_Config)
     ISLAND_NUMBER = ConfigIni:GetValueI("Island", "Number")
     ISLAND_DISTANCE = ConfigIni:GetValueI("Island", "Distance")
+    ISLAND_SCHEMATIC = ConfigIni:GetValue("Island", "Schematic")
 end
 
 function SaveConfiguration(a_Config)
