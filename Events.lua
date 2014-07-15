@@ -23,7 +23,7 @@ function OnPlayerQuit(a_Player) -- Save file and remove PlayerInfo
     PLAYERS[a_Player:GetName()] = nil
 end
 
---[[function OnPlayerSpawn(a_Player) -- This should be used instead of the function below
+function OnPlayerSpawn(a_Player)
     if (a_Player:GetWorld():GetName() ~= "skyblock") then
         return
     end    
@@ -35,33 +35,9 @@ end
         posX, posZ = GetIslandPosition(pi:GetIslandNumber())
         a_Player:TeleportToCoords(posX, 151, posZ)
     end
-end]]
-
-function OnKilling(a_Victim, a_Killer) -- Fix for respawn bug, respawns and send player back to his island
-    if (a_Victim:IsPlayer() == false) then
-        return
-    end
-    
-    if (a_Victim:GetWorld():GetName() ~= "skyblock") then
-        return
-    end
-    
-    local Player = tolua.cast(a_Victim,"cPlayer")
-    Player:Respawn()
-    
-    local pi = PLAYERS[Player:GetName()]
-    if (pi:GetIslandNumber() == -1) then -- no island
-        Player:TeleportToCoords(0, 170, 0)
-    else
-        local posX = 0
-        local posZ = 0
-    
-        posX, posZ = GetIslandPosition(pi:GetIslandNumber())
-        Player:TeleportToCoords(posX, 151, posZ)
-    end
 end
 
-function OnWorldLoaded(a_World) -- Create Spawn in world skyblock
+function OnWorldLoaded(a_World)
     if (a_World:GetName() ~= "skyblock") then
         return
     end

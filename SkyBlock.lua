@@ -39,10 +39,8 @@ function Initialize(Plugin)
     cPluginManager:AddHook(cPluginManager.HOOK_CHUNK_GENERATING, OnChunkGenerating)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_JOINED, OnPlayerJoin)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerQuit)
-    -- cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
+    cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
     cPluginManager:AddHook(cPluginManager.HOOK_WORLD_STARTED, OnWorldLoaded)
-
-    cPluginManager.AddHook(cPluginManager.HOOK_KILLING, OnKilling)
     
     -- Command Bindings
     cPluginManager.BindCommand("/skyblock", "skyblock", CommandSkyBlock , " - Access to the skyblock plugin")
