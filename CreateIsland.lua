@@ -33,6 +33,7 @@ function CreateIsland(a_Player, a_IslandNumber) -- Creates a island for the play
         a_Player:GetInventory():GetInventoryGrid():SetSlot(8, 0, cItem(E_ITEM_CARROT, 1));
         a_Player:GetInventory():GetInventoryGrid():SetSlot(0, 1, cItem(E_ITEM_POTATO, 1));
         a_Player:GetInventory():GetInventoryGrid():SetSlot(1, 1, cItem(E_ITEM_BONE, 3));
+        a_Player:GetInventory():GetInventoryGrid():SetSlot(2, 1, cItem(E_BLOCK_CHEST, 1));
     else -- no schematic found, use defaul island as fallback
     -- Create island at position
     CreateLayer(posX, 148, posZ, E_BLOCK_DIRT)

@@ -17,7 +17,9 @@ function OnPlayerJoin(a_Player) -- Load file and add PlayerInfo to list
 end
 
 function OnPlayerQuit(a_Player) -- Save file and remove PlayerInfo
-    PLAYERS[a_Player:GetName()]:Save()
+    if (PLAYERS[a_Player:GetName()]:GetIslandNumber() ~= -1) then -- Only save player info, if he has an island
+        PLAYERS[a_Player:GetName()]:Save()
+    end
     PLAYERS[a_Player:GetName()] = nil
 end
 
@@ -64,13 +66,25 @@ function OnWorldLoaded(a_World) -- Create Spawn in world skyblock
         return
     end
     
-    if (a_World:GetBlock(0, 169, 0) == E_BLOCK_STONE) then
+    if (SPAWN_CREATED) then
         return
     end
     
-    for x = -5,5 do
-        for z = -5,5 do
-            a_World:SetBlock(x, 169, z, E_BLOCK_STONE, 0)
+    local area = cBlockArea()
+    if (area:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. SPAWN_SCHEMATIC)) then
+        local weOffset = area:GetWEOffset()
+        local wex = weOffset.x
+        local wey = weOffset.y
+        local wez = weOffset.z
+        
+        area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez) -- Paste the schematic
+        SPAWN_CREATED = true
+    else -- Error or no schematic found, create default spawn
+        for x = -5,5 do
+            for z = -5,5 do
+                SKYBLOCK:SetBlock(x, 169, z, E_BLOCK_STONE, 0)
+            end
         end
+        SPAWN_CREATED = false
     end
 end

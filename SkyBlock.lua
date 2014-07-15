@@ -1,11 +1,13 @@
 -- SkyBlock plugin for the c++ MC Server.
--- Before adding that plugin, you need to add a world named skyblock in the settings.ini under the topic [Worlds]
+-- Before starting the server, you need to add a world named skyblock in the settings.ini under the topic [Worlds]
 -- World=skyblock
 
 PLUGIN = nil
 ISLAND_NUMBER = nil -- Gets increased, before a new island is created
 ISLAND_DISTANCE = nil -- Distance betweens the islands
 ISLAND_SCHEMATIC = nil -- Schematic file for islands
+SPAWN_SCHEMATIC = nil -- Schematic file for the spawn
+SPAWN_CREATED = nil -- Check value, if spawn has already been created
 SKYBLOCK = nil -- Instance of world skyblock
 PLAYERS = nil -- A table that contains player names and PlayerInfos
 
@@ -17,6 +19,8 @@ function Initialize(Plugin)
     ISLAND_NUMBER = 0
     ISLAND_DISTANCE = 96
     ISLAND_SCHEMATIC = ""
+    SPAWN_SCHEMATIC = ""
+    SPAWN_CREATED = false
     PLAYERS = {}
     
     -- Create players folder
@@ -37,6 +41,7 @@ function Initialize(Plugin)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerQuit)
     -- cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
     cPluginManager:AddHook(cPluginManager.HOOK_WORLD_STARTED, OnWorldLoaded)
+
     cPluginManager.AddHook(cPluginManager.HOOK_KILLING, OnKilling)
     
     -- Command Bindings
@@ -61,7 +66,9 @@ function LoadConfiguration(a_Config)
     ConfigIni:ReadFile(a_Config)
     ISLAND_NUMBER = ConfigIni:GetValueI("Island", "Number")
     ISLAND_DISTANCE = ConfigIni:GetValueI("Island", "Distance")
-    ISLAND_SCHEMATIC = ConfigIni:GetValue("Island", "Schematic")
+    ISLAND_SCHEMATIC = ConfigIni:GetValue("Schematic", "Island")
+    SPAWN_SCHEMATIC = ConfigIni:GetValue("Schematic", "Spawn")
+    SPAWN_CREATED = ConfigIni:GetValueB("PluginValues", "SpawnCreated")
 end
 
 function SaveConfiguration(a_Config)
@@ -69,6 +76,7 @@ function SaveConfiguration(a_Config)
     ConfigIni:ReadFile(a_Config)
     ConfigIni:SetValue("Island", "Number", ISLAND_NUMBER, true)
     ConfigIni:SetValue("Island", "Distance", ISLAND_DISTANCE, true)
+    ConfigIni:SetValueB("PluginValues", "SpawnCreated", SPAWN_CREATED, true)
     ConfigIni:WriteFile(a_Config)
 end
 
