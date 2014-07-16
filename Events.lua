@@ -1,5 +1,5 @@
 function OnChunkGenerating(a_World, a_ChunkX, a_ChunkZ, a_ChunkDesc) -- Air generator
-    if a_World:GetName() == "skyblock" then
+    if a_World:GetName() == WORLD_NAME then
         FillBlocks(a_ChunkDesc) -- fill entire chunk with air
     end
 end
@@ -24,7 +24,7 @@ function OnPlayerQuit(a_Player) -- Save file and remove PlayerInfo
 end
 
 function OnPlayerSpawn(a_Player)
-    if (a_Player:GetWorld():GetName() ~= "skyblock") then
+    if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
         return
     end    
     
@@ -38,7 +38,7 @@ function OnPlayerSpawn(a_Player)
 end
 
 function OnWorldLoaded(a_World)
-    if (a_World:GetName() ~= "skyblock") then
+    if (a_World:GetName() ~= WORLD_NAME) then
         return
     end
     

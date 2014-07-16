@@ -11,14 +11,14 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
         return true
     end
     
-    if (a_Split[2] == "join") then -- Join the world skyblock
-        if (a_Player:GetWorld():GetName() == "skyblock") then -- Check if player is already in world skyblock
+    if (a_Split[2] == "join") then -- Join the world
+        if (a_Player:GetWorld():GetName() == WORLD_NAME) then -- Check if player is already in the world
             a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
             a_Player:SendMessage("Welcome back to the spawn platform.")
             return true
         end
     
-        if (a_Player:MoveToWorld("skyblock")) then
+        if (a_Player:MoveToWorld(WORLD_NAME)) then
             -- a_Player moved
             a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
             a_Player:SendMessage("Welcome to the world skyblock. Type /skyblock play to get an island.")
@@ -41,7 +41,7 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
             pi:SetIslandNumber(islandNumber)
             
             if (a_Player:GetWorld():GetName() ~= SKYBLOCK:GetName()) then
-                a_Player:MoveToWorld("skyblock")
+                a_Player:MoveToWorld(WORLD_NAME)
             end
             
             a_Player:TeleportToCoords(posX, 151, posZ)
@@ -54,7 +54,7 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
             posX, posZ = GetIslandPosition(pi:GetIslandNumber())
             
             if (a_Player:GetWorld():GetName() ~= SKYBLOCK:GetName()) then
-                a_Player:MoveToWorld("skyblock")
+                a_Player:MoveToWorld(WORLD_NAME)
             end
             
             a_Player:TeleportToCoords(posX, 151, posZ)
@@ -65,7 +65,7 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
     
     if (a_Split[2] == "restart") then -- Let the player restarts his island
         local pi = PLAYERS[a_Player:GetName()]
-        if (a_Player:GetWorld():GetName() ~= "skyblock") then
+        if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
             a_Player:SendMessage("This command works only in the world skyblock.")
             return true
         end

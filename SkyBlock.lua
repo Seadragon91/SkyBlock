@@ -8,13 +8,14 @@ ISLAND_DISTANCE = nil -- Distance betweens the islands
 ISLAND_SCHEMATIC = nil -- Schematic file for islands
 SPAWN_SCHEMATIC = nil -- Schematic file for the spawn
 SPAWN_CREATED = nil -- Check value, if spawn has already been created
-SKYBLOCK = nil -- Instance of world skyblock
+SKYBLOCK = nil -- Instance of a world
 PLAYERS = nil -- A table that contains player names and PlayerInfos
+WORLD_NAME = nil -- The world that the plugin is using
 
 function Initialize(Plugin)
     Plugin:SetName("SkyBlock")
     Plugin:SetVersion(1)
-    
+
     PLUGIN = Plugin
     ISLAND_NUMBER = 0
     ISLAND_DISTANCE = 96
@@ -22,6 +23,7 @@ function Initialize(Plugin)
     SPAWN_SCHEMATIC = ""
     SPAWN_CREATED = false
     PLAYERS = {}
+    WORLD_NAME = "skyblock"
     
     -- Create players folder
     cFile:CreateFolder(PLUGIN:GetLocalDirectory() .. "/players/")
@@ -30,7 +32,7 @@ function Initialize(Plugin)
     LoadConfiguration(PLUGIN:GetLocalDirectory() .. "/Config.ini")
     
     -- Get instance of world skyblock
-    SKYBLOCK = cRoot:Get():GetWorld("skyblock")
+    SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
     
     -- Load all PlayerInfos from players who are online
     LoadAllPlayerInfos()
@@ -66,6 +68,7 @@ function LoadConfiguration(a_Config)
     ISLAND_DISTANCE = ConfigIni:GetValueI("Island", "Distance")
     ISLAND_SCHEMATIC = ConfigIni:GetValue("Schematic", "Island")
     SPAWN_SCHEMATIC = ConfigIni:GetValue("Schematic", "Spawn")
+    WORLD_NAME = ConfigIni:GetValue("General", "Worldname")
     SPAWN_CREATED = ConfigIni:GetValueB("PluginValues", "SpawnCreated")
 end
 
@@ -74,6 +77,7 @@ function SaveConfiguration(a_Config)
     ConfigIni:ReadFile(a_Config)
     ConfigIni:SetValue("Island", "Number", ISLAND_NUMBER, true)
     ConfigIni:SetValue("Island", "Distance", ISLAND_DISTANCE, true)
+    ConfigIni:SetValue("General", "Worldname", WORLD_NAME, true)
     ConfigIni:SetValueB("PluginValues", "SpawnCreated", SPAWN_CREATED, true)
     ConfigIni:WriteFile(a_Config)
 end
