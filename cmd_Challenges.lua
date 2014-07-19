@@ -23,16 +23,16 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
         
     if (a_Split[2] == "info") then -- List all infos to a challenge
         if (#a_Split == 2) then
-            a_Player:SendMessage("/challenges info <name>")
+            a_Player:SendMessageInfo("/challenges info <name>")
             return true
         end
         
         ci = CHALLENGES[a_Split[3]]
         if (ci == nil) then
-            a_Player:SendMessage("There is no challenge with that name.")
+            a_Player:SendMessageFailure("There is no challenge with that name.")
             return true
         end
-        a_Player:SendMessage(" --- " .. cChatColor.Green .. ci.challengeName .. cChatColor.White .. " ---")
+        a_Player:SendMessage("--- " .. cChatColor.Green .. ci.challengeName .. cChatColor.White .. " ---")
         a_Player:SendMessage(cChatColor.LightBlue .. ci.description)
         a_Player:SendMessage(cChatColor.LightGreen .. "Gather this items: " .. cChatColor.White .. ci.requiredText)
         a_Player:SendMessage(cChatColor.Gold .. "You get for completion: " .. cChatColor.White .. ci.rewardText)            
@@ -46,13 +46,13 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
             return true
         end
         if (#a_Split == 2) then
-            a_Player:SendMessage("/challenges complete <name>")
+            a_Player:SendMessageInfo("/challenges complete <name>")
             return true
         end
         
         ci = CHALLENGES[a_Split[3]]
         if (ci == nil) then
-            a_Player:SendMessage("There is no challenge with that name.")
+            a_Player:SendMessageFailure("There is no challenge with that name.")
             return true
         end
         
@@ -60,7 +60,7 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
         return true
     end
     
-    a_Player:SendMessage("Unknwown argument.")
+    a_Player:SendMessageFailure("Unknwown argument.")
     return true
 end
 
