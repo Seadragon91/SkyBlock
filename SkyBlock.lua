@@ -11,6 +11,7 @@ SPAWN_CREATED = nil -- Check value, if spawn has already been created
 SKYBLOCK = nil -- Instance of a world
 PLAYERS = nil -- A table that contains player names and PlayerInfos
 WORLD_NAME = nil -- The world that the plugin is using
+CHALLENGES = nil -- Store all challenges
 
 function Initialize(Plugin)
     Plugin:SetName("SkyBlock")
@@ -24,6 +25,7 @@ function Initialize(Plugin)
     SPAWN_CREATED = false
     PLAYERS = {}
     WORLD_NAME = "skyblock"
+    CHALLENGES = {}
     
     -- Create players folder
     cFile:CreateFolder(PLUGIN:GetLocalDirectory() .. "/players/")
@@ -34,6 +36,9 @@ function Initialize(Plugin)
     -- Get instance of world skyblock
     SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
     
+    -- Load all ChallengeInfos
+    LoadAllChallengeInfos(PLUGIN:GetLocalDirectory() .. "/Challenges.ini")
+        
     -- Load all PlayerInfos from players who are online
     LoadAllPlayerInfos()
     
@@ -46,6 +51,7 @@ function Initialize(Plugin)
     
     -- Command Bindings
     cPluginManager.BindCommand("/skyblock", "skyblock", CommandSkyBlock , " - Access to the skyblock plugin")
+    cPluginManager.BindCommand("/challenges", "skyblock.challenges", CommandChallenges , " - Access to the challenges")
     
     LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
     return true
@@ -91,5 +97,16 @@ end
 function SaveAllPlayerInfos()
     for player, pi in pairs(PLAYERS) do
         pi:Save()
+    end
+end
+
+function LoadAllChallengeInfos(a_File)
+    local ChallengesIni = cIniFile()
+    ChallengesIni:ReadFile(a_File)
+
+    local amount = ChallengesIni:GetNumValues("Challenges")    
+    for i = 1, amount do
+        local name = ChallengesIni:GetValue("Challenges", i)
+        CHALLENGES[name] = cChallengeInfo.new(name, ChallengesIni)
     end
 end

@@ -9,6 +9,7 @@ function cPlayerInfo.new(a_PlayerName)
     self.playerName = a_PlayerName
     self.islandNumber = -1 -- Set to -1 for no island
     self.playerFile = PLUGIN:GetLocalDirectory() .. "/players/" .. a_PlayerName .. ".ini"
+    self.completedChallenges = {}
     
     self.Load(self) -- Check if there is a player file, if yes load it
     return self
@@ -38,6 +39,19 @@ function cPlayerInfo.Save(self) -- Save PlayerInfo
     local PlayerInfoIni = cIniFile()
     PlayerInfoIni:SetValue("Player", "Name", self.playerName, true)
     PlayerInfoIni:SetValue("Island", "Number", self.islandNumber, true)
+    
+    local res = ""
+    local first = true
+    for index, value in pairs(self.completedChallenges) do
+        if (first) then
+            first = false
+        else
+            res = res .. ":"
+        end
+        res = res .. index;
+    end
+    
+    PlayerInfoIni:SetValue("Challenges", "Completed", res, true)
     PlayerInfoIni:WriteFile(self.playerFile)
 end
 
@@ -48,4 +62,10 @@ function cPlayerInfo.Load(self) -- Load PlayerInfo
     end
     
     self.islandNumber = PlayerInfoIni:GetValueI("Island", "Number")
+    local list = PlayerInfoIni:GetValue("Challenges", "Completed")
+    local values = StringSplit(list, ":")
+    
+    for i = 1, #values do
+        self.completedChallenges[values[i]] = true
+    end
 end
