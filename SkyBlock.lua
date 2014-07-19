@@ -51,7 +51,7 @@ function Initialize(Plugin)
     
     -- Command Bindings
     cPluginManager.BindCommand("/skyblock", "skyblock", CommandSkyBlock , " - Access to the skyblock plugin")
-    cPluginManager.BindCommand("/challenges", "skyblock.challenges", CommandChallenges , " - Access to the challenges")
+    cPluginManager.BindCommand("/challenges", "skyblock", CommandChallenges , " - Access to the challenges")
     
     LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
     return true
