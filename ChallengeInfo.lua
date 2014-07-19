@@ -15,13 +15,13 @@ function cChallengeInfo.IsCompleted(self, a_Player)
     local pi = PLAYERS[a_Player:GetName()]
     
     if (pi.completedChallenges[self.challengeName] == true) then
-        a_Player:SendMessage("You have already completed that challenge.")
+        a_Player:SendMessageInfo("You have already completed that challenge.")
         return
     end
 
     for i = 1, #self.requiredItems do
         if (not a_Player:GetInventory():HasItems(self.requiredItems[i])) then
-            a_Player:SendMessage("You don't have the required items.")
+            a_Player:SendMessageFailure("You don't have the required items.")
             return
         end
     end
@@ -35,7 +35,7 @@ function cChallengeInfo.IsCompleted(self, a_Player)
     end
     
     pi.completedChallenges[self.challengeName] = true
-    a_Player:SendMessage("Congrats you completed the challenge " .. self.challengeName)
+    a_Player:SendMessageSuccess("Congrats you completed the challenge " .. self.challengeName)
 end
 
 function cChallengeInfo.Load(self, a_ChallengesIni)
