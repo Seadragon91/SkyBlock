@@ -27,7 +27,7 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
             return true
         end
         
-        ci = CHALLENGES[a_Split[3]]
+        local ci = CHALLENGES[a_Split[3]]
         if (ci == nil) then
             a_Player:SendMessageFailure("There is no challenge with that name.")
             return true
@@ -50,7 +50,7 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
             return true
         end
         
-        ci = CHALLENGES[a_Split[3]]
+        local ci = CHALLENGES[a_Split[3]]
         if (ci == nil) then
             a_Player:SendMessageFailure("There is no challenge with that name.")
             return true
