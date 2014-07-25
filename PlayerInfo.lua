@@ -36,6 +36,10 @@ function cPlayerInfo.GetIsRestarting(self)
 end
 
 function cPlayerInfo.Save(self) -- Save PlayerInfo
+    if (self.islandNumber == -1) then -- Only save player info, if he has an island
+        return
+    end
+
     local PlayerInfoIni = cIniFile()
     PlayerInfoIni:SetValue("Player", "Name", self.playerName, true)
     PlayerInfoIni:SetValue("Island", "Number", self.islandNumber, true)

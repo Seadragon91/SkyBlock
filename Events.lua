@@ -17,9 +17,7 @@ function OnPlayerJoin(a_Player) -- Load file and add PlayerInfo to list
 end
 
 function OnPlayerQuit(a_Player) -- Save file and remove PlayerInfo
-    if (PLAYERS[a_Player:GetName()]:GetIslandNumber() ~= -1) then -- Only save player info, if he has an island
-        PLAYERS[a_Player:GetName()]:Save()
-    end
+    PLAYERS[a_Player:GetName()]:Save()
     PLAYERS[a_Player:GetName()] = nil
 end
 
@@ -63,4 +61,16 @@ function OnWorldLoaded(a_World)
         end
         SPAWN_CREATED = false
     end
+end
+
+function OnBlockPlacing(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ, a_BlockType, a_BlockMeta)
+    return HasPermissionThereCancelEvent(a_Player)
+end
+
+function OnPlayerLeftClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_Action)
+    return HasPermissionThereCancelEvent(a_Player)
+end
+
+function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ)
+    return HasPermissionThereCancelEvent(a_Player)
 end

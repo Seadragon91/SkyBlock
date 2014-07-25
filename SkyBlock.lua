@@ -49,9 +49,14 @@ function Initialize(Plugin)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
     cPluginManager:AddHook(cPluginManager.HOOK_WORLD_STARTED, OnWorldLoaded)
     
+    -- This below are required for checking the permission in the island area
+    cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnBlockPlacing)
+    cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_LEFT_CLICK, OnPlayerLeftClick)
+    cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_RIGHT_CLICK, OnPlayerRightClick)
+    
     -- Command Bindings
-    cPluginManager.BindCommand("/skyblock", "skyblock", CommandSkyBlock , " - Access to the skyblock plugin")
-    cPluginManager.BindCommand("/challenges", "skyblock", CommandChallenges , " - Access to the challenges")
+    cPluginManager.BindCommand("/skyblock", "skyblock.command", CommandSkyBlock , " - Access to the skyblock plugin")
+    cPluginManager.BindCommand("/challenges", "skyblock.command", CommandChallenges , " - Access to the challenges")
     
     LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
     return true
@@ -66,6 +71,25 @@ function OnDisable()
     
     LOG(PLUGIN:GetName() .. " is shutting down...")
 end
+
+function HasPermissionThereCancelEvent(a_Player)
+    if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
+        return false
+    end
+    
+    local pi = PLAYERS[a_Player:GetName()]
+    local islandNumber = GetIslandNumber(a_Player:GetPosX(), a_Player:GetPosZ())
+    if (a_Player:HasPermission("skyblock.admin.build")) then
+        return false
+    end
+    
+    if (pi:GetIslandNumber() == islandNumber) then
+        return false
+    end
+    
+    return true
+end
+
 
 function LoadConfiguration(a_Config)
     local ConfigIni = cIniFile()

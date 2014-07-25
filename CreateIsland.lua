@@ -120,6 +120,11 @@ function GetIslandPosition(n) -- Calculates with the island number the positions
     return posX, posZ
 end
 
+function round(num, idp) -- required for function below
+  local mult = 10^(idp or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
 function GetIslandNumber(posX, posZ) -- Calculates with the positions x and z an island number. Returns the island number
     local px = posX
     local pz = posZ
