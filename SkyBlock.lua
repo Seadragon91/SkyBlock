@@ -72,13 +72,13 @@ function OnDisable()
     LOG(PLUGIN:GetName() .. " is shutting down...")
 end
 
-function HasPermissionThereCancelEvent(a_Player)
+function HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
     if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
         return false
     end
     
     local pi = PLAYERS[a_Player:GetName()]
-    local islandNumber = GetIslandNumber(a_Player:GetPosX(), a_Player:GetPosZ())
+    local islandNumber = GetIslandNumber(a_BlockX, a_BlockZ)
     if (a_Player:HasPermission("skyblock.admin.build")) then
         return false
     end

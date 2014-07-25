@@ -64,13 +64,13 @@ function OnWorldLoaded(a_World)
 end
 
 function OnBlockPlacing(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ, a_BlockType, a_BlockMeta)
-    return HasPermissionThereCancelEvent(a_Player)
+    return HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
 end
 
 function OnPlayerLeftClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_Action)
-    return HasPermissionThereCancelEvent(a_Player)
+    return HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
 end
 
 function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ)
-    return HasPermissionThereCancelEvent(a_Player)
+    return HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
 end
