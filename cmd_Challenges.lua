@@ -1,23 +1,28 @@
 function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.    
     if (#a_Split == 1) then -- List all challenge names, light gray for completed and light green for not
-        local list = ""
         local pi = PLAYERS[a_Player:GetName()]
-        local first = true
-        for name, ci in pairs(CHALLENGES) do
-            if (first) then
-                first = false
-            else
-                list = list .. ", "
-            end
+        
+        for index, level in pairs(LEVELS) do
+            a_Player:SendMessageInfo("--- Level: " .. level.levelName .. " ---")
             
-            if (pi.completedChallenges[name] == nil) then
-                list = list .. cChatColor.LightGreen .. name
-            else
-                list = list .. cChatColor.LightGray .. name
+            local first = true
+            local list = ""
+            for name, ci in pairs(level.challenges) do
+                    if (first) then
+                    first = false
+                else
+                    list = list .. ", "
+                end
+                
+                if (pi:HasCompleted(level.levelName, name)) then
+                    list = list .. cChatColor.LightGreen .. name
+                else
+                    list = list .. cChatColor.LightGray .. name
+                end
             end
+            a_Player:SendMessageInfo(list)
         end
         
-        a_Player:SendMessage(list)
         return true
     end
         
@@ -27,7 +32,7 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
             return true
         end
         
-        local ci = CHALLENGES[a_Split[3]]
+        local ci = GetChallenge(a_Split[3])
         if (ci == nil) then
             a_Player:SendMessageFailure("There is no challenge with that name.")
             return true
@@ -42,7 +47,7 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
     if (a_Split[2] == "complete") then -- Complete a challenge
         local pi = PLAYERS[a_Player:GetName()]
         if (pi:GetIslandNumber() == -1) then
-            a_Player:SendMessage("You have no island. Type /skyblock play first.")
+            a_Player:SendMessageFailure("You have no island. Type /skyblock play first.")
             return true
         end
         if (#a_Split == 2) then
@@ -50,7 +55,7 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
             return true
         end
         
-        local ci = CHALLENGES[a_Split[3]]
+        local ci = GetChallenge(a_Split[3])
         if (ci == nil) then
             a_Player:SendMessageFailure("There is no challenge with that name.")
             return true

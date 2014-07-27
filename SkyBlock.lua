@@ -11,7 +11,7 @@ SPAWN_CREATED = nil -- Check value, if spawn has already been created
 SKYBLOCK = nil -- Instance of a world
 PLAYERS = nil -- A table that contains player names and PlayerInfos
 WORLD_NAME = nil -- The world that the plugin is using
-CHALLENGES = nil -- Store all challenges
+LEVELS = nil -- Store all levels
 
 function Initialize(Plugin)
     Plugin:SetName("SkyBlock")
@@ -25,7 +25,7 @@ function Initialize(Plugin)
     SPAWN_CREATED = false
     PLAYERS = {}
     WORLD_NAME = "skyblock"
-    CHALLENGES = {}
+    LEVELS = {}
     
     -- Create players folder
     cFile:CreateFolder(PLUGIN:GetLocalDirectory() .. "/players/")
@@ -37,7 +37,7 @@ function Initialize(Plugin)
     SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
     
     -- Load all ChallengeInfos
-    LoadAllChallengeInfos(PLUGIN:GetLocalDirectory() .. "/Challenges.ini")
+    LoadAllLevels(PLUGIN:GetLocalDirectory() .. "/challenges/Config.ini")
         
     -- Load all PlayerInfos from players who are online
     LoadAllPlayerInfos()
@@ -124,13 +124,22 @@ function SaveAllPlayerInfos()
     end
 end
 
-function LoadAllChallengeInfos(a_File)
-    local ChallengesIni = cIniFile()
-    ChallengesIni:ReadFile(a_File)
+function LoadAllLevels(a_File)
+    local ConfigIni = cIniFile()
+    ConfigIni:ReadFile(a_File)
 
-    local amount = ChallengesIni:GetNumValues("Challenges")    
+    local amount = ConfigIni:GetNumValues("Levels")    
     for i = 1, amount do
-        local name = ChallengesIni:GetValue("Challenges", i)
-        CHALLENGES[name] = cChallengeInfo.new(name, ChallengesIni)
+        local fileLevel = ConfigIni:GetValue("Levels", i)
+        LEVELS[i] = cLevel.new(fileLevel)
     end
+end
+
+function GetChallenge(a_ChallengeName)
+    for i = 1, #LEVELS do
+        if (LEVELS[i].challenges[a_ChallengeName] ~= nil) then
+            return LEVELS[i].challenges[a_ChallengeName]
+        end
+    end
+    return nil
 end

@@ -3,10 +3,11 @@
 cChallengeInfo = {}
 cChallengeInfo.__index = cChallengeInfo
 
-function cChallengeInfo.new(a_Challengename, a_ChallengesIni)
+function cChallengeInfo.new(a_Challengename, a_ChallengesIni, a_Level)
     self = setmetatable({}, cChallengeInfo)
     
     self.challengeName = a_Challengename
+    self.inLevel = a_Level
     self.Load(self, a_ChallengesIni)
     return self
 end
@@ -14,7 +15,20 @@ end
 function cChallengeInfo.IsCompleted(self, a_Player)
     local pi = PLAYERS[a_Player:GetName()]
     
-    if (pi.completedChallenges[self.challengeName] == true) then
+    if (pi.completedChallenges[self.inLevel] == nil) then
+        a_Player:SendMessageInfo("You don't have the level to complete that challenge.")
+        return
+    end
+    
+    local isLevel = GetLevelAsNumer(self, pi.isLevel)
+    local needLevel = GetLevelAsNumer(self, self.inLevel)
+    
+    if (needLevel > isLevel) then
+        a_Player:SendMessageInfo("You don't have the level to complete that challenge.")
+        return
+    end
+    
+    if (pi.completedChallenges[self.inLevel][self.challengeName] == true) then
         a_Player:SendMessageInfo("You have already completed that challenge.")
         return
     end
@@ -34,8 +48,38 @@ function cChallengeInfo.IsCompleted(self, a_Player)
         a_Player:GetInventory():AddItem(self.rewardItems[i])
     end
     
-    pi.completedChallenges[self.challengeName] = true
+    pi.completedChallenges[self.inLevel][self.challengeName] = true
     a_Player:SendMessageSuccess("Congrats you completed the challenge " .. self.challengeName)
+    
+    local amountDone = GetAmount(self, pi.completedChallenges[pi.isLevel])
+    local amountNeeded = GetAmount(self, LEVELS[GetLevelAsNumer(self, self.inLevel)].challenges)
+    
+    if (amountDone == amountNeeded) then
+        if (isLevel == #LEVELS) then
+            a_Player:SendMessageSuccess("You completed all levels and all challenges."); 
+            return
+        end
+        
+        pi.isLevel = LEVELS[isLevel + 1].levelName
+        pi.completedChallenges[pi.isLevel] = {}
+        a_Player:SendMessageSuccess("Congrats. You unlocked next level " .. LEVELS[isLevel + 1].levelName)
+    end
+end
+
+function GetLevelAsNumer(self, a_Level)
+    for i = 1, #LEVELS do
+        if (LEVELS[i].levelName == a_Level) then
+            return i
+        end
+    end
+end
+
+function GetAmount(self, a_List)
+    local amount = 0
+    for k,v in pairs(a_List) do
+        amount = amount + 1
+    end
+    return amount
 end
 
 function cChallengeInfo.Load(self, a_ChallengesIni)

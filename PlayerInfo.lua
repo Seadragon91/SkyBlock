@@ -9,8 +9,10 @@ function cPlayerInfo.new(a_PlayerName)
     self.playerName = a_PlayerName
     self.islandNumber = -1 -- Set to -1 for no island
     self.playerFile = PLUGIN:GetLocalDirectory() .. "/players/" .. a_PlayerName .. ".ini"
+    self.isLevel = LEVELS[1].levelName -- Set first level
     self.completedChallenges = {}
-    
+    self.completedChallenges[self.isLevel] = {}
+        
     self.Load(self) -- Check if there is a player file, if yes load it
     return self
 end
@@ -35,6 +37,18 @@ function cPlayerInfo.GetIsRestarting(self)
     return self.isRestarting
 end
 
+function cPlayerInfo.HasCompleted(self, a_Level, a_ChallengeName)
+    if (self.completedChallenges[a_Level] == nil) then
+        return false
+    end
+    
+    if (self.completedChallenges[a_Level][a_ChallengeName] == nil) then
+        return false
+    end
+    
+    return true
+end
+
 function cPlayerInfo.Save(self) -- Save PlayerInfo
     if (self.islandNumber == -1) then -- Only save player info, if he has an island
         return
@@ -44,18 +58,25 @@ function cPlayerInfo.Save(self) -- Save PlayerInfo
     PlayerInfoIni:SetValue("Player", "Name", self.playerName, true)
     PlayerInfoIni:SetValue("Island", "Number", self.islandNumber, true)
     
-    local res = ""
-    local first = true
-    for index, value in pairs(self.completedChallenges) do
-        if (first) then
-            first = false
-        else
-            res = res .. ":"
+    for i = 1, #LEVELS do
+        local res = ""
+        local first = true
+        if (self.completedChallenges[LEVELS[i].levelName] == nil) then
+            break
         end
-        res = res .. index;
+        
+        for index, value in pairs(self.completedChallenges[LEVELS[i].levelName]) do
+            if (first) then
+                first = false
+            else
+                res = res .. ":"
+            end
+            res = res .. index;
+        end
+        
+        PlayerInfoIni:SetValue("Completed", LEVELS[i].levelName, res, true)
     end
-    
-    PlayerInfoIni:SetValue("Challenges", "Completed", res, true)
+    PlayerInfoIni:SetValue("Player", "IsLevel", self.isLevel, true)
     PlayerInfoIni:WriteFile(self.playerFile)
 end
 
@@ -66,10 +87,22 @@ function cPlayerInfo.Load(self) -- Load PlayerInfo
     end
     
     self.islandNumber = PlayerInfoIni:GetValueI("Island", "Number")
-    local list = PlayerInfoIni:GetValue("Challenges", "Completed")
-    local values = StringSplit(list, ":")
     
-    for i = 1, #values do
-        self.completedChallenges[values[i]] = true
+    for l = 1, #LEVELS do
+        self.completedChallenges[LEVELS[l].levelName] = {}
+        local list = PlayerInfoIni:GetValue("Completed", LEVELS[l].levelName)
+        if (list == nil) then
+            break
+        end
+            
+        local values = StringSplit(list, ":")
+    
+        for i = 1, #values do
+            self.completedChallenges[LEVELS[l].levelName][values[i]] = true
+        end
+    end
+    self.isLevel = PlayerInfoIni:GetValue("Player", "IsLevel")
+    if (self.isLevel == "") then
+        self.isLevel = LEVELS[1].levelName
     end
 end
