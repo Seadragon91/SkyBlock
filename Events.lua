@@ -27,10 +27,10 @@ function OnPlayerSpawn(a_Player)
     end    
     
     local pi = PLAYERS[a_Player:GetName()]
-    if (pi:GetIslandNumber() == -1) then -- no island
+    if (pi.islandNumber == -1) then -- no island
         a_Player:TeleportToCoords(0, 170, 0)
     else
-        posX, posZ = GetIslandPosition(pi:GetIslandNumber())
+        posX, posZ = GetIslandPosition(pi.islandNumber)
         a_Player:TeleportToCoords(posX, 151, posZ)
     end
 end

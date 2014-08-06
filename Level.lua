@@ -28,4 +28,3 @@ function cLevel.Load(self, a_File)
         self.challenges[challengeName] = cChallengeInfo.new(challengeName, LevelIni, self.levelName)
     end
 end
-

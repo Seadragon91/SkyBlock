@@ -36,13 +36,13 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
     
     if (a_Split[2] == "play") then
         local pi = PLAYERS[a_Player:GetName()]
-        if (pi:GetIslandNumber() == -1) then -- Player has no island
+        if (pi.islandNumber == -1) then -- Player has no island
             local islandNumber = -1
             local posX = 0
             local posZ = 0
             
             islandNumber, posX, posZ = CreateIsland(a_Player, -1)
-            pi:SetIslandNumber(islandNumber)
+            pi.islandNumber = islandNumber
             
             if (a_Player:GetWorld():GetName() ~= SKYBLOCK:GetName()) then
                 a_Player:MoveToWorld(WORLD_NAME)
@@ -55,7 +55,7 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
             local posX = 0
             local posZ = 0
             
-            posX, posZ = GetIslandPosition(pi:GetIslandNumber())
+            posX, posZ = GetIslandPosition(pi.islandNumber)
             
             if (a_Player:GetWorld():GetName() ~= SKYBLOCK:GetName()) then
                 a_Player:MoveToWorld(WORLD_NAME)
@@ -74,23 +74,23 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
             return true
         end
         
-        if (pi:GetIslandNumber() == -1) then
+        if (pi.islandNumber == -1) then
             a_Player:SendMessageFailure("You have no island.")
             return true
         end
         
-        if (pi:GetIsRestarting() == true) then -- Avoid running the command multiple
+        if (pi.isRestarting == true) then -- Avoid running the command multiple
             a_Player:SendMessageInfo("This command is running. Please wait...")
             return true
         end
         
-        pi:SetIsRestarting(true)
+        pi.isRestarting = true
         a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
         
         local posX = 0
         local posZ = 0
         
-        posX, posZ = GetIslandPosition(pi:GetIslandNumber())
+        posX, posZ = GetIslandPosition(pi.islandNumber)
         RemoveIsland(posX, posZ) -- Recreates all chunks in the area of the island
 
         a_Player:SendMessageInfo("Please wait 10s...");
@@ -106,12 +106,12 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
                     local posX = 0
                     local posZ = 0
                 
-                    islandNumber, posX, posZ = CreateIsland(a_FoundPlayer, pi:GetIslandNumber());
+                    islandNumber, posX, posZ = CreateIsland(a_FoundPlayer, pi.islandNumber);
                     a_FoundPlayer:TeleportToCoords(posX, 151, posZ);
                     a_FoundPlayer:SetFoodLevel(20)
                     a_FoundPlayer:SetHealth(a_FoundPlayer:GetMaxHealth())
                     a_FoundPlayer:SendMessageSuccess("Good luck with your new island.");
-                    pi:SetIsRestarting(false)
+                    pi.isRestarting  = false
                 end)
             end
         

@@ -17,26 +17,6 @@ function cPlayerInfo.new(a_PlayerName)
     return self
 end
 
-function cPlayerInfo.GetPlayerName(self)
-    return self.playerName
-end
-
-function cPlayerInfo.SetIslandNumber(self, a_IslandNumber)
-    self.islandNumber = a_IslandNumber
-end
-
-function cPlayerInfo.GetIslandNumber(self)
-    return self.islandNumber
-end
-
-function cPlayerInfo.SetIsRestarting(self, a_IsRestarting)
-    self.isRestarting = a_IsRestarting
-end
-
-function cPlayerInfo.GetIsRestarting(self)
-    return self.isRestarting
-end
-
 function cPlayerInfo.HasCompleted(self, a_Level, a_ChallengeName)
     if (self.completedChallenges[a_Level] == nil) then
         return false

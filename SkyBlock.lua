@@ -72,25 +72,6 @@ function OnDisable()
     LOG(PLUGIN:GetName() .. " is shutting down...")
 end
 
-function HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
-    if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-        return false
-    end
-    
-    local pi = PLAYERS[a_Player:GetName()]
-    local islandNumber = GetIslandNumber(a_BlockX, a_BlockZ)
-    if (a_Player:HasPermission("skyblock.admin.build")) then
-        return false
-    end
-    
-    if (pi:GetIslandNumber() == islandNumber) then
-        return false
-    end
-    
-    return true
-end
-
-
 function LoadConfiguration(a_Config)
     local ConfigIni = cIniFile()
     ConfigIni:ReadFile(a_Config)
@@ -133,13 +114,4 @@ function LoadAllLevels(a_File)
         local fileLevel = ConfigIni:GetValue("Levels", i)
         LEVELS[i] = cLevel.new(fileLevel)
     end
-end
-
-function GetChallenge(a_ChallengeName)
-    for i = 1, #LEVELS do
-        if (LEVELS[i].challenges[a_ChallengeName] ~= nil) then
-            return LEVELS[i].challenges[a_ChallengeName]
-        end
-    end
-    return nil
 end
