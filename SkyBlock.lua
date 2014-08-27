@@ -38,7 +38,7 @@ function Initialize(Plugin)
     
     -- Load all ChallengeInfos
     LoadAllLevels(PLUGIN:GetLocalDirectory() .. "/challenges/Config.ini")
-        
+    
     -- Load all PlayerInfos from players who are online
     LoadAllPlayerInfos()
     

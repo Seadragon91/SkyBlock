@@ -12,7 +12,7 @@ function cLevel.new(a_File)
 end
 
 function cLevel.GetLevelName(self)
-    return self.levelName 
+    return self.levelName
 end
 
 function cLevel.Load(self, a_File)

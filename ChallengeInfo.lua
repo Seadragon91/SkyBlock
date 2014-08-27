@@ -3,11 +3,11 @@
 cChallengeInfo = {}
 cChallengeInfo.__index = cChallengeInfo
 
-function cChallengeInfo.new(a_Challengename, a_ChallengesIni, a_Level)
-    self = setmetatable({}, cChallengeInfo)
+function cChallengeInfo.new(a_Challengename, a_ChallengesIni, a_LevelName)
+    local self = setmetatable({}, cChallengeInfo)
     
     self.challengeName = a_Challengename
-    self.inLevel = a_Level
+    self.inLevel = a_LevelName
     self.Load(self, a_ChallengesIni)
     return self
 end
@@ -29,7 +29,27 @@ function cChallengeInfo.IsCompleted(self, a_Player)
     end
     
     if (pi.completedChallenges[self.inLevel][self.challengeName] == true) then
-        a_Player:SendMessageInfo("You have already completed that challenge.")
+        if (self.repeatable == false) then
+            a_Player:SendMessageInfo("This challenge is not repeatable.")
+            return
+        end
+        
+        for i = 1, #self.rpt_requiredItems do
+            if (not a_Player:GetInventory():HasItems(self.rpt_requiredItems[i])) then
+                a_Player:SendMessageFailure("You don't have the required items.")
+                return
+            end
+        end
+        
+        for i = 1, #self.rpt_requiredItems do
+            a_Player:GetInventory():RemoveItem(self.rpt_requiredItems[i])
+        end
+        
+        for i = 1, #self.rpt_rewardItems do
+            a_Player:GetInventory():AddItem(self.rpt_rewardItems[i])
+        end
+        
+        a_Player:SendMessageSuccess("Congrats you repeated the challenge " .. self.challengeName)
         return
     end
 
@@ -48,6 +68,7 @@ function cChallengeInfo.IsCompleted(self, a_Player)
         a_Player:GetInventory():AddItem(self.rewardItems[i])
     end
     
+    pi.completedChallenges[self.inLevel] = {}    
     pi.completedChallenges[self.inLevel][self.challengeName] = true
     a_Player:SendMessageSuccess("Congrats you completed the challenge " .. self.challengeName)
     
@@ -68,8 +89,19 @@ end
 
 function cChallengeInfo.Load(self, a_ChallengesIni)
     self.description    = a_ChallengesIni:GetValue(self.challengeName, "description")
-    self.requiredItems  = self.ParseStringToItems(a_ChallengesIni:GetValue(self.challengeName, "requiredItems"))   
+    self.requiredItems  = ParseStringToItems(a_ChallengesIni:GetValue(self.challengeName, "requiredItems"))
     self.requiredText   = a_ChallengesIni:GetValue(self.challengeName, "requiredText")
-    self.rewardItems    = self.ParseStringToItems(a_ChallengesIni:GetValue(self.challengeName, "rewardItems"))
+    self.rewardItems    = ParseStringToItems(a_ChallengesIni:GetValue(self.challengeName, "rewardItems"))
     self.rewardText     = a_ChallengesIni:GetValue(self.challengeName, "rewardText")
+    
+    -- Check if challenge is repeatable.
+    self.repeatable = a_ChallengesIni:GetValueB(self.challengeName, "repeatable")
+    if (self.repeatable == false) then
+        return
+    end
+    
+    self.rpt_requiredItems  = ParseStringToItems(a_ChallengesIni:GetValue(self.challengeName, "rpt_requiredItems"))
+    self.rpt_requiredText   = a_ChallengesIni:GetValue(self.challengeName, "rpt_requiredText")
+    self.rpt_rewardItems    = ParseStringToItems(a_ChallengesIni:GetValue(self.challengeName, "rpt_rewardItems"))
+    self.rpt_rewardText     = a_ChallengesIni:GetValue(self.challengeName, "rpt_rewardText")
 end

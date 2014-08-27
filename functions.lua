@@ -18,7 +18,7 @@ function GetAmount(a_List)
 end
 
  -- Parses all elements from the string to items and returns a list
-function ParseStringToItems(self, a_ToParse)
+function ParseStringToItems(a_ToParse)
     local items = {}
     local list = StringSplit(a_ToParse, " ")
     for i = 1, #list do
