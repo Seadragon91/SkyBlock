@@ -1,6 +1,6 @@
 -- SkyBlock plugin for the c++ MC Server.
--- Before starting the server, you need to add a world named skyblock in the settings.ini under the topic [Worlds]
--- World=skyblock
+-- Before starting the server, you need to add a (configurable world name in Config.ini) world in the settings.ini under the topic [Worlds]
+-- Example: World=skyblock
 
 PLUGIN = nil
 ISLAND_NUMBER = nil -- Gets increased, before a new island is created

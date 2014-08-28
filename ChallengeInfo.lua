@@ -68,7 +68,6 @@ function cChallengeInfo.IsCompleted(self, a_Player)
         a_Player:GetInventory():AddItem(self.rewardItems[i])
     end
     
-    pi.completedChallenges[self.inLevel] = {}    
     pi.completedChallenges[self.inLevel][self.challengeName] = true
     a_Player:SendMessageSuccess("Congrats you completed the challenge " .. self.challengeName)
     

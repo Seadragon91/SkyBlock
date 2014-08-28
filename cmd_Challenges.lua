@@ -1,5 +1,5 @@
 function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.    
-    if (#a_Split == 1) then -- List all challenge names, light gray for completed and light green for not
+    if (#a_Split == 1) then -- List all challenge names, light gray for completed, light blue for repeatable and light green for not
         local pi = PLAYERS[a_Player:GetName()]
         local isLevel = GetLevelAsNumer(pi.isLevel)
         local pos = -1
@@ -10,7 +10,7 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
         
             if (needLevel > isLevel) then
                 pos = index
-                break 
+                break
             end
         
             a_Player:SendMessageInfo("--- Level: " .. level.levelName .. " ---")
@@ -76,10 +76,12 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
         a_Player:SendMessage(cChatColor.LightGreen .. "Gather this items: " .. cChatColor.White .. ci.requiredText)
         a_Player:SendMessage(cChatColor.Gold .. "You get for completion: " .. cChatColor.White .. ci.rewardText)
         
-        a_Player:SendMessage(cChatColor.Blue .. "For repeating:")
-        a_Player:SendMessage(cChatColor.LightGreen .. "Gather this items: " .. cChatColor.White .. ci.rpt_requiredText)
-        a_Player:SendMessage(cChatColor.Gold .. "You get for completion: " .. cChatColor.White .. ci.rpt_rewardText)
-        
+        if (ci.repeatable) then
+            a_Player:SendMessage(cChatColor.Blue .. "For repeating:")
+            a_Player:SendMessage(cChatColor.LightGreen .. "Gather this items: " .. cChatColor.White .. ci.rpt_requiredText)
+            a_Player:SendMessage(cChatColor.Gold .. "You get for completion: " .. cChatColor.White .. ci.rpt_rewardText)
+        end
+                
         return true
     end
     
@@ -135,14 +137,14 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
             else
                 for i = 1, #ci.requiredItems do
                     a_Player:GetInventory():AddItem(ci.requiredItems[i])
-                end             
+                end
             end
-                
+            
             a_Player:SendMessageInfo("You got the required items.")
             return true
         end
-         
-        if (a_Split[4] == "rew") then        
+        
+        if (a_Split[4] == "rew") then
             if (#a_Split == 5 and a_Split[5] == "rpt") then
                 if (ci.repeatable == false) then
                     a_Player:SendMessageInfo("This challenge has no repeatable items.")
@@ -155,9 +157,9 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
             else
                 for i = 1, #ci.rewardItems do
                     a_Player:GetInventory():AddItem(ci.rewardItems[i])
-                end             
+                end
             end
-                
+            
             a_Player:SendMessageInfo("You got the reward items.")
             return true
         end
@@ -166,4 +168,3 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
     a_Player:SendMessageFailure("Unknwown argument.")
     return true
 end
-

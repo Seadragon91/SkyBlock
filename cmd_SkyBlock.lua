@@ -28,8 +28,8 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
             a_Player:SendMessageSuccess("Welcome to the world skyblock. Type /skyblock play to get an island.")
             return true
         else
-            -- No world named skyblock found :-(
-            a_Player:SendMessageFailure("Command failed. Couldn't find the world skyblock.")
+            -- Didn't find the world
+            a_Player:SendMessageFailure("Command failed. Couldn't find the world " .. WORLD_NAME .. ".")
             return true
         end
     end

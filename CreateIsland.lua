@@ -2,12 +2,12 @@ function CreateIsland(a_Player, a_IslandNumber) -- Creates a island for the play
     local posX = 0
     local posZ = 0
     
-    if (a_IslandNumber == -1) then -- New island for a player, use his island number, not a new one
+    if (a_IslandNumber == -1) then -- New island for a player
         -- Increase island number
         ISLAND_NUMBER = ISLAND_NUMBER + 1
         -- Get island position
         posX, posZ = GetIslandPosition(ISLAND_NUMBER)
-    else
+    else -- Use his island number
         posX, posZ = GetIslandPosition(a_IslandNumber)
     end
     
