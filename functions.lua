@@ -25,9 +25,9 @@ function ParseStringToItems(a_ToParse)
         local values = StringSplit(list[i], ":")
         local item = cItem()
         
-        if (StringToItem(values[1], item)) then -- Invalid item name
+        if (StringToItem(values[1], item)) then -- Check if valid item name
             local amount = tonumber(values[2])
-            if (amount ~= nil) then -- Invalid number
+            if (amount ~= nil) then -- Check if valid number
                 item.m_ItemCount = amount
                 if (#values == 3) then
                     local dv = tonumber(values[3])
