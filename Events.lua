@@ -12,29 +12,37 @@ function FillBlocks(a_ChunkDesc)
     a_ChunkDesc:SetUseDefaultFinish(false)
 end
 
-function OnPlayerJoin(a_Player) -- Load file and add PlayerInfo to list
-    PLAYERS[a_Player:GetName()] = cPlayerInfo.new(a_Player:GetName())
-end
-
+-- TODO: Deprecated
+-- Save PlayerInfo
 function OnPlayerQuit(a_Player) -- Save file and remove PlayerInfo
-    PLAYERS[a_Player:GetName()]:Save()
-    PLAYERS[a_Player:GetName()] = nil
+    if (a_Player:GetWorld():GetName() == WORLD_NAME) then
+        GetPlayerInfo(a_Player):Save()
+        PLAYERS[a_Player:GetUUID()] = nil
+    end
 end
 
+-- Teleport player to island or spawn platform
 function OnPlayerSpawn(a_Player)
+    print("Amount playerinfos = " .. GetAmount(PLAYERS))
+
     if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
         return
-    end    
+    end
     
-    local pi = PLAYERS[a_Player:GetName()]
+    print("Joined world skyblock")
+    
+    local pi = GetPlayerInfo(a_Player)
     if (pi.islandNumber == -1) then -- no island
         a_Player:TeleportToCoords(0, 170, 0)
     else
         posX, posZ = GetIslandPosition(pi.islandNumber)
         a_Player:TeleportToCoords(posX, 151, posZ)
     end
+    
+    print("Amount playerinfos = " .. GetAmount(PLAYERS))
 end
 
+-- Handle the spawn schematic
 function OnWorldLoaded(a_World)
     if (a_World:GetName() ~= WORLD_NAME) then
         return

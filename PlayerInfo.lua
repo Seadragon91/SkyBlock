@@ -3,17 +3,17 @@
 cPlayerInfo = {}
 cPlayerInfo.__index = cPlayerInfo
 
-function cPlayerInfo.new(a_PlayerName)
+function cPlayerInfo.new(a_Player)
     local self = setmetatable({}, cPlayerInfo)
     
-    self.playerName = a_PlayerName
+    self.playerName = a_Player:GetName()
     self.islandNumber = -1 -- Set to -1 for no island
-    self.playerFile = PLUGIN:GetLocalDirectory() .. "/players/" .. a_PlayerName .. ".ini"
+    self.playerFile = PLUGIN:GetLocalDirectory() .. "/players/" .. a_Player:GetUUID() .. ".ini"
     self.isLevel = LEVELS[1].levelName -- Set first level
     self.completedChallenges = {}
     self.completedChallenges[self.isLevel] = {}
         
-    self.Load(self) -- Check if there is a player file, if yes load it
+    self.Load(self, a_Player) -- Check if there is a player file, if yes load it
     return self
 end
 
@@ -60,8 +60,16 @@ function cPlayerInfo.Save(self) -- Save PlayerInfo
     PlayerInfoIni:WriteFile(self.playerFile)
 end
 
-function cPlayerInfo.Load(self) -- Load PlayerInfo
+function cPlayerInfo.Load(self, a_Player) -- Load PlayerInfo
     local PlayerInfoIni = cIniFile()
+    
+    print("playerinfo")
+    
+    -- Check for old file, backward compability
+    if (cFile:Exists(PLUGIN:GetLocalDirectory() .. "/players/" .. a_Player:GetName() .. ".ini")) then -- Rename file if exists
+        cFile:Rename(PLUGIN:GetLocalDirectory() .. "/players/" .. a_Player:GetName() .. ".ini", self.playerFile)
+    end
+    
     if (PlayerInfoIni:ReadFile(self.playerFile) == false) then
         return
     end

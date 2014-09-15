@@ -9,7 +9,7 @@ ISLAND_SCHEMATIC = nil -- Schematic file for islands
 SPAWN_SCHEMATIC = nil -- Schematic file for the spawn
 SPAWN_CREATED = nil -- Check value, if spawn has already been created
 SKYBLOCK = nil -- Instance of a world
-PLAYERS = nil -- A table that contains player names and PlayerInfos
+PLAYERS = nil -- A table that contains player uuid and PlayerInfos
 WORLD_NAME = nil -- The world that the plugin is using
 LEVELS = nil -- Store all levels
 
@@ -44,7 +44,6 @@ function Initialize(Plugin)
     
     -- register hooks
     cPluginManager:AddHook(cPluginManager.HOOK_CHUNK_GENERATING, OnChunkGenerating)
-    cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_JOINED, OnPlayerJoin)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerQuit)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
     cPluginManager:AddHook(cPluginManager.HOOK_WORLD_STARTED, OnWorldLoaded)
@@ -93,14 +92,16 @@ function SaveConfiguration(a_Config)
     ConfigIni:WriteFile(a_Config)
 end
 
-function LoadAllPlayerInfos()
+function LoadAllPlayerInfos() -- Only for the world that the plugin is using
     cRoot:Get():ForEachPlayer(function(a_Player)
-        PLAYERS[a_Player:GetName()] = cPlayerInfo.new(a_Player:GetName());
+        if (a_Player:GetWorld():GetName() == WORLD_NAME) then
+            PLAYERS[a_Player:GetUUID()] = cPlayerInfo.new(a_Player:GetName());
+        end
     end);
 end
 
 function SaveAllPlayerInfos()
-    for player, pi in pairs(PLAYERS) do
+    for uuid, pi in pairs(PLAYERS) do
         pi:Save()
     end
 end

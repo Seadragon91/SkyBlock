@@ -46,7 +46,7 @@ function HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
         return false
     end
     
-    local pi = PLAYERS[a_Player:GetName()]
+    local pi = GetPlayerInfo(a_Player)
     local islandNumber = GetIslandNumber(a_BlockX, a_BlockZ)
     if (a_Player:HasPermission("skyblock.admin.build")) then
         return false
@@ -67,4 +67,14 @@ function GetChallenge(a_ChallengeName)
         end
     end
     return nil
+end
+
+-- Returns and load cPlayerInfo, should never returns nil
+function GetPlayerInfo(a_Player)
+    local pi = PLAYERS[a_Player:GetUUID()]
+    if (pi == nil) then
+        pi = cPlayerInfo.new(a_Player) -- Load or create new PlayerInfo
+        PLAYERS[a_Player:GetUUID()] = pi
+    end
+    return pi
 end

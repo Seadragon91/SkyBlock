@@ -35,7 +35,7 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
     end
     
     if (a_Split[2] == "play") then
-        local pi = PLAYERS[a_Player:GetName()]
+        local pi = GetPlayerInfo(a_Player)
         if (pi.islandNumber == -1) then -- Player has no island
             local islandNumber = -1
             local posX = 0
@@ -68,7 +68,7 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
     end
     
     if (a_Split[2] == "restart") then -- Let the player restarts his island
-        local pi = PLAYERS[a_Player:GetName()]
+        local pi = GetPlayerInfo(a_Player)
         if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
             a_Player:SendMessageFailure("This command works only in the world skyblock.")
             return true
@@ -101,7 +101,7 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
                 function(a_FoundPlayer)                
                     a_FoundPlayer:GetInventory():Clear()
                     
-                    local pi = PLAYERS[a_FoundPlayer:GetName()]
+                    local pi = GetPlayerInfo(a_Player)
                     local islandNumber = -1
                     local posX = 0
                     local posZ = 0
