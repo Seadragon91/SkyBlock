@@ -23,13 +23,9 @@ end
 
 -- Teleport player to island or spawn platform
 function OnPlayerSpawn(a_Player)
-    print("Amount playerinfos = " .. GetAmount(PLAYERS))
-
     if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
         return
     end
-    
-    print("Joined world skyblock")
     
     local pi = GetPlayerInfo(a_Player)
     if (pi.islandNumber == -1) then -- no island
@@ -38,8 +34,6 @@ function OnPlayerSpawn(a_Player)
         posX, posZ = GetIslandPosition(pi.islandNumber)
         a_Player:TeleportToCoords(posX, 151, posZ)
     end
-    
-    print("Amount playerinfos = " .. GetAmount(PLAYERS))
 end
 
 -- Handle the spawn schematic
@@ -61,13 +55,15 @@ function OnWorldLoaded(a_World)
         
         area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez) -- Paste the schematic
         SPAWN_CREATED = true
+        SaveConfiguration()
     else -- Error or no schematic found, create default spawn
         for x = -5,5 do
             for z = -5,5 do
                 SKYBLOCK:SetBlock(x, 169, z, E_BLOCK_STONE, 0)
             end
         end
-        SPAWN_CREATED = false
+        SPAWN_CREATED = true
+        SaveConfiguration()
     end
 end
 

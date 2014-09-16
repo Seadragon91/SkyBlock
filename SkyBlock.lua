@@ -12,6 +12,7 @@ SKYBLOCK = nil -- Instance of a world
 PLAYERS = nil -- A table that contains player uuid and PlayerInfos
 WORLD_NAME = nil -- The world that the plugin is using
 LEVELS = nil -- Store all levels
+CONFIG_FILE = nil -- Config file for SkyBlock
 
 function Initialize(Plugin)
     Plugin:SetName("SkyBlock")
@@ -26,12 +27,13 @@ function Initialize(Plugin)
     PLAYERS = {}
     WORLD_NAME = "skyblock"
     LEVELS = {}
+    CONFIG_FILE = PLUGIN:GetLocalDirectory() .. "/Config.ini"
     
     -- Create players folder
     cFile:CreateFolder(PLUGIN:GetLocalDirectory() .. "/players/")
     
     -- Load Config file
-    LoadConfiguration(PLUGIN:GetLocalDirectory() .. "/Config.ini")
+    LoadConfiguration()
     
     -- Get instance of world skyblock
     SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
@@ -39,8 +41,8 @@ function Initialize(Plugin)
     -- Load all ChallengeInfos
     LoadAllLevels(PLUGIN:GetLocalDirectory() .. "/challenges/Config.ini")
     
-    -- Load all PlayerInfos from players who are online
-    LoadAllPlayerInfos()
+    -- Load all PlayerInfos from players who are in the world
+    LoadPlayerInfos()
     
     -- register hooks
     cPluginManager:AddHook(cPluginManager.HOOK_CHUNK_GENERATING, OnChunkGenerating)
@@ -62,18 +64,15 @@ function Initialize(Plugin)
 end
 
 function OnDisable()
-    -- Save configuration
-    SaveConfiguration(PLUGIN:GetLocalDirectory() .. "/Config.ini")
-    
     -- Save all PlayerInfos
     SaveAllPlayerInfos()
     
     LOG(PLUGIN:GetName() .. " is shutting down...")
 end
 
-function LoadConfiguration(a_Config)
+function LoadConfiguration()
     local ConfigIni = cIniFile()
-    ConfigIni:ReadFile(a_Config)
+    ConfigIni:ReadFile(CONFIG_FILE)
     ISLAND_NUMBER = ConfigIni:GetValueI("Island", "Number")
     ISLAND_DISTANCE = ConfigIni:GetValueI("Island", "Distance")
     ISLAND_SCHEMATIC = ConfigIni:GetValue("Schematic", "Island")
@@ -82,17 +81,15 @@ function LoadConfiguration(a_Config)
     SPAWN_CREATED = ConfigIni:GetValueB("PluginValues", "SpawnCreated")
 end
 
-function SaveConfiguration(a_Config)
+function SaveConfiguration()
     local ConfigIni = cIniFile()
-    ConfigIni:ReadFile(a_Config)
+    ConfigIni:ReadFile(CONFIG_FILE)
     ConfigIni:SetValue("Island", "Number", ISLAND_NUMBER, true)
-    ConfigIni:SetValue("Island", "Distance", ISLAND_DISTANCE, true)
-    ConfigIni:SetValue("General", "Worldname", WORLD_NAME, true)
     ConfigIni:SetValueB("PluginValues", "SpawnCreated", SPAWN_CREATED, true)
-    ConfigIni:WriteFile(a_Config)
+    ConfigIni:WriteFile(CONFIG_FILE)
 end
 
-function LoadAllPlayerInfos() -- Only for the world that the plugin is using
+function LoadPlayerInfos() -- Only for the world that the plugin is using
     cRoot:Get():ForEachPlayer(function(a_Player)
         if (a_Player:GetWorld():GetName() == WORLD_NAME) then
             PLAYERS[a_Player:GetUUID()] = cPlayerInfo.new(a_Player:GetName());
@@ -110,7 +107,7 @@ function LoadAllLevels(a_File)
     local ConfigIni = cIniFile()
     ConfigIni:ReadFile(a_File)
 
-    local amount = ConfigIni:GetNumValues("Levels")    
+    local amount = ConfigIni:GetNumValues("Levels")
     for i = 1, amount do
         local fileLevel = ConfigIni:GetValue("Levels", i)
         LEVELS[i] = cLevel.new(fileLevel)

@@ -5,6 +5,8 @@ function CreateIsland(a_Player, a_IslandNumber) -- Creates a island for the play
     if (a_IslandNumber == -1) then -- New island for a player
         -- Increase island number
         ISLAND_NUMBER = ISLAND_NUMBER + 1
+        -- Save Config file to save island number
+        SaveConfiguration()
         -- Get island position
         posX, posZ = GetIslandPosition(ISLAND_NUMBER)
     else -- Use his island number
