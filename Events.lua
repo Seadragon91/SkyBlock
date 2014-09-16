@@ -1,4 +1,5 @@
-function OnChunkGenerating(a_World, a_ChunkX, a_ChunkZ, a_ChunkDesc) -- Air generator
+-- Air generator
+function OnChunkGenerating(a_World, a_ChunkX, a_ChunkZ, a_ChunkDesc)
     if a_World:GetName() == WORLD_NAME then
         FillBlocks(a_ChunkDesc) -- fill entire chunk with air
     end

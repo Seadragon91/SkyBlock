@@ -64,6 +64,7 @@ function Initialize(Plugin)
 end
 
 function OnDisable()
+    -- Deprecated
     -- Save all PlayerInfos
     SaveAllPlayerInfos()
     
@@ -79,8 +80,11 @@ function LoadConfiguration()
     SPAWN_SCHEMATIC = ConfigIni:GetValue("Schematic", "Spawn")
     WORLD_NAME = ConfigIni:GetValue("General", "Worldname")
     SPAWN_CREATED = ConfigIni:GetValueB("PluginValues", "SpawnCreated")
+    
+    -- Reminder: Any new settings who gets added in new versions, should be added, to the config file, if not existent
 end
 
+-- Save settings who gets changed trough the plugin
 function SaveConfiguration()
     local ConfigIni = cIniFile()
     ConfigIni:ReadFile(CONFIG_FILE)
@@ -89,7 +93,8 @@ function SaveConfiguration()
     ConfigIni:WriteFile(CONFIG_FILE)
 end
 
-function LoadPlayerInfos() -- Only for the world that the plugin is using
+-- Only for the world that the plugin is using
+function LoadPlayerInfos()
     cRoot:Get():ForEachPlayer(function(a_Player)
         if (a_Player:GetWorld():GetName() == WORLD_NAME) then
             PLAYERS[a_Player:GetUUID()] = cPlayerInfo.new(a_Player:GetName());

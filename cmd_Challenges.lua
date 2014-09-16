@@ -1,4 +1,5 @@
-function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.    
+ -- Handle the command challenges
+function CommandChallenges(a_Split, a_Player) 
     if (#a_Split == 1) then -- List all challenge names, light gray for completed, light blue for repeatable and light green for not
         local pi = GetPlayerInfo(a_Player)
         local isLevel = GetLevelAsNumer(pi.isLevel)

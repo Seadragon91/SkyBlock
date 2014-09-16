@@ -63,8 +63,6 @@ end
 function cPlayerInfo.Load(self, a_Player) -- Load PlayerInfo
     local PlayerInfoIni = cIniFile()
     
-    print("playerinfo")
-    
     -- Check for old file, backward compability
     if (cFile:Exists(PLUGIN:GetLocalDirectory() .. "/players/" .. a_Player:GetName() .. ".ini")) then -- Rename file if exists
         cFile:Rename(PLUGIN:GetLocalDirectory() .. "/players/" .. a_Player:GetName() .. ".ini", self.playerFile)

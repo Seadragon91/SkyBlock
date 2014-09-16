@@ -1,4 +1,5 @@
-function CreateIsland(a_Player, a_IslandNumber) -- Creates a island for the player, a_islandNuber for restart. Returns island number, positions x and z
+-- Creates a island for the player, a_islandNuber for restart. Returns island number, positions x and z
+function CreateIsland(a_Player, a_IslandNumber)
     local posX = 0
     local posZ = 0
     
