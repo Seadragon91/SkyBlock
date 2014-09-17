@@ -8,7 +8,7 @@ function cPlayerInfo.new(a_Player)
     
     self.playerName = a_Player:GetName()
     self.islandNumber = -1 -- Set to -1 for no island
-    self.playerFile = PLUGIN:GetLocalDirectory() .. "/players/" .. a_Player:GetUUID() .. ".ini"
+    self.playerFile = PLUGIN:GetLocalFolder() .. "/players/" .. a_Player:GetUUID() .. ".ini"
     self.isLevel = LEVELS[1].levelName -- Set first level
     self.completedChallenges = {}
     self.completedChallenges[self.isLevel] = {}
@@ -63,9 +63,9 @@ end
 function cPlayerInfo.Load(self, a_Player) -- Load PlayerInfo
     local PlayerInfoIni = cIniFile()
     
-    -- Check for old file, backward compability
-    if (cFile:Exists(PLUGIN:GetLocalDirectory() .. "/players/" .. a_Player:GetName() .. ".ini")) then -- Rename file if exists
-        cFile:Rename(PLUGIN:GetLocalDirectory() .. "/players/" .. a_Player:GetName() .. ".ini", self.playerFile)
+    -- Check for old file, backward compatibilityx
+    if (cFile:Exists(PLUGIN:GetLocalFolder() .. "/players/" .. a_Player:GetName() .. ".ini")) then -- Rename file if exists
+        cFile:Rename(PLUGIN:GetLocalFolder() .. "/players/" .. a_Player:GetName() .. ".ini", self.playerFile)
     end
     
     if (PlayerInfoIni:ReadFile(self.playerFile) == false) then
@@ -74,9 +74,9 @@ function cPlayerInfo.Load(self, a_Player) -- Load PlayerInfo
     
     self.islandNumber = PlayerInfoIni:GetValueI("Island", "Number")
     
-    for l = 1, #LEVELS do
-        self.completedChallenges[LEVELS[l].levelName] = {}
-        local list = PlayerInfoIni:GetValue("Completed", LEVELS[l].levelName)
+    for level_index = 1, #LEVELS do
+        self.completedChallenges[LEVELS[level_index].levelName] = {}
+        local list = PlayerInfoIni:GetValue("Completed", LEVELS[level_index].levelName)
         if (list == nil) then
             break
         end
@@ -84,7 +84,7 @@ function cPlayerInfo.Load(self, a_Player) -- Load PlayerInfo
         local values = StringSplit(list, ":")
     
         for i = 1, #values do
-            self.completedChallenges[LEVELS[l].levelName][values[i]] = true
+            self.completedChallenges[LEVELS[level_index].levelName][values[i]] = true
         end
     end
     self.isLevel = PlayerInfoIni:GetValue("Player", "IsLevel")

@@ -27,10 +27,13 @@ function Initialize(Plugin)
     PLAYERS = {}
     WORLD_NAME = "skyblock"
     LEVELS = {}
-    CONFIG_FILE = PLUGIN:GetLocalDirectory() .. "/Config.ini"
+    CONFIG_FILE = PLUGIN:GetLocalFolder() .. "/Config.ini"
     
     -- Create players folder
-    cFile:CreateFolder(PLUGIN:GetLocalDirectory() .. "/players/")
+    cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/players/")
+    
+    -- Create islands folder
+    cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/islands/")
     
     -- Load Config file
     LoadConfiguration()
@@ -39,7 +42,7 @@ function Initialize(Plugin)
     SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
     
     -- Load all ChallengeInfos
-    LoadAllLevels(PLUGIN:GetLocalDirectory() .. "/challenges/Config.ini")
+    LoadAllLevels(PLUGIN:GetLocalFolder() .. "/challenges/Config.ini")
     
     -- Load all PlayerInfos from players who are in the world
     LoadPlayerInfos()
