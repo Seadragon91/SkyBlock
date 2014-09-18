@@ -10,6 +10,7 @@ SPAWN_SCHEMATIC = nil -- Schematic file for the spawn
 SPAWN_CREATED = nil -- Check value, if spawn has already been created
 SKYBLOCK = nil -- Instance of a world
 PLAYERS = nil -- A table that contains player uuid and PlayerInfos
+ISLANDS = nil -- A table contains island numbers and IslandInfo
 WORLD_NAME = nil -- The world that the plugin is using
 LEVELS = nil -- Store all levels
 CONFIG_FILE = nil -- Config file for SkyBlock
@@ -25,6 +26,7 @@ function Initialize(Plugin)
     SPAWN_SCHEMATIC = ""
     SPAWN_CREATED = false
     PLAYERS = {}
+    ISLANDS = {}
     WORLD_NAME = "skyblock"
     LEVELS = {}
     CONFIG_FILE = PLUGIN:GetLocalFolder() .. "/Config.ini"
@@ -44,10 +46,10 @@ function Initialize(Plugin)
     -- Load all ChallengeInfos
     LoadAllLevels(PLUGIN:GetLocalFolder() .. "/challenges/Config.ini")
     
-    -- Load all PlayerInfos from players who are in the world
+    -- Load all PlayerInfos and IslandInfos from players who are in the world
     LoadPlayerInfos()
     
-    -- register hooks
+    -- Register hooks
     cPluginManager:AddHook(cPluginManager.HOOK_CHUNK_GENERATING, OnChunkGenerating)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerQuit)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
@@ -84,7 +86,7 @@ function LoadConfiguration()
     WORLD_NAME = ConfigIni:GetValue("General", "Worldname")
     SPAWN_CREATED = ConfigIni:GetValueB("PluginValues", "SpawnCreated")
     
-    -- Reminder: Any new settings who gets added in new versions, should be added, to the config file, if not existent
+    -- Reminder: Any new settings who gets added in new versions, should be added, to the config file trough the plugin, if not existent
 end
 
 -- Save settings who gets changed trough the plugin
@@ -100,7 +102,15 @@ end
 function LoadPlayerInfos()
     cRoot:Get():ForEachPlayer(function(a_Player)
         if (a_Player:GetWorld():GetName() == WORLD_NAME) then
-            PLAYERS[a_Player:GetUUID()] = cPlayerInfo.new(a_Player);
+            local pi = cPlayerInfo.new(a_Player)
+            if (cFile:Exists(PLUGIN:GetLocalFolder() .. "/islands/" .. pi.islandNumber .. ".ini")) then
+                local ii = cIslandInfo.new(pi.islandNumber)
+                if (ii ~= nil) then
+                    ISLANDS[pi.islandNumber] = ii
+                end
+            end
+            
+            PLAYERS[a_Player:GetUUID()] = pi
         end
     end);
 end

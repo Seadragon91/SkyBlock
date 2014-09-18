@@ -69,7 +69,7 @@ function GetChallenge(a_ChallengeName)
     return nil
 end
 
--- Returns and load cPlayerInfo, should never returns nil
+-- Returns and load cPlayerInfo if necessary, should never return nil
 function GetPlayerInfo(a_Player)
     local pi = PLAYERS[a_Player:GetUUID()]
     if (pi == nil) then
@@ -77,4 +77,10 @@ function GetPlayerInfo(a_Player)
         PLAYERS[a_Player:GetUUID()] = pi
     end
     return pi
+end
+
+-- Return and load cIslandInfo if necessary, can return nil
+function GetIslandInfo(a_IslandNumber)
+    local ii = ISLANDS[a_IslandNumber)
+    return ii
 end

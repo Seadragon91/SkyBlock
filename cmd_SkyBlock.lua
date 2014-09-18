@@ -45,12 +45,19 @@ function CommandSkyBlock(a_Split, a_Player)
             islandNumber, posX, posZ = CreateIsland(a_Player, -1)
             pi.islandNumber = islandNumber
             
+            local ii = cIslandInfo.new(islandNumber)
+            ii.ownerUUID = a_Player:GetUUID()
+            ii.ownerName = a_Player:GetName()
+            ii:Save()
+            
             if (a_Player:GetWorld():GetName() ~= SKYBLOCK:GetName()) then
                 a_Player:MoveToWorld(WORLD_NAME)
             end
             
             a_Player:TeleportToCoords(posX, 151, posZ)
             a_Player:SendMessageSuccess("Welcome to your island. Do not fall and make no obsidian :-)")
+            
+            pi:Save()
             return true
         else -- Player has an island            
             local posX = 0
@@ -63,6 +70,7 @@ function CommandSkyBlock(a_Split, a_Player)
             end
             
             a_Player:TeleportToCoords(posX, 151, posZ)
+            local number = GetIslandNumber(a_Player:GetPosX(), a_Player:GetPosZ())
             a_Player:SendMessageSuccess("Welcome back " .. a_Player:GetName())
             return true
         end

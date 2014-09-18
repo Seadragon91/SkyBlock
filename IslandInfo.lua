@@ -12,7 +12,13 @@ function cIslandInfo.new(a_IslandNumber)
     self.homeLocation = nil
 --    self.friends = {}
     
-    self.Load(a_IslandNumber, a_Player) -- Load island file
+    self.Load(self, a_IslandNumber, a_Player) -- Load island file
+    return self
+end
+
+function cIslandInfo.SetOwner(a_Player)
+    self.ownerUUID = a_Player:GetUUID()
+    self.ownerName = a_Player:GetName()
 end
 
 -- Save the island info
@@ -60,7 +66,7 @@ end
 -- end
 
 -- Load the island info
-function cIslandInfo.Load(self, a_IslandNumber, a_Player)
+function cIslandInfo.Load(self, a_IslandNumber)
     local IslandInfoIni = cIniFile()
     
     if (IslandInfoIni:ReadFile(self.islandFile) == false) then
@@ -72,10 +78,15 @@ function cIslandInfo.Load(self, a_IslandNumber, a_Player)
     self.islandNumber = a_IslandNumber
     self.ownerUUID = IslandInfoIni:GetValue("General", "OwnerUUID")
     self.ownerName = IslandInfoIni:GetValue("General", "OwnerName")
+    
     local temp = IslandInfoIni:GetValue("General", "HomeLocation")
     if (temp ~= "") then
         self.homeLocation = StringSplit(temp, " ")
     end
     
+    -- if (self.ownerName ~= a_Player:GetName()) then
+    --     self.ownerName = a_Player:GetName()
+    --     self.Save(self)
+    -- end
 end
 
