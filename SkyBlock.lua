@@ -100,7 +100,7 @@ end
 function LoadPlayerInfos()
     cRoot:Get():ForEachPlayer(function(a_Player)
         if (a_Player:GetWorld():GetName() == WORLD_NAME) then
-            PLAYERS[a_Player:GetUUID()] = cPlayerInfo.new(a_Player:GetName());
+            PLAYERS[a_Player:GetUUID()] = cPlayerInfo.new(a_Player);
         end
     end);
 end

@@ -32,6 +32,11 @@ function OnPlayerSpawn(a_Player)
     if (pi.islandNumber == -1) then -- no island
         a_Player:TeleportToCoords(0, 170, 0)
     else
+        -- Lets check players location
+        if (pi.islandNumber == GetIslandNumber(a_Player:GetPosX(), a_Player:GetPosZ())) then
+            return -- His island, return here then he gets to the last position
+        end
+    
         posX, posZ = GetIslandPosition(pi.islandNumber)
         a_Player:TeleportToCoords(posX, 151, posZ)
     end
