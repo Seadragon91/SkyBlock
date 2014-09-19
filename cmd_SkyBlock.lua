@@ -46,8 +46,7 @@ function CommandSkyBlock(a_Split, a_Player)
             pi.islandNumber = islandNumber
             
             local ii = cIslandInfo.new(islandNumber)
-            ii.ownerUUID = a_Player:GetUUID()
-            ii.ownerName = a_Player:GetName()
+            ii:SetOwner(a_Player)
             ii:Save()
             
             if (a_Player:GetWorld():GetName() ~= SKYBLOCK:GetName()) then

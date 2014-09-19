@@ -9,10 +9,8 @@ function cIslandInfo.new(a_IslandNumber)
     
     self.islandFile = PLUGIN:GetLocalFolder() .. "/islands/" .. a_IslandNumber .. ".ini"
     self.islandNumber = a_IslandNumber
-    self.homeLocation = nil
 --    self.friends = {}
-    
-    self.Load(self, a_IslandNumber, a_Player) -- Load island file
+
     return self
 end
 
@@ -30,7 +28,7 @@ function cIslandInfo.Save(self)
     IslandInfoIni:SetValue("General", "OwnerName", self.ownerName, true)
     -- IslandInfoIni:SetValue("General", "Friends", table.concat(self.friends, " "), true)
     if (self.homeLocation ~= nil) then
-        IslandInfoIni:SetValue("General", "HomeLocation", table.concat(self.homeLocation))
+        IslandInfoIni:SetValue("General", "HomeLocation", table.concat(self.homeLocation, " "))
     end
     
     IslandInfoIni:WriteFile(self.islandFile)
@@ -66,16 +64,13 @@ end
 -- end
 
 -- Load the island info
-function cIslandInfo.Load(self, a_IslandNumber)
+function cIslandInfo.Load(self)
     local IslandInfoIni = cIniFile()
     
     if (IslandInfoIni:ReadFile(self.islandFile) == false) then
-        self.Save(self)
-        return
+        return false
     end
 
-    local IslandInfoIni = cIniFile()
-    self.islandNumber = a_IslandNumber
     self.ownerUUID = IslandInfoIni:GetValue("General", "OwnerUUID")
     self.ownerName = IslandInfoIni:GetValue("General", "OwnerName")
     
@@ -83,10 +78,6 @@ function cIslandInfo.Load(self, a_IslandNumber)
     if (temp ~= "") then
         self.homeLocation = StringSplit(temp, " ")
     end
-    
-    -- if (self.ownerName ~= a_Player:GetName()) then
-    --     self.ownerName = a_Player:GetName()
-    --     self.Save(self)
-    -- end
+    return true
 end
 

@@ -54,7 +54,7 @@ function Initialize(Plugin)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerQuit)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
     cPluginManager:AddHook(cPluginManager.HOOK_WORLD_STARTED, OnWorldLoaded)
-    
+        
     -- This below are required for checking the permission in the island area
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnBlockPlacing)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_LEFT_CLICK, OnPlayerLeftClick)
@@ -63,6 +63,7 @@ function Initialize(Plugin)
     -- Command Bindings
     cPluginManager.BindCommand("/skyblock", "skyblock.command", CommandSkyBlock , " - Access to the skyblock plugin")
     cPluginManager.BindCommand("/challenges", "skyblock.command", CommandChallenges , " - Access to the challenges")
+    cPluginManager.BindCommand("/island", "skyblock.command", CommandIsland , " - Access to the island commands")
     
     LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
     return true
@@ -104,10 +105,7 @@ function LoadPlayerInfos()
         if (a_Player:GetWorld():GetName() == WORLD_NAME) then
             local pi = cPlayerInfo.new(a_Player)
             if (cFile:Exists(PLUGIN:GetLocalFolder() .. "/islands/" .. pi.islandNumber .. ".ini")) then
-                local ii = cIslandInfo.new(pi.islandNumber)
-                if (ii ~= nil) then
-                    ISLANDS[pi.islandNumber] = ii
-                end
+                local ii = GetIslandInfo(pi.islandNumber)
             end
             
             PLAYERS[a_Player:GetUUID()] = pi

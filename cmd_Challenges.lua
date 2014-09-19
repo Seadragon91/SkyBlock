@@ -39,11 +39,9 @@ function CommandChallenges(a_Split, a_Player)
         end
         
         if (pos ~= -1) then
-            print("Start: " .. pos)
             local msg = "Locked levels: "
             local first = true
             for i = pos, #LEVELS do
-                print("Pos: " .. i)
                 if (first) then
                     first = false
                 else

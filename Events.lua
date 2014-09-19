@@ -82,5 +82,22 @@ function OnPlayerLeftClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, 
 end
 
 function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ)
-    return HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
+    if (HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ) == false) then
+        local pi = GetPlayerInfo(a_Player)
+        if (pi.resetObsidian == false) then
+            return false
+        end
+        
+        if (a_Player:GetEquippedItem().m_ItemType ~= -1) then
+            return false
+        end
+        
+        if (a_Player:GetWorld():GetBlock(a_BlockX, a_BlockY, a_BlockZ) == E_BLOCK_OBSIDIAN) then
+            a_Player:GetWorld():SetBlock(a_BlockX, a_BlockY, a_BlockZ, E_BLOCK_LAVA, 0)
+            pi.resetObsidian = false
+            a_Player:SendMessageInfo("Changed obsidian back to lava")        
+        end
+    else
+        return true
+    end
 end

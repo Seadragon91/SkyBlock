@@ -81,6 +81,13 @@ end
 
 -- Return and load cIslandInfo if necessary, can return nil
 function GetIslandInfo(a_IslandNumber)
-    local ii = ISLANDS[a_IslandNumber)
+    local ii = ISLANDS[a_IslandNumber]    
+    if (ii == nil) then
+        ii = cIslandInfo.new(a_IslandNumber)
+        if (ii:Load() == false) then -- Load cIslandInfo if exists
+            return nil
+        end
+        ISLANDS[a_IslandNumber] = ii
+    end
     return ii
 end
