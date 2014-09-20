@@ -76,55 +76,7 @@ function CommandSkyBlock(a_Split, a_Player)
     end
     
     if (a_Split[2] == "restart") then -- Let the player restarts his island
-        local pi = GetPlayerInfo(a_Player)
-        if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-            a_Player:SendMessageFailure("This command works only in the world skyblock.")
-            return true
-        end
-        
-        if (pi.islandNumber == -1) then
-            a_Player:SendMessageFailure("You have no island.")
-            return true
-        end
-        
-        if (pi.isRestarting == true) then -- Avoid running the command multiple
-            a_Player:SendMessageInfo("This command is running. Please wait...")
-            return true
-        end
-        
-        pi.isRestarting = true
-        a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
-        
-        local posX = 0
-        local posZ = 0
-        
-        posX, posZ = GetIslandPosition(pi.islandNumber)
-        RemoveIsland(posX, posZ) -- Recreates all chunks in the area of the island
-
-        a_Player:SendMessageInfo("Please wait 10s...");
-        local playerName = a_Player:GetName()
-        
-        local Callback = function (a_World)
-            a_World:DoWithPlayer(playerName, 
-                function(a_FoundPlayer)                
-                    a_FoundPlayer:GetInventory():Clear()
-                    
-                    local pi = GetPlayerInfo(a_Player)
-                    local islandNumber = -1
-                    local posX = 0
-                    local posZ = 0
-                
-                    islandNumber, posX, posZ = CreateIsland(a_FoundPlayer, pi.islandNumber);
-                    a_FoundPlayer:TeleportToCoords(posX, 151, posZ);
-                    a_FoundPlayer:SetFoodLevel(20)
-                    a_FoundPlayer:SetHealth(a_FoundPlayer:GetMaxHealth())
-                    a_FoundPlayer:SendMessageSuccess("Good luck with your new island.");
-                    pi.isRestarting  = false
-                end)
-            end
-        
-        a_Player:GetWorld():ScheduleTask(200, Callback)
-        return true
+        -- Deprecated
     end
     
     a_Player:SendMessageFailure("Unknown argument.")

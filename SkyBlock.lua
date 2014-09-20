@@ -105,7 +105,15 @@ function LoadPlayerInfos()
         if (a_Player:GetWorld():GetName() == WORLD_NAME) then
             local pi = cPlayerInfo.new(a_Player)
             if (cFile:Exists(PLUGIN:GetLocalFolder() .. "/islands/" .. pi.islandNumber .. ".ini")) then
-                local ii = GetIslandInfo(pi.islandNumber)
+                GetIslandInfo(pi.islandNumber)
+            else
+                if (pi.islandNumber ~= -1) then -- Save island informations now in island file
+                    local ii = cIslandInfo.new(pi.islandNumber)
+                    ii.ownerUUID = a_Player:GetUUID()
+                    ii.ownerName = a_Player:GetName()
+                    ii:Save()
+                    ISLANDS[pi.islandNumber] = ii
+                end
             end
             
             PLAYERS[a_Player:GetUUID()] = pi

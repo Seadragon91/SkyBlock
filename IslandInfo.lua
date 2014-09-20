@@ -9,7 +9,7 @@ function cIslandInfo.new(a_IslandNumber)
     
     self.islandFile = PLUGIN:GetLocalFolder() .. "/islands/" .. a_IslandNumber .. ".ini"
     self.islandNumber = a_IslandNumber
---    self.friends = {}
+    self.friends = {}
 
     return self
 end
@@ -34,34 +34,24 @@ function cIslandInfo.Save(self)
     IslandInfoIni:WriteFile(self.islandFile)
 end
 
--- -- Add friend to list
--- function cIslandInfo.AddFriend(self, a_Player)
---     for i = i, #self.friends do
---         if (self.friends[i] == a_Player:GetUUID()) then
---             return
---         end
---     end
--- 
---     table.insert(self.friends, a_Player:GetUUID())
--- end
--- 
--- -- Remove friend from list
--- function cIslandInfo.RemoveFriend(self, a_Player)
---     local index = 0
---     for i = 1, #self.friends do
---         if (self.friends[i] == a_Player:GetUUID()) then
---             index = i
---             break
---         end
---     end
---     
---     if (index == 0) then
---         return false
---     end
---     
---     table.remove(self.friends, index)
---     return true
--- end
+-- Add friend to list
+function cIslandInfo.AddFriend(self, a_Player)
+    if (self.friends[a_Player:GetUUID()] == nil) then
+        self.friends[a_Player:GetUUID()] = a_Player:GetName()
+        self.Save(self)
+    end
+end
+
+-- Remove friend from list
+function cIslandInfo.RemoveFriend(self, a_Player)
+    if (self.friends[a_Player:GetUUID()] == nil) then
+        return false
+    end
+    
+    self.friends[a_Player:GetUUID()] = nil
+    self.Save(self)
+    return true
+end
 
 -- Load the island info
 function cIslandInfo.Load(self)

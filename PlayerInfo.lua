@@ -12,6 +12,7 @@ function cPlayerInfo.new(a_Player)
     self.isLevel = LEVELS[1].levelName -- Set first level
     self.completedChallenges = {}
     self.completedChallenges[self.isLevel] = {}
+    self.inFriendList = {}
         
     self.Load(self, a_Player) -- Check if there is a player file, if yes load it
     return self
@@ -27,6 +28,37 @@ function cPlayerInfo.HasCompleted(self, a_Level, a_ChallengeName)
     end
     
     return true
+end
+
+function cPlayerInfo.AddEntry(self, a_IslandNumber, a_Player)
+    if (self.inFriendList[a_Player:GetName()] == nil) then
+        self.inFriendList[a_Player:GetName()] = a_IslandNumber()
+        self.Save(self)
+    end
+end
+
+function cPlayerInfo.RemoveEntry(self, a_PlayerName)
+    if (self.inFriendList[a_PlayerName] == nil) then
+        return false
+    end
+    
+    self.inFriendList[a_PlayerName] = nil
+    self.Save(self)
+    return true
+end
+
+function cPlayerInfo.HasPermissionThere(self, a_BlockX, a_BlockZ)
+    local islandNumber = GetIslandNumber(a_BlockX, a_BlockZ)
+    if (islandNumber == 0) then
+        return false
+    end
+    
+    local ii = GetIslandInfo(islandNumber)
+    if (ii == nil) then
+        return false
+    end
+    
+    -- for playerName, number in pairs(self.
 end
 
 function cPlayerInfo.Save(self) -- Save PlayerInfo
@@ -63,7 +95,7 @@ end
 function cPlayerInfo.Load(self, a_Player) -- Load PlayerInfo
     local PlayerInfoIni = cIniFile()
     
-    -- Check for old file, backward compatibilityx
+    -- Check for old file, backward compatibility
     if (cFile:Exists(PLUGIN:GetLocalFolder() .. "/players/" .. a_Player:GetName() .. ".ini")) then -- Rename file if exists
         cFile:Rename(PLUGIN:GetLocalFolder() .. "/players/" .. a_Player:GetName() .. ".ini", self.playerFile)
     end
