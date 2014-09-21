@@ -26,9 +26,22 @@ function cIslandInfo.Save(self)
     IslandInfoIni:SetValue("General", "IslandNumber", self.islandNumber, true)
     IslandInfoIni:SetValue("General", "OwnerUUID", self.ownerUUID, true)
     IslandInfoIni:SetValue("General", "OwnerName", self.ownerName, true)
-    -- IslandInfoIni:SetValue("General", "Friends", table.concat(self.friends, " "), true)
     if (self.homeLocation ~= nil) then
         IslandInfoIni:SetValue("General", "HomeLocation", table.concat(self.homeLocation, " "))
+    end
+
+    local amount = GetAmount(self.friends)
+    if (amount > 0) then
+        local list = ""
+        local counter = 0
+        for uuid, playerName in pairs(self.friends) do
+            counter = counter + 1
+            list = list .. uuid .. ":" .. playerName
+            if (counter ~= amount) then
+                list = list .. " "
+            end
+        end
+        IslandInfoIni:SetValue("General", "Friends", list, true)
     end
     
     IslandInfoIni:WriteFile(self.islandFile)
@@ -37,7 +50,7 @@ end
 -- Add friend to list
 function cIslandInfo.AddFriend(self, a_Player)
     if (self.friends[a_Player:GetUUID()] == nil) then
-        self.friends[a_Player:GetUUID()] = a_Player:GetName()
+        self.friends[a_Player:GetUUID()] = a_Player:GetName().lower()
         self.Save(self)
     end
 end
@@ -51,6 +64,15 @@ function cIslandInfo.RemoveFriend(self, a_Player)
     self.friends[a_Player:GetUUID()] = nil
     self.Save(self)
     return true
+end
+
+function cIslandInfo.ContainsFriend(self, a_PlayerName)
+    for uuid, playerName in pairs(self.friends) do
+        if (a_PlayerName == playerName) then
+            return true
+        end
+    end
+    return false
 end
 
 -- Load the island info
@@ -68,6 +90,16 @@ function cIslandInfo.Load(self)
     if (temp ~= "") then
         self.homeLocation = StringSplit(temp, " ")
     end
+    
+    temp = IslandInfoIni:GetValue("General", "Friends")
+    if (temp ~= "") then
+        temp = StringSplit(temp, " ")
+        for i = 1, #temp do
+            local player = StringSplit(temp[i], ":")
+            self.friends[player[1]] = player[2]
+        end
+    end
+    
     return true
 end
 

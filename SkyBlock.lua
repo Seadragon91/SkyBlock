@@ -72,7 +72,7 @@ end
 function OnDisable()
     -- Deprecated
     -- Save all PlayerInfos
-    SaveAllPlayerInfos()
+    -- SaveAllPlayerInfos()
     
     LOG(PLUGIN:GetName() .. " is shutting down...")
 end
@@ -121,11 +121,11 @@ function LoadPlayerInfos()
     end);
 end
 
-function SaveAllPlayerInfos()
-    for uuid, pi in pairs(PLAYERS) do
-        pi:Save()
-    end
-end
+--function SaveAllPlayerInfos()
+--    for uuid, pi in pairs(PLAYERS) do
+--        pi:Save()
+--    end
+--end
 
 function LoadAllLevels(a_File)
     local ConfigIni = cIniFile()
