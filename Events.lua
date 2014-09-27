@@ -13,6 +13,13 @@ function FillBlocks(a_ChunkDesc)
     a_ChunkDesc:SetUseDefaultFinish(false)
 end
 
+-- Player quits
+function OnPlayerQuit(a_Player)
+    if (a_Player:GetWorld():GetName() == WORLD_NAME) then
+        PLAYERS[a_Player:GetUUID()] = nil -- Remove player from list
+    end
+end
+
 -- Teleport player to island or spawn platform
 function OnPlayerSpawn(a_Player)
     if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
