@@ -40,7 +40,7 @@ function Initialize(Plugin)
     -- Load Config file
     LoadConfiguration()
     
-    -- Get instance of world skyblock
+    -- Get instance of world <WORLD_NAME>
     SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
     
     -- Load all ChallengeInfos
@@ -51,7 +51,6 @@ function Initialize(Plugin)
     
     -- Register hooks
     cPluginManager:AddHook(cPluginManager.HOOK_CHUNK_GENERATING, OnChunkGenerating)
-    cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerQuit)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
     cPluginManager:AddHook(cPluginManager.HOOK_WORLD_STARTED, OnWorldLoaded)
         
@@ -69,11 +68,7 @@ function Initialize(Plugin)
     return true
 end
 
-function OnDisable()
-    -- Deprecated
-    -- Save all PlayerInfos
-    -- SaveAllPlayerInfos()
-    
+function OnDisable()    
     LOG(PLUGIN:GetName() .. " is shutting down...")
 end
 
@@ -120,12 +115,6 @@ function LoadPlayerInfos()
         end
     end);
 end
-
---function SaveAllPlayerInfos()
---    for uuid, pi in pairs(PLAYERS) do
---        pi:Save()
---    end
---end
 
 function LoadAllLevels(a_File)
     local ConfigIni = cIniFile()

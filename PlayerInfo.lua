@@ -73,7 +73,7 @@ function cPlayerInfo.HasPermissionThere(self, a_BlockX, a_BlockZ)
 end
 
 function cPlayerInfo.Save(self) -- Save PlayerInfo
-    if (self.islandNumber == -1) then -- Only save player info, if he has an island
+    if (self.islandNumber == -1) then -- Only save player info, if he has or is on a friends island
         return
     end
 

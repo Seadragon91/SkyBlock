@@ -16,7 +16,7 @@ function CommandIsland(a_Split, a_Player)
         if (#a_Split == 3) then
             if (a_Split[3] == "set") then                
                 if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-                    a_Player:SendMessageInfo("You can use this command only in skyblock.")
+                    a_Player:SendMessageInfo("You can use this command only in world " + WORLD_NAME)
                     return true
                 end
                 
@@ -28,7 +28,7 @@ function CommandIsland(a_Split, a_Player)
                 
                 ii.homeLocation = { [1] = x, [2] = y, [3] = z, [4] = yaw, [5] = pitch }
                 ii:Save()
-                a_Player:SendMessageInfo("Home spawn location changed.")
+                a_Player:SendMessageSuccess("Island home location changed.")
                 return true
             end
             return true
@@ -80,7 +80,7 @@ function CommandIsland(a_Split, a_Player)
             a_Player:SendMessageInfo("/island add <player>")
             return true
         end
-            
+        
         local toAdd = a_Split[3]
         a_Player:GetWorld():DoWithPlayer(toAdd,
             function (a_FoundPlayer)
@@ -90,9 +90,14 @@ function CommandIsland(a_Split, a_Player)
                 -- Add Entry to inFriendList
                 local pi_Added = GetPlayerInfo(a_FoundPlayer)
                 pi_Added:AddEntry(ii.islandNumber, a_Player)
+                
+                -- Check if player has no island, if yes set first added as default
+                if (pi_Added.islandNumber == -1) then
+                    pi_Added.islandNumber = ii.islandNumber
+                end
                 pi_Added:Save()
                 
-                a_Player:SendMessageInfo("Added player " .. a_FoundPlayer:GetName() .. " to your island.")
+                a_Player:SendMessageSuccess("Added player " .. a_FoundPlayer:GetName() .. " to your island.")
                 return true
             end);
         
@@ -106,12 +111,21 @@ function CommandIsland(a_Split, a_Player)
     
     if (a_Split[2] == "remove") then
         -- Remove player
+        if (#a_Split == 2) then
+            a_Player:SendMessageInfo("/island remove <player>")
+            return true
+        end
+        
+        if (ii:RemoveFriend(a_Split[3]) == false) then
+            a_Player:SendMessageInfo("There is no player with that name.")
+        else
+            a_Player:SendMessageSuccess("Removed player from friend list.")
+        end
         return true
     end
     
     if (a_Split[2] == "join") then
         -- Join island
-        
         if (#a_Split == 2) then
             a_Player:SendMessageInfo("/island join <player>")
             return true
@@ -125,13 +139,13 @@ function CommandIsland(a_Split, a_Player)
         
         local iiFriend = GetIslandInfo(pi.inFriendList[toJoin][2])
         if (iiFriend.friends[a_Player:GetUUID()] == nil) then
-            a_Player:SendMessageInfo("You are not in his friend list.")
+            a_Player:SendMessageInfo("You have been removed from his friend list.")
             return true
         end
         
         if (iiFriend.homeLocation == nil) then
             local posX, posZ
-            posX, posZ = GetIslandPosition(tonumber(iiFriend.islandNumber))
+            posX, posZ = GetIslandPosition(iiFriend.islandNumber)
             a_Player:TeleportToCoords(posX, 151, posZ)
         else
             local x = iiFriend.homeLocation[1]
@@ -145,12 +159,34 @@ function CommandIsland(a_Split, a_Player)
             a_Player:SetPitch(pitch)
         end
         
-        a_Player:SendMessageInfo("Teleport you...")
+        a_Player:SendMessageSuccess("Teleported you to the island.")
         return true
     end
     
     if (a_Split[2] == "list") then
-        -- List friend from island and islands who player can access
+        -- List friends from island and islands who player can access
+        local hasFriends = "Your friends: "
+        local amount = GetAmount(ii.friends)
+        local counter = 0
+        for uuid, playerName in pairs(ii.friends) do
+            hasFriends = hasFriends .. playerName
+            if (counter ~= amount) then
+                hasFriends = hasFriends .. ", "
+            end
+        end
+        
+        local canJoin = "Islands you can enter: "
+        amount = GetAmount(pi.inFriendList)
+        counter = 0
+        for playerName, info in pairs(self.inFriendList) do
+            canJoin = canJoin .. playerName
+            if (counter ~= amount) then
+                canJoin = canJoin .. ", "
+            end
+        end
+        
+        a_Player:SendMessageInfo(hasFriends)
+        a_Player:SendMessageInfo(canJoin)
         return true
     end
     
@@ -158,7 +194,7 @@ function CommandIsland(a_Split, a_Player)
         -- Restart island
         -- local pi = GetPlayerInfo(a_Player)
         if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-            a_Player:SendMessageFailure("This command works only in the world skyblock.")
+            a_Player:SendMessageFailure("This command works only in the world " + WORLD_NAME)
             return true
         end
         
@@ -175,7 +211,7 @@ function CommandIsland(a_Split, a_Player)
         -- Check if player is the real owner
         -- local ii GetIslandInfo(pi.islandNumber)
         if (ii.ownerUUID ~= a_Player:GetUUID()) then
-            a_Player:SendMessageInfo("You are not the owner of this island. If you want to start a own island. Type /skyblock restart again.")
+            a_Player:SendMessageInfo("Restart not possible, you are not the real owner of this island. If you want to start own one, type again /island restart.")
             -- TODO: Add list for starting a island.
             return true
         end

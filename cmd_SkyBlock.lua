@@ -49,7 +49,7 @@ function CommandSkyBlock(a_Split, a_Player)
             ii:SetOwner(a_Player)
             ii:Save()
             
-            if (a_Player:GetWorld():GetName() ~= SKYBLOCK:GetName()) then
+            if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
                 a_Player:MoveToWorld(WORLD_NAME)
             end
             
@@ -64,7 +64,7 @@ function CommandSkyBlock(a_Split, a_Player)
             
             posX, posZ = GetIslandPosition(pi.islandNumber)
             
-            if (a_Player:GetWorld():GetName() ~= SKYBLOCK:GetName()) then
+            if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
                 a_Player:MoveToWorld(WORLD_NAME)
             end
             
@@ -73,10 +73,6 @@ function CommandSkyBlock(a_Split, a_Player)
             a_Player:SendMessageSuccess("Welcome back " .. a_Player:GetName())
             return true
         end
-    end
-    
-    if (a_Split[2] == "restart") then -- Let the player restarts his island
-        -- Deprecated
     end
     
     a_Player:SendMessageFailure("Unknown argument.")

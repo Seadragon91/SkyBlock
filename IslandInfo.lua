@@ -14,16 +14,50 @@ function cIslandInfo.new(a_IslandNumber)
     return self
 end
 
-function cIslandInfo.SetOwner(a_Player)
+function cIslandInfo.SetOwner(self, a_Player)
     self.ownerUUID = a_Player:GetUUID()
     self.ownerName = a_Player:GetName()
+end
+
+-- Add friend to list
+function cIslandInfo.AddFriend(self, a_Player)
+    if (self.friends[a_Player:GetUUID()] == nil) then
+        self.friends[a_Player:GetUUID()] = a_Player:GetName().lower()
+    end
+end
+
+-- Remove friend from list
+function cIslandInfo.RemoveFriend(self, a_PlayerName)
+    local hasUUID = ""
+    for uuid, playerName in pairs(self.friends) do
+        if (playerName == a_PlayerName.lower()) then
+            hasUUID = uuid
+            break
+        end
+    end
+    
+    if (hasUUID == "") then
+        return false
+    end
+    
+    self.friends[hasUUID] = nil
+    return true
+end
+
+function cIslandInfo.ContainsFriend(self, a_PlayerName)
+    for uuid, playerName in pairs(self.friends) do
+        if (a_PlayerName == playerName) then
+            return true
+        end
+    end
+    return false
 end
 
 -- Save the island info
 function cIslandInfo.Save(self)
     local IslandInfoIni = cIniFile()
     
-    IslandInfoIni:SetValue("General", "IslandNumber", self.islandNumber, true)
+    IslandInfoIni:SetValueI("General", "IslandNumber", self.islandNumber, true)
     IslandInfoIni:SetValue("General", "OwnerUUID", self.ownerUUID, true)
     IslandInfoIni:SetValue("General", "OwnerName", self.ownerName, true)
     if (self.homeLocation ~= nil) then
@@ -45,34 +79,6 @@ function cIslandInfo.Save(self)
     end
     
     IslandInfoIni:WriteFile(self.islandFile)
-end
-
--- Add friend to list
-function cIslandInfo.AddFriend(self, a_Player)
-    if (self.friends[a_Player:GetUUID()] == nil) then
-        self.friends[a_Player:GetUUID()] = a_Player:GetName().lower()
-        self.Save(self)
-    end
-end
-
--- Remove friend from list
-function cIslandInfo.RemoveFriend(self, a_Player)
-    if (self.friends[a_Player:GetUUID()] == nil) then
-        return false
-    end
-    
-    self.friends[a_Player:GetUUID()] = nil
-    self.Save(self)
-    return true
-end
-
-function cIslandInfo.ContainsFriend(self, a_PlayerName)
-    for uuid, playerName in pairs(self.friends) do
-        if (a_PlayerName == playerName) then
-            return true
-        end
-    end
-    return false
 end
 
 -- Load the island info
