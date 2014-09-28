@@ -9,10 +9,21 @@ function CommandSkyBlock(a_Split, a_Player)
         a_Player:SendMessage("---"  .. cChatColor.LightGreen .. " Commands for the skyblock plugin " .. cChatColor.White .. " ---")
         a_Player:SendMessageInfo("/skyblock join - Join the world skyblock and comes to a spawn platform.")
         a_Player:SendMessageInfo("/skyblock play - Get an island and start playing.")
-        a_Player:SendMessageInfo("/skyblock restart - Restart your island")
+        
+        -- cmd_Challenges.lua
         a_Player:SendMessageInfo("/challenges - List all challenges")
         a_Player:SendMessageInfo("/challenges info <name> - Shows informations to the challenge")
         a_Player:SendMessageInfo("/challenges complete <name> -Complete the challenge")
+        
+        -- cmd_Island.lua
+        a_Player:SendMessageInfo("/island home - Teleport back to your home location of the island")
+        a_Player:SendMessageInfo("/island home set - Change home location on island")
+        a_Player:SendMessageInfo("/island obsidian - Change obsidian backt to lava")
+        a_Player:SendMessageInfo("/island add <player> - Add player to your friend list")
+        a_Player:SendMessageInfo("/island remove <player> - Remove player from your friend list")
+        a_Player:SendMessageInfo("/island join <player> - Teleport to a friends island")
+        a_Player:SendMessageInfo("/island list - List your friends and islands who you can join")
+        a_Player:SendMessageInfo("/island restart - Start an new island")
         return true
     end
     

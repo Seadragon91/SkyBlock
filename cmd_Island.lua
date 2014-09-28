@@ -1,7 +1,6 @@
  -- Handle the island command
 function CommandIsland(a_Split, a_Player)
     if (#a_Split == 1) then
-        -- List commands
         return true
     end
     
@@ -25,6 +24,13 @@ function CommandIsland(a_Split, a_Player)
                 local z = a_Player:GetPosZ()
                 local yaw = a_Player:GetHeadYaw()
                 local pitch = a_Player:GetPitch()
+                
+                -- Checkf if player is in his island area
+                local islandNumber = GetIslandNumber(x, z)
+                if (pi.islandNumber ~= islandNumber) then
+                    a_Player:SendMessageInfo("You can use this command only on your own island.")
+                    return true
+                end
                 
                 ii.homeLocation = { [1] = x, [2] = y, [3] = z, [4] = yaw, [5] = pitch }
                 ii:Save()
