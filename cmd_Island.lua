@@ -125,8 +125,10 @@ function CommandIsland(a_Split, a_Player)
         if (ii:RemoveFriend(a_Split[3]) == false) then
             a_Player:SendMessageInfo("There is no player with that name.")
         else
+            ii:Save()
             a_Player:SendMessageSuccess("Removed player from friend list.")
         end
+        
         return true
     end
     
@@ -138,7 +140,7 @@ function CommandIsland(a_Split, a_Player)
         end
         
         local toJoin = a_Split[3]
-        if (pi.inFriendList[toJoin] == nil) then
+        if (pi.inFriendList[toJoin:lower()] == nil) then
             a_Player:SendMessageInfo("You are not in his friend list.")
             return true
         end
@@ -184,7 +186,7 @@ function CommandIsland(a_Split, a_Player)
         local canJoin = "Islands you can enter: "
         amount = GetAmount(pi.inFriendList)
         counter = 0
-        for playerName, info in pairs(self.inFriendList) do
+        for playerName, info in pairs(pi.inFriendList) do
             canJoin = canJoin .. playerName
             if (counter ~= amount) then
                 canJoin = canJoin .. ", "

@@ -8,7 +8,7 @@ function cIslandInfo.new(a_IslandNumber)
     local self = setmetatable({}, cIslandInfo)
     
     self.islandFile = PLUGIN:GetLocalFolder() .. "/islands/" .. a_IslandNumber .. ".ini"
-    self.islandNumber = a_IslandNumber
+    self.islandNumber = tonumber(a_IslandNumber)
     self.friends = {}
 
     return self
@@ -22,7 +22,7 @@ end
 -- Add friend to list
 function cIslandInfo.AddFriend(self, a_Player)
     if (self.friends[a_Player:GetUUID()] == nil) then
-        self.friends[a_Player:GetUUID()] = a_Player:GetName().lower()
+        self.friends[a_Player:GetUUID()] = a_Player:GetName():lower()
     end
 end
 
@@ -30,7 +30,7 @@ end
 function cIslandInfo.RemoveFriend(self, a_PlayerName)
     local hasUUID = ""
     for uuid, playerName in pairs(self.friends) do
-        if (playerName == a_PlayerName.lower()) then
+        if (playerName == a_PlayerName:lower()) then
             hasUUID = uuid
             break
         end
@@ -46,7 +46,7 @@ end
 
 function cIslandInfo.ContainsFriend(self, a_PlayerName)
     for uuid, playerName in pairs(self.friends) do
-        if (a_PlayerName == playerName) then
+        if (a_PlayerName:lower() == playerName) then
             return true
         end
     end

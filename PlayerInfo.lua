@@ -32,7 +32,7 @@ function cPlayerInfo.HasCompleted(self, a_Level, a_ChallengeName)
 end
 
 function cPlayerInfo.AddEntry(self, a_IslandNumber, a_Player)
-    local s = a_Player():GetName():lower()
+    local s = a_Player:GetName():lower()
 
     if (self.inFriendList[s] == nil) then
         self.inFriendList[s] = {}
