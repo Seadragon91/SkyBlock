@@ -72,15 +72,15 @@ function OnWorldLoaded(a_World)
 end
 
 function OnBlockPlacing(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ, a_BlockType, a_BlockMeta)
-    return HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
+    return CancelEvent(a_Player, a_BlockX, a_BlockZ)
 end
 
 function OnPlayerLeftClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_Action)
-    return HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
+    return CancelEvent(a_Player, a_BlockX, a_BlockZ)
 end
 
 function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ)
-    if (HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ) == false) then
+    if (CancelEvent(a_Player, a_BlockX, a_BlockZ) == false) then
         local pi = GetPlayerInfo(a_Player)
         if (pi.resetObsidian == false) then
             return false

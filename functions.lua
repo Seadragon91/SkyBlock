@@ -41,7 +41,7 @@ function ParseStringToItems(a_ToParse)
 end
 
 -- Checks if the player can interact at the position
-function HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
+function CancelEvent(a_Player, a_BlockX, a_BlockZ)
     if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
         return false
     end
@@ -52,7 +52,7 @@ function HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
         return false
     end
     
-    if (pi.islandNumber == islandNumber) then
+    if (pi:HasPermissionThere(a_BlockX, a_BlockZ)) then
         return false
     end
     
