@@ -79,8 +79,67 @@ function OnPlayerLeftClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, 
     return CancelEvent(a_Player, a_BlockX, a_BlockZ)
 end
 
-function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ)
-    if (CancelEvent(a_Player, a_BlockX, a_BlockZ) == false) then
+function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ)    
+    if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
+        return false
+    end
+
+    local posX = 0
+    local posY = 0
+    local posZ = 0
+    
+    if (a_BlockX == -1) then
+        posX = a_Player:GetPosX()
+    else
+        posX = a_BlockX
+    end
+    
+    if (a_BlockY == -1) then
+        posY = a_Player:GetPosY()
+    else
+        posY = a_BlockY
+    end
+    
+    if (a_BlockZ == -1) then
+        posZ = a_Player:GetPosZ()
+    else
+        posZ = a_BlockZ
+    end
+
+    
+    if (a_BlockFace == BLOCK_FACE_NONE) then    
+        if(a_Player:GetEquippedItem().m_ItemType == 280) then
+            local islandNumber = GetIslandNumber(posX, posZ)
+            if (islandNumber == 0) then
+                a_Player:SendMessageInfo("This is the spawn area.")
+                return true
+            end
+            
+            local ii = GetIslandInfo(islandNumber)
+            if (ii == nil) then
+                a_Player:SendMessageInfo("Unknown area.")
+                return true
+            end
+            
+            a_Player:SendMessageInfo("Island number: " .. ii.islandNumber)
+            a_Player:SendMessageInfo("Owner: " .. ii.ownerName)
+            
+            local friends = "Friends: "
+            local amount = GetAmount(ii.friends)
+            local counter = 0
+            for uuid, playerName in pairs(ii.friends) do
+                friends = friends .. playerName
+                if (counter ~= amount) then
+                    friends = friends .. ", "
+                end
+            end
+            
+            a_Player:SendMessageInfo(friends)
+        end
+        return true
+    end
+    
+    if (CancelEvent(a_Player, posX, posZ) == false) then
         local pi = GetPlayerInfo(a_Player)
         if (pi.resetObsidian == false) then
             return false
@@ -90,8 +149,8 @@ function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
             return false
         end
         
-        if (a_Player:GetWorld():GetBlock(a_BlockX, a_BlockY, a_BlockZ) == E_BLOCK_OBSIDIAN) then
-            a_Player:GetWorld():SetBlock(a_BlockX, a_BlockY, a_BlockZ, E_BLOCK_LAVA, 0)
+        if (a_Player:GetWorld():GetBlock(posX, posY, a_BlockZ) == E_BLOCK_OBSIDIAN) then
+            a_Player:GetWorld():SetBlock(posX, posY, posZ, E_BLOCK_LAVA, 0)
             pi.resetObsidian = false
             a_Player:SendMessageInfo("Changed obsidian back to lava")        
         end

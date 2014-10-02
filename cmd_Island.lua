@@ -65,7 +65,7 @@ function CommandIsland(a_Split, a_Player)
             a_Player:SetPitch(pitch)
         end
         a_Player:SendMessageSuccess("Welcome back " .. a_Player:GetName())
-        return true        
+        return true
     end
     
     if (a_Split[2] == "obsidian") then
