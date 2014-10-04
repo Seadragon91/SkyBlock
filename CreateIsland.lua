@@ -22,7 +22,7 @@ function CreateIsland(a_Player, a_IslandNumber)
         local wey = weOffset.y
         local wez = weOffset.z
         
-        area:Write(a_Player:GetWorld(), posX - wex, 150 - wey, posZ - wez) -- Place the schematic at the island position
+        area:Write(SKYBLOCK, posX - wex, 150 - wey, posZ - wez) -- Place the schematic at the island position
 
         -- Add items to player inventory
         a_Player:GetInventory():GetInventoryGrid():SetSlot(0, 0, cItem(E_ITEM_LAVA_BUCKET, 1));
