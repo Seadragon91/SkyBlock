@@ -69,7 +69,7 @@ function GetChallenge(a_ChallengeName)
     return nil
 end
 
--- Returns and load cPlayerInfo if necessary, should never return nil
+-- Return and load cPlayerInfo if necessary, should never return nil
 function GetPlayerInfo(a_Player)
     local pi = PLAYERS[a_Player:GetUUID()]
     if (pi == nil) then
@@ -90,4 +90,32 @@ function GetIslandInfo(a_IslandNumber)
         ISLANDS[a_IslandNumber] = ii
     end
     return ii
+end
+
+
+-- Remove the island info from ISLAND list
+function RemoveIslandInfo(a_IslandNumber)
+    local ii = ISLANDS[a_IslandNumber]
+    
+    if (ii == nil) then
+        return
+    end
+    
+    if (PLAYERS[ii.ownerUUID] ~= nil) then
+        return
+    end
+    
+    
+    for uuid, playerName in pairs(ii.friends) do
+        if (PLAYERS[uuid] ~= nil) then
+            return
+        end
+    end
+    
+    ISLANDS[a_IslandNumber] = nil
+end
+
+-- For debugging
+function DEBUG(s)
+    print("[DEBUG] " .. s)
 end
