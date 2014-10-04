@@ -16,29 +16,91 @@ end
 -- Player quits
 function OnPlayerQuit(a_Player)
     if (a_Player:GetWorld():GetName() == WORLD_NAME) then
-        PLAYERS[a_Player:GetUUID()] = nil -- Remove player from list
+        local islandNumber = GetPlayerInfo(a_Player).islandNumber
+        RemoveIslandInfo(islandNumber)
+
+        -- Try ro remove island info from ISLANDS list
+        local pi = GetPlayerInfo(a_Player)
+        for player, info in pairs(pi.inFriendList) do
+            RemoveIslandInfo(pi.inFriendList[player][2])
+        end
+        
+        PLAYERS[a_Player:GetUUID()] = nil
     end
 end
 
--- Teleport player to island or spawn platform
-function OnPlayerSpawn(a_Player)
-    if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-        return
+function OnKilling(a_Victim, a_Killer)
+    if (a_Victim:IsA("cPlayer") == false) then
+        return false
+    end
+
+    if (a_Victim:GetWorld():GetName() ~= WORLD_NAME) then
+        return false
     end
     
-    local pi = GetPlayerInfo(a_Player)
+    local player = tolua.cast(a_Victim, "cPlayer")
+    
+    player:SetHealth(player:GetMaxHealth())
+    player:SetFoodLevel(20)
+    
+    local pi = GetPlayerInfo(player)
     if (pi.islandNumber == -1) then -- no island
-        a_Player:TeleportToCoords(0, 170, 0)
+        player:TeleportToCoords(0, 170, 0)
     else
-        -- Lets check players location
-        if (pi.islandNumber == GetIslandNumber(a_Player:GetPosX(), a_Player:GetPosZ())) then
-            return -- His island, return here then he gets to the last position
+        local ii = GetIslandInfo(pi.islandNumber)
+        if (ii == nil) then
+            player:TeleportToCoords(0, 170, 0)
+        else
+            if (ii.homeLocation == nil) then
+                local posX
+                local posZ
+            
+                posX, posZ = GetIslandPosition(pi.islandNumber)
+                player:TeleportToCoords(posX, 151, posZ) 
+            else
+                local x = ii.homeLocation[1]
+                local y = ii.homeLocation[2]
+                local z = ii.homeLocation[3]
+                local yaw = ii.homeLocation[4]
+                local pitch = ii.homeLocation[5]
+            
+                player:TeleportToCoords(x, y, z)
+                player:SetYaw(yaw)
+                player:SetPitch(pitch)
+            end
         end
-    
-        posX, posZ = GetIslandPosition(pi.islandNumber)
-        a_Player:TeleportToCoords(posX, 151, posZ)
     end
+    
+    return true
 end
+
+-- -- Teleport player to island or spawn platform
+-- function OnPlayerSpawn(a_Player)
+--     if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
+--         return
+--     end
+--     
+--     local pi = GetPlayerInfo(a_Player)
+--     if (pi.islandNumber == -1) then -- no island
+--         a_Player:TeleportToCoords(0, 170, 0)
+--     else
+--         -- Check if player has permission skyblock.admin.build
+--         -- if (a_Player:HasPermission("skyblock.admin.build")) then
+--         --     return
+--         -- end
+--         
+--         -- Lets check players location
+--         if (pi.islandNumber == GetIslandNumber(a_Player:GetPosX(), a_Player:GetPosZ())) then
+--             return -- His island, return here then he gets to the last position
+--         end
+--         
+--         local posX = 0
+--         local posZ = 0
+--     
+--         posX, posZ = GetIslandPosition(pi.islandNumber)
+--         a_Player:TeleportToCoords(posX, 151, posZ)
+--     end
+-- end
 
 -- Handle the spawn schematic
 function OnWorldLoaded(a_World)
@@ -79,35 +141,15 @@ function OnPlayerLeftClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, 
     return CancelEvent(a_Player, a_BlockX, a_BlockZ)
 end
 
-function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ)    
-    if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-        return false
-    end
-
-    local posX = 0
-    local posY = 0
-    local posZ = 0
+function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ)
+    if (a_BlockFace == BLOCK_FACE_NONE) then
+        if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
+            return false
+        end
     
-    if (a_BlockX == -1) then
-        posX = a_Player:GetPosX()
-    else
-        posX = a_BlockX
-    end
+        local posX = a_Player:GetPosX()
+        local posZ = a_Player:GetPosZ()
     
-    if (a_BlockY == -1) then
-        posY = a_Player:GetPosY()
-    else
-        posY = a_BlockY
-    end
-    
-    if (a_BlockZ == -1) then
-        posZ = a_Player:GetPosZ()
-    else
-        posZ = a_BlockZ
-    end
-
-    
-    if (a_BlockFace == BLOCK_FACE_NONE) then    
         if(a_Player:GetEquippedItem().m_ItemType == 280) then
             local islandNumber = GetIslandNumber(posX, posZ)
             if (islandNumber == 0) then
@@ -129,6 +171,7 @@ function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
             local counter = 0
             for uuid, playerName in pairs(ii.friends) do
                 friends = friends .. playerName
+                counter = counter + 1
                 if (counter ~= amount) then
                     friends = friends .. ", "
                 end
@@ -139,22 +182,36 @@ function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
         return true
     end
     
-    if (CancelEvent(a_Player, posX, posZ) == false) then
-        local pi = GetPlayerInfo(a_Player)
-        if (pi.resetObsidian == false) then
-            return false
-        end
-        
-        if (a_Player:GetEquippedItem().m_ItemType ~= -1) then
-            return false
-        end
-        
-        if (a_Player:GetWorld():GetBlock(posX, posY, a_BlockZ) == E_BLOCK_OBSIDIAN) then
-            a_Player:GetWorld():SetBlock(posX, posY, posZ, E_BLOCK_LAVA, 0)
-            pi.resetObsidian = false
-            a_Player:SendMessageInfo("Changed obsidian back to lava")        
-        end
-    else
+    if (CancelEvent(a_Player, a_BlockX, a_BlockZ)) then
         return true
+    end
+    
+    local pi = GetPlayerInfo(a_Player)
+    if (pi.resetObsidian == false) then
+        return false
+    end
+    
+    if (a_Player:GetEquippedItem().m_ItemType ~= -1) then
+        return false
+    end
+    
+    if (a_Player:GetWorld():GetBlock(a_BlockX, a_BlockY, a_BlockZ) == E_BLOCK_OBSIDIAN) then
+        a_Player:GetWorld():SetBlock(a_BlockX, a_BlockY, a_BlockZ, E_BLOCK_LAVA, 0)
+        pi.resetObsidian = false
+        a_Player:SendMessageInfo("Changed obsidian back to lava")        
+    end
+end
+
+function OnTakeDamage(a_Receiver, a_TDI)
+    if (a_Receiver:GetWorld():GetName() ~= WORLD_NAME) then
+        return true
+    end
+    
+    if ((a_TDI.Attacker ~= nil) and (a_TDI.Attacker:IsA("cPlayer"))) then
+    
+        local player = tolua.cast(a_TDI.Attacker, "cPlayer")
+        if (CancelEvent(player, player:GetPosX(), player:GetPosZ())) then
+            return true
+        end
     end
 end
