@@ -145,7 +145,7 @@ function CommandIsland(a_Split, a_Player)
             return true
         end
         
-        local iiFriend = GetIslandInfo(pi.inFriendList[toJoin][2])
+        local iiFriend = GetIslandInfo(pi.inFriendList[toJoin:lower()][2])
         if (iiFriend.friends[a_Player:GetUUID()] == nil) then
             a_Player:SendMessageInfo("You have been removed from his friend list.")
             return true
@@ -178,6 +178,7 @@ function CommandIsland(a_Split, a_Player)
         local counter = 0
         for uuid, playerName in pairs(ii.friends) do
             hasFriends = hasFriends .. playerName
+            counter = counter + 1
             if (counter ~= amount) then
                 hasFriends = hasFriends .. ", "
             end
@@ -188,6 +189,7 @@ function CommandIsland(a_Split, a_Player)
         counter = 0
         for playerName, info in pairs(pi.inFriendList) do
             canJoin = canJoin .. playerName
+            counter = counter + 1
             if (counter ~= amount) then
                 canJoin = canJoin .. ", "
             end
@@ -200,7 +202,6 @@ function CommandIsland(a_Split, a_Player)
     
     if (a_Split[2] == "restart") then
         -- Restart island
-        -- local pi = GetPlayerInfo(a_Player)
         if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
             a_Player:SendMessageFailure("This command works only in the world " + WORLD_NAME)
             return true
@@ -211,16 +212,38 @@ function CommandIsland(a_Split, a_Player)
             return true
         end
         
-        if (pi.isRestarting) then -- Avoid running the command multiple
+        if (pi.isRestarting ~= nil and pi.isRestarting) then -- Avoid running the command multiple
             a_Player:SendMessageInfo("This command is running. Please wait...")
             return true
         end
         
         -- Check if player is the real owner
-        -- local ii GetIslandInfo(pi.islandNumber)
-        if (ii.ownerUUID ~= a_Player:GetUUID()) then
-            a_Player:SendMessageInfo("Restart not possible, you are not the real owner of this island. If you want to start own one, type again /island restart.")
-            -- TODO: Add list for starting a island.
+        if (ii.ownerUUID ~= a_Player:GetUUID() and pi.isRestarting ~= nil) then
+            a_Player:SendMessageInfo("Restart not possible, you are not the real owner of this island. If you want to start an own one, type again /island restart.")
+            pi.isRestarting = nil -- Player wants to start an own island.
+            return true
+        end
+        
+        if (pi.isRestarting == nil) then
+            pi.isRestarting = false
+            local islandNumber = -1
+            local posX = 0
+            local posZ = 0
+            
+            islandNumber, posX, posZ = CreateIsland(a_Player, -1)
+            pi.islandNumber = islandNumber
+            
+            local ii = cIslandInfo.new(islandNumber)
+            ii:SetOwner(a_Player)
+            ii:Save()
+            
+            if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
+                a_Player:MoveToWorld(WORLD_NAME)
+            end
+            
+            a_Player:TeleportToCoords(posX, 151, posZ)
+            a_Player:SendMessageSuccess("Welcome to your island. Do not fall and make no obsidian :-)")
+            pi:Save()
             return true
         end
         

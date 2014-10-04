@@ -14,6 +14,7 @@ function cPlayerInfo.new(a_Player)
     self.completedChallenges = {}
     self.completedChallenges[self.isLevel] = {}
     self.inFriendList = {}
+    self.isRestarting = false
         
     self.Load(self, a_Player) -- Check if there is a player file, if yes load it
     return self
