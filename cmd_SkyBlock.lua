@@ -86,6 +86,25 @@ function CommandSkyBlock(a_Split, a_Player)
         end
     end
     
+    if (a_Split[2] == "recreate") then -- Recreate spawn
+        if (a_Player:HasPermission("skyblock.admin.recreate") == false) then
+            a_Player:SendMessageFailure("You don't have the permission for that command.")
+            return true
+        end
+        
+        local area = cBlockArea()
+        if (area:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. SPAWN_SCHEMATIC)) then
+            local weOffset = area:GetWEOffset()
+            local wex = weOffset.x
+            local wey = weOffset.y
+            local wez = weOffset.z
+            
+            area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez) -- Paste the schematic
+            a_Player:SendMessageSuccess("Recreated spawn from schematic file.")
+        end
+        return true
+    end
+    
     a_Player:SendMessageFailure("Unknown argument.")
     return true
 end
