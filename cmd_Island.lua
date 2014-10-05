@@ -37,6 +37,8 @@ function CommandIsland(a_Split, a_Player)
                 a_Player:SendMessageSuccess("Island home location changed.")
                 return true
             end
+            
+            a_Player:SendMessageFailure("Unknown argument.")
             return true
         end
     
@@ -273,12 +275,20 @@ function CommandIsland(a_Split, a_Player)
                     a_FoundPlayer:TeleportToCoords(posX, 151, posZ);
                     a_FoundPlayer:SetFoodLevel(20)
                     a_FoundPlayer:SetHealth(a_FoundPlayer:GetMaxHealth())
-                    a_FoundPlayer:SendMessageSuccess("Good luck with your new island.");
+                    a_FoundPlayer:SendMessageSuccess("Good luck with your new island.")
+                    
                     pi.isRestarting  = false
+                    pi.isLevel = LEVELS[1].levelName
+                    pi.completedChallenges = {}
+                    pi.completedChallenges[pi.isLevel] = {}
+                    pi:Save()
                 end)
             end
         
         a_Player:GetWorld():ScheduleTask(200, Callback)
         return true
     end
+    
+    a_Player:SendMessageFailure("Unknown argument.")
+    return true
 end

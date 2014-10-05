@@ -105,7 +105,6 @@ function RemoveIslandInfo(a_IslandNumber)
         return
     end
     
-    
     for uuid, playerName in pairs(ii.friends) do
         if (PLAYERS[uuid] ~= nil) then
             return

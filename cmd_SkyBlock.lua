@@ -101,6 +101,8 @@ function CommandSkyBlock(a_Split, a_Player)
             
             area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez) -- Paste the schematic
             a_Player:SendMessageSuccess("Recreated spawn from schematic file.")
+        else
+            a_Player:SendMessageInfo("Schematic not found or error occured.")
         end
         return true
     end
