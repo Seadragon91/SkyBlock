@@ -9,9 +9,11 @@ ISLAND_SCHEMATIC = nil -- Schematic file for islands
 SPAWN_SCHEMATIC = nil -- Schematic file for the spawn
 SPAWN_CREATED = nil -- Check value, if spawn has already been created
 SKYBLOCK = nil -- Instance of a world
-PLAYERS = nil -- A table that contains player names and PlayerInfos
+PLAYERS = nil -- A table that contains player uuid and PlayerInfos
+ISLANDS = nil -- A table contains island numbers and IslandInfo
 WORLD_NAME = nil -- The world that the plugin is using
 LEVELS = nil -- Store all levels
+CONFIG_FILE = nil -- Config file for SkyBlock
 
 function Initialize(Plugin)
     Plugin:SetName("SkyBlock")
@@ -24,31 +26,36 @@ function Initialize(Plugin)
     SPAWN_SCHEMATIC = ""
     SPAWN_CREATED = false
     PLAYERS = {}
+    ISLANDS = {}
     WORLD_NAME = "skyblock"
     LEVELS = {}
+    CONFIG_FILE = PLUGIN:GetLocalFolder() .. "/Config.ini"
     
     -- Create players folder
-    cFile:CreateFolder(PLUGIN:GetLocalDirectory() .. "/players/")
+    cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/players/")
+    
+    -- Create islands folder
+    cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/islands/")
     
     -- Load Config file
-    LoadConfiguration(PLUGIN:GetLocalDirectory() .. "/Config.ini")
+    LoadConfiguration()
     
-    -- Get instance of world skyblock
+    -- Get instance of world <WORLD_NAME>
     SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
     
     -- Load all ChallengeInfos
-    LoadAllLevels(PLUGIN:GetLocalDirectory() .. "/challenges/Config.ini")
+    LoadAllLevels(PLUGIN:GetLocalFolder() .. "/challenges/Config.ini")
     
-    -- Load all PlayerInfos from players who are online
-    LoadAllPlayerInfos()
+    -- Load all PlayerInfos and IslandInfos from players who are in the world
+    LoadPlayerInfos()
     
-    -- register hooks
+    -- Register hooks
     cPluginManager:AddHook(cPluginManager.HOOK_CHUNK_GENERATING, OnChunkGenerating)
-    cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_JOINED, OnPlayerJoin)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerQuit)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, OnPlayerSpawn)
     cPluginManager:AddHook(cPluginManager.HOOK_WORLD_STARTED, OnWorldLoaded)
-    
+    cPluginManager:AddHook(cPluginManager.HOOK_TAKE_DAMAGE, OnTakeDamage)
+        
     -- This below are required for checking the permission in the island area
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnBlockPlacing)
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_LEFT_CLICK, OnPlayerLeftClick)
@@ -57,59 +64,65 @@ function Initialize(Plugin)
     -- Command Bindings
     cPluginManager.BindCommand("/skyblock", "skyblock.command", CommandSkyBlock , " - Access to the skyblock plugin")
     cPluginManager.BindCommand("/challenges", "skyblock.command", CommandChallenges , " - Access to the challenges")
+    cPluginManager.BindCommand("/island", "skyblock.command", CommandIsland , " - Access to the island commands")
     
     LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
     return true
 end
 
-function OnDisable()
-    -- Save configuration
-    SaveConfiguration(PLUGIN:GetLocalDirectory() .. "/Config.ini")
-    
-    -- Save all PlayerInfos
-    SaveAllPlayerInfos()
-    
+function OnDisable()    
     LOG(PLUGIN:GetName() .. " is shutting down...")
 end
 
-function LoadConfiguration(a_Config)
+function LoadConfiguration()
     local ConfigIni = cIniFile()
-    ConfigIni:ReadFile(a_Config)
+    ConfigIni:ReadFile(CONFIG_FILE)
     ISLAND_NUMBER = ConfigIni:GetValueI("Island", "Number")
     ISLAND_DISTANCE = ConfigIni:GetValueI("Island", "Distance")
     ISLAND_SCHEMATIC = ConfigIni:GetValue("Schematic", "Island")
     SPAWN_SCHEMATIC = ConfigIni:GetValue("Schematic", "Spawn")
     WORLD_NAME = ConfigIni:GetValue("General", "Worldname")
     SPAWN_CREATED = ConfigIni:GetValueB("PluginValues", "SpawnCreated")
+    
+    -- Reminder: Any new settings who gets added in new versions, should be added, to the config file trough the plugin, if not existent
 end
 
-function SaveConfiguration(a_Config)
+-- Save settings who gets changed trough the plugin
+function SaveConfiguration()
     local ConfigIni = cIniFile()
-    ConfigIni:ReadFile(a_Config)
+    ConfigIni:ReadFile(CONFIG_FILE)
     ConfigIni:SetValue("Island", "Number", ISLAND_NUMBER, true)
-    ConfigIni:SetValue("Island", "Distance", ISLAND_DISTANCE, true)
-    ConfigIni:SetValue("General", "Worldname", WORLD_NAME, true)
     ConfigIni:SetValueB("PluginValues", "SpawnCreated", SPAWN_CREATED, true)
-    ConfigIni:WriteFile(a_Config)
+    ConfigIni:WriteFile(CONFIG_FILE)
 end
 
-function LoadAllPlayerInfos()
+-- Only for the world that the plugin is using
+function LoadPlayerInfos()
     cRoot:Get():ForEachPlayer(function(a_Player)
-        PLAYERS[a_Player:GetName()] = cPlayerInfo.new(a_Player:GetName());
+        if (a_Player:GetWorld():GetName() == WORLD_NAME) then
+            local pi = cPlayerInfo.new(a_Player)
+            if (cFile:Exists(PLUGIN:GetLocalFolder() .. "/islands/" .. pi.islandNumber .. ".ini")) then
+                GetIslandInfo(pi.islandNumber)
+            else
+                if (pi.islandNumber ~= -1) then -- Save island informations now in island file
+                    local ii = cIslandInfo.new(pi.islandNumber)
+                    ii.ownerUUID = a_Player:GetUUID()
+                    ii.ownerName = a_Player:GetName()
+                    ii:Save()
+                    ISLANDS[pi.islandNumber] = ii
+                end
+            end
+            
+            PLAYERS[a_Player:GetUUID()] = pi
+        end
     end);
-end
-
-function SaveAllPlayerInfos()
-    for player, pi in pairs(PLAYERS) do
-        pi:Save()
-    end
 end
 
 function LoadAllLevels(a_File)
     local ConfigIni = cIniFile()
     ConfigIni:ReadFile(a_File)
 
-    local amount = ConfigIni:GetNumValues("Levels")    
+    local amount = ConfigIni:GetNumValues("Levels")
     for i = 1, amount do
         local fileLevel = ConfigIni:GetValue("Levels", i)
         LEVELS[i] = cLevel.new(fileLevel)

@@ -13,8 +13,8 @@ function cChallengeInfo.new(a_Challengename, a_ChallengesIni, a_LevelName)
 end
 
 function cChallengeInfo.IsCompleted(self, a_Player)
-    local pi = PLAYERS[a_Player:GetName()]
-    
+    local pi = GetPlayerInfo(a_Player)
+        
     if (pi.completedChallenges[self.inLevel] == nil) then
         a_Player:SendMessageInfo("You don't have the level to complete that challenge.")
         return
@@ -84,6 +84,8 @@ function cChallengeInfo.IsCompleted(self, a_Player)
         pi.completedChallenges[pi.isLevel] = {}
         a_Player:SendMessageSuccess("Congrats. You unlocked next level " .. LEVELS[isLevel + 1].levelName)
     end
+    
+    pi:Save()
 end
 
 function cChallengeInfo.Load(self, a_ChallengesIni)

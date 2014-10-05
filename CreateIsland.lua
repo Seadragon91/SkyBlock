@@ -1,10 +1,13 @@
-function CreateIsland(a_Player, a_IslandNumber) -- Creates a island for the player, a_islandNuber for restart. Returns island number, positions x and z
+-- Creates a island for the player, a_islandNuber for restart. Returns island number, positions x and z
+function CreateIsland(a_Player, a_IslandNumber)
     local posX = 0
     local posZ = 0
     
     if (a_IslandNumber == -1) then -- New island for a player
         -- Increase island number
         ISLAND_NUMBER = ISLAND_NUMBER + 1
+        -- Save Config file to save island number
+        SaveConfiguration()
         -- Get island position
         posX, posZ = GetIslandPosition(ISLAND_NUMBER)
     else -- Use his island number
@@ -19,7 +22,7 @@ function CreateIsland(a_Player, a_IslandNumber) -- Creates a island for the play
         local wey = weOffset.y
         local wez = weOffset.z
         
-        area:Write(a_Player:GetWorld(), posX - wex, 150 - wey, posZ - wez) -- Place the schematic at the island position
+        area:Write(SKYBLOCK, posX - wex, 150 - wey, posZ - wez) -- Place the schematic at the island position
 
         -- Add items to player inventory
         a_Player:GetInventory():GetInventoryGrid():SetSlot(0, 0, cItem(E_ITEM_LAVA_BUCKET, 1));

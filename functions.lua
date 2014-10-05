@@ -41,18 +41,18 @@ function ParseStringToItems(a_ToParse)
 end
 
 -- Checks if the player can interact at the position
-function HasPermissionThereDontCancel(a_Player, a_BlockX, a_BlockZ)
+function CancelEvent(a_Player, a_BlockX, a_BlockZ)
     if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
         return false
     end
     
-    local pi = PLAYERS[a_Player:GetName()]
+    local pi = GetPlayerInfo(a_Player)
     local islandNumber = GetIslandNumber(a_BlockX, a_BlockZ)
     if (a_Player:HasPermission("skyblock.admin.build")) then
         return false
     end
     
-    if (pi.islandNumber == islandNumber) then
+    if (pi:HasPermissionThere(a_BlockX, a_BlockZ)) then
         return false
     end
     
@@ -67,4 +67,54 @@ function GetChallenge(a_ChallengeName)
         end
     end
     return nil
+end
+
+-- Return and load cPlayerInfo if necessary, should never return nil
+function GetPlayerInfo(a_Player)
+    local pi = PLAYERS[a_Player:GetUUID()]
+    if (pi == nil) then
+        pi = cPlayerInfo.new(a_Player) -- Load or create new PlayerInfo
+        PLAYERS[a_Player:GetUUID()] = pi
+    end
+    return pi
+end
+
+-- Return and load cIslandInfo if necessary, can return nil
+function GetIslandInfo(a_IslandNumber)
+    local ii = ISLANDS[a_IslandNumber]
+    if (ii == nil) then
+        ii = cIslandInfo.new(a_IslandNumber)
+        if (ii:Load() == false) then -- Load cIslandInfo if exists
+            return nil
+        end
+        ISLANDS[a_IslandNumber] = ii
+    end
+    return ii
+end
+
+
+-- Remove the island info from ISLAND list
+function RemoveIslandInfo(a_IslandNumber)
+    local ii = ISLANDS[a_IslandNumber]
+    
+    if (ii == nil) then
+        return
+    end
+    
+    if (PLAYERS[ii.ownerUUID] ~= nil) then
+        return
+    end
+    
+    for uuid, playerName in pairs(ii.friends) do
+        if (PLAYERS[uuid] ~= nil) then
+            return
+        end
+    end
+    
+    ISLANDS[a_IslandNumber] = nil
+end
+
+-- For debugging
+function DEBUG(s)
+    print("[DEBUG] " .. s)
 end

@@ -1,4 +1,5 @@
-function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
+ -- Handle the command skyblock
+function CommandSkyBlock(a_Split, a_Player)
     if (#a_Split == 1) then
         a_Player:SendMessageInfo("Command for the skyblock plugin. Type skyblock help for a list of commands and arguments.")
         return true
@@ -8,10 +9,21 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
         a_Player:SendMessage("---"  .. cChatColor.LightGreen .. " Commands for the skyblock plugin " .. cChatColor.White .. " ---")
         a_Player:SendMessageInfo("/skyblock join - Join the world skyblock and comes to a spawn platform.")
         a_Player:SendMessageInfo("/skyblock play - Get an island and start playing.")
-        a_Player:SendMessageInfo("/skyblock restart - Restart your island")
+        
+        -- cmd_Challenges.lua
         a_Player:SendMessageInfo("/challenges - List all challenges")
         a_Player:SendMessageInfo("/challenges info <name> - Shows informations to the challenge")
         a_Player:SendMessageInfo("/challenges complete <name> -Complete the challenge")
+        
+        -- cmd_Island.lua
+        a_Player:SendMessageInfo("/island home - Teleport back to your home location of the island")
+        a_Player:SendMessageInfo("/island home set - Change home location on island")
+        a_Player:SendMessageInfo("/island obsidian - Change obsidian backt to lava")
+        a_Player:SendMessageInfo("/island add <player> - Add player to your friend list")
+        a_Player:SendMessageInfo("/island remove <player> - Remove player from your friend list")
+        a_Player:SendMessageInfo("/island join <player> - Teleport to a friends island")
+        a_Player:SendMessageInfo("/island list - List your friends and islands who you can join")
+        a_Player:SendMessageInfo("/island restart - Start an new island")
         return true
     end
     
@@ -35,7 +47,7 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
     end
     
     if (a_Split[2] == "play") then
-        local pi = PLAYERS[a_Player:GetName()]
+        local pi = GetPlayerInfo(a_Player)
         if (pi.islandNumber == -1) then -- Player has no island
             local islandNumber = -1
             local posX = 0
@@ -44,12 +56,18 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
             islandNumber, posX, posZ = CreateIsland(a_Player, -1)
             pi.islandNumber = islandNumber
             
-            if (a_Player:GetWorld():GetName() ~= SKYBLOCK:GetName()) then
+            local ii = cIslandInfo.new(islandNumber)
+            ii:SetOwner(a_Player)
+            ii:Save()
+            
+            if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
                 a_Player:MoveToWorld(WORLD_NAME)
             end
             
             a_Player:TeleportToCoords(posX, 151, posZ)
             a_Player:SendMessageSuccess("Welcome to your island. Do not fall and make no obsidian :-)")
+            
+            pi:Save()
             return true
         else -- Player has an island            
             local posX = 0
@@ -57,65 +75,35 @@ function CommandSkyBlock(a_Split, a_Player) -- Handle the command skyblock.
             
             posX, posZ = GetIslandPosition(pi.islandNumber)
             
-            if (a_Player:GetWorld():GetName() ~= SKYBLOCK:GetName()) then
+            if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
                 a_Player:MoveToWorld(WORLD_NAME)
             end
             
             a_Player:TeleportToCoords(posX, 151, posZ)
+            local number = GetIslandNumber(a_Player:GetPosX(), a_Player:GetPosZ())
             a_Player:SendMessageSuccess("Welcome back " .. a_Player:GetName())
             return true
         end
     end
     
-    if (a_Split[2] == "restart") then -- Let the player restarts his island
-        local pi = PLAYERS[a_Player:GetName()]
-        if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-            a_Player:SendMessageFailure("This command works only in the world skyblock.")
+    if (a_Split[2] == "recreate") then -- Recreate spawn
+        if (a_Player:HasPermission("skyblock.admin.recreate") == false) then
+            a_Player:SendMessageFailure("You don't have the permission for that command.")
             return true
         end
         
-        if (pi.islandNumber == -1) then
-            a_Player:SendMessageFailure("You have no island.")
-            return true
+        local area = cBlockArea()
+        if (area:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. SPAWN_SCHEMATIC)) then
+            local weOffset = area:GetWEOffset()
+            local wex = weOffset.x
+            local wey = weOffset.y
+            local wez = weOffset.z
+            
+            area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez) -- Paste the schematic
+            a_Player:SendMessageSuccess("Recreated spawn from schematic file.")
+        else
+            a_Player:SendMessageInfo("Schematic not found or error occured.")
         end
-        
-        if (pi.isRestarting == true) then -- Avoid running the command multiple
-            a_Player:SendMessageInfo("This command is running. Please wait...")
-            return true
-        end
-        
-        pi.isRestarting = true
-        a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
-        
-        local posX = 0
-        local posZ = 0
-        
-        posX, posZ = GetIslandPosition(pi.islandNumber)
-        RemoveIsland(posX, posZ) -- Recreates all chunks in the area of the island
-
-        a_Player:SendMessageInfo("Please wait 10s...");
-        local playerName = a_Player:GetName()
-        
-        local Callback = function (a_World)
-            a_World:DoWithPlayer(playerName, 
-                function(a_FoundPlayer)                
-                    a_FoundPlayer:GetInventory():Clear()
-                    
-                    local pi = PLAYERS[a_FoundPlayer:GetName()]
-                    local islandNumber = -1
-                    local posX = 0
-                    local posZ = 0
-                
-                    islandNumber, posX, posZ = CreateIsland(a_FoundPlayer, pi.islandNumber);
-                    a_FoundPlayer:TeleportToCoords(posX, 151, posZ);
-                    a_FoundPlayer:SetFoodLevel(20)
-                    a_FoundPlayer:SetHealth(a_FoundPlayer:GetMaxHealth())
-                    a_FoundPlayer:SendMessageSuccess("Good luck with your new island.");
-                    pi.isRestarting  = false
-                end)
-            end
-        
-        a_Player:GetWorld():ScheduleTask(200, Callback)
         return true
     end
     

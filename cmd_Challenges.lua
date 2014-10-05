@@ -1,6 +1,7 @@
-function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.    
+ -- Handle the command challenges
+function CommandChallenges(a_Split, a_Player) 
     if (#a_Split == 1) then -- List all challenge names, light gray for completed, light blue for repeatable and light green for not
-        local pi = PLAYERS[a_Player:GetName()]
+        local pi = GetPlayerInfo(a_Player)
         local isLevel = GetLevelAsNumer(pi.isLevel)
         local pos = -1
         
@@ -38,11 +39,9 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
         end
         
         if (pos ~= -1) then
-            print("Start: " .. pos)
             local msg = "Locked levels: "
             local first = true
             for i = pos, #LEVELS do
-                print("Pos: " .. i)
                 if (first) then
                     first = false
                 else
@@ -86,7 +85,7 @@ function CommandChallenges(a_Split, a_Player) -- Handle the command challenges.
     end
     
     if (a_Split[2] == "complete") then -- Complete a challenge
-        local pi = PLAYERS[a_Player:GetName()]
+        local pi = GetPlayerInfo(a_Player)
         if (pi.islandNumber == -1) then
             a_Player:SendMessageFailure("You have no island. Type /skyblock play first.")
             return true

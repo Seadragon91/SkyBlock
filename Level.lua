@@ -17,7 +17,7 @@ end
 
 function cLevel.Load(self, a_File)
     local LevelIni = cIniFile()
-    LevelIni:ReadFile(PLUGIN:GetLocalDirectory() .. "/challenges/" .. a_File)
+    LevelIni:ReadFile(PLUGIN:GetLocalFolder() .. "/challenges/" .. a_File)
     
     self.levelName = LevelIni:GetValue("General", "LevelName")
     self.description = LevelIni:GetValue("General", "Description")
