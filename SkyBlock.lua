@@ -17,7 +17,7 @@ CONFIG_FILE = nil -- Config file for SkyBlock
 
 function Initialize(Plugin)
     Plugin:SetName("SkyBlock")
-    Plugin:SetVersion(1)
+    Plugin:SetVersion(2)
 
     PLUGIN = Plugin
     ISLAND_NUMBER = 0
