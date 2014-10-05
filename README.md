@@ -13,8 +13,8 @@ For Installation
 
 For Updating
 ======
-Use this step only, if you want to upgrade from a previous version
-1) **Make an Backup from the current SkyBlock plugin and the skyblock world**
-2) Download the SkyBlock.zip and extract it
-3) Remove the Config.ini and the folder challenges from the extracted folder
-4) Copy all files into the plugin folder of SkyBlock
+Use this step only, if you want to upgrade from a previous version  
+1) **Make an Backup from the current SkyBlock plugin and the skyblock world**  
+2) Download the SkyBlock.zip and extract it  
+3) Remove the Config.ini and the folder challenges from the extracted folder  
+4) Copy all files into the plugin folder of SkyBlock  
