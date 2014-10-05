@@ -1,5 +1,5 @@
-SkyBlock
-========
+SkyBlock V2
+===========
 
 SkyBlock lua plugin for the c++ MCServer.
 
