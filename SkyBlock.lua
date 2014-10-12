@@ -106,8 +106,7 @@ function LoadPlayerInfos()
             else
                 if (pi.islandNumber ~= -1) then -- Save island informations now in island file
                     local ii = cIslandInfo.new(pi.islandNumber)
-                    ii.ownerUUID = a_Player:GetUUID()
-                    ii.ownerName = a_Player:GetName()
+                    ii:SetOwner(a_Player)
                     ii:Save()
                     ISLANDS[pi.islandNumber] = ii
                 end
