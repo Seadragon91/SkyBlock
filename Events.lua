@@ -147,8 +147,9 @@ function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
             end
             
             a_Player:SendMessageInfo(friends)
+            return true
         end
-        return true
+        return CancelEvent(a_Player, posX, posZ)
     end
     
     if (CancelEvent(a_Player, a_BlockX, a_BlockZ)) then
