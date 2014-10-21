@@ -1,4 +1,4 @@
- -- Handle the command skyblock
+-- Handle the command skyblock
 function CommandSkyBlock(a_Split, a_Player)
     if (#a_Split == 1) then
         a_Player:SendMessageInfo("Command for the skyblock plugin. Type skyblock help for a list of commands and arguments.")

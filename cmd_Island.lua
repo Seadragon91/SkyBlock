@@ -1,4 +1,4 @@
- -- Handle the island command
+-- Handle the island command
 function CommandIsland(a_Split, a_Player)
     if (#a_Split == 1) then
         return true
@@ -11,9 +11,9 @@ function CommandIsland(a_Split, a_Player)
         return true
     end
     
-    if (a_Split[2] == "home") then    
+    if (a_Split[2] == "home") then
         if (#a_Split == 3) then
-            if (a_Split[3] == "set") then                
+            if (a_Split[3] == "set") then
                 if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
                     a_Player:SendMessageInfo("You can use this command only in world " + WORLD_NAME)
                     return true

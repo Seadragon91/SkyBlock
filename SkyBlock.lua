@@ -70,7 +70,7 @@ function Initialize(Plugin)
     return true
 end
 
-function OnDisable()    
+function OnDisable()
     LOG(PLUGIN:GetName() .. " is shutting down...")
 end
 
