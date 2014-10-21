@@ -69,18 +69,29 @@ function CommandSkyBlock(a_Split, a_Player)
             
             pi:Save()
             return true
-        else -- Player has an island            
-            local posX = 0
-            local posZ = 0
-            
-            posX, posZ = GetIslandPosition(pi.islandNumber)
-            
+        else -- Player has an island
             if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
                 a_Player:MoveToWorld(WORLD_NAME)
             end
             
-            a_Player:TeleportToCoords(posX, 151, posZ)
-            local number = GetIslandNumber(a_Player:GetPosX(), a_Player:GetPosZ())
+            local ii = GetIslandInfo(pi.islandNumber)
+            if (ii.homeLocation == nil) then
+                local posX = 0
+                local posZ = 0
+                posX, posZ = GetIslandPosition(pi.islandNumber)
+                a_Player:TeleportToCoords(posX, 151, posZ)
+            else
+                local x = ii.homeLocation[1]
+                local y = ii.homeLocation[2]
+                local z = ii.homeLocation[3]
+                local yaw = ii.homeLocation[4]
+                local pitch = ii.homeLocation[5]
+            
+                a_Player:TeleportToCoords(x, y, z)
+                a_Player:SetYaw(yaw)
+                a_Player:SetPitch(pitch)
+            end
+            
             a_Player:SendMessageSuccess("Welcome back " .. a_Player:GetName())
             return true
         end
