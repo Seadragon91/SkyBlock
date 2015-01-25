@@ -11,7 +11,7 @@ end
 -- Returns the amount of elements in the list
 function GetAmount(a_List)
     local amount = 0
-    for k,v in pairs(a_List) do
+    for _,_ in pairs(a_List) do
         amount = amount + 1
     end
     return amount
@@ -105,7 +105,7 @@ function RemoveIslandInfo(a_IslandNumber)
         return
     end
     
-    for uuid, playerName in pairs(ii.friends) do
+    for uuid, _ in pairs(ii.friends) do
         if (PLAYERS[uuid] ~= nil) then
             return
         end

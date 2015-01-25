@@ -16,16 +16,15 @@ end
 -- Player quits
 function OnPlayerQuit(a_Player)
     if (a_Player:GetWorld():GetName() == WORLD_NAME) then
-        local islandNumber = GetPlayerInfo(a_Player).islandNumber
+        local pi = GetPlayerInfo(a_Player)
+        PLAYERS[a_Player:GetUUID()] = nil
+        local islandNumber = pi.islandNumber
         RemoveIslandInfo(islandNumber)
 
         -- Try ro remove island info from ISLANDS list
-        local pi = GetPlayerInfo(a_Player)
-        for player, info in pairs(pi.inFriendList) do
+        for player, _ in pairs(pi.inFriendList) do
             RemoveIslandInfo(pi.inFriendList[player][2])
         end
-        
-        PLAYERS[a_Player:GetUUID()] = nil
     end
 end
 
@@ -138,7 +137,7 @@ function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
             local friends = "Friends: "
             local amount = GetAmount(ii.friends)
             local counter = 0
-            for uuid, playerName in pairs(ii.friends) do
+            for _, playerName in pairs(ii.friends) do
                 friends = friends .. playerName
                 counter = counter + 1
                 if (counter ~= amount) then

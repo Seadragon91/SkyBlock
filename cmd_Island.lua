@@ -178,7 +178,7 @@ function CommandIsland(a_Split, a_Player)
         local hasFriends = "Your friends: "
         local amount = GetAmount(ii.friends)
         local counter = 0
-        for uuid, playerName in pairs(ii.friends) do
+        for _, playerName in pairs(ii.friends) do
             hasFriends = hasFriends .. playerName
             counter = counter + 1
             if (counter ~= amount) then
@@ -189,7 +189,7 @@ function CommandIsland(a_Split, a_Player)
         local canJoin = "Islands you can enter: "
         amount = GetAmount(pi.inFriendList)
         counter = 0
-        for playerName, info in pairs(pi.inFriendList) do
+        for playerName, _ in pairs(pi.inFriendList) do
             canJoin = canJoin .. playerName
             counter = counter + 1
             if (counter ~= amount) then

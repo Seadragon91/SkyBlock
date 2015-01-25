@@ -45,7 +45,7 @@ function cIslandInfo.RemoveFriend(self, a_PlayerName)
 end
 
 function cIslandInfo.ContainsFriend(self, a_PlayerName)
-    for uuid, playerName in pairs(self.friends) do
+    for _, playerName in pairs(self.friends) do
         if (a_PlayerName:lower() == playerName) then
             return true
         end

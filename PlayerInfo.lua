@@ -17,6 +17,9 @@ function cPlayerInfo.new(a_Player)
     self.isRestarting = false
         
     self.Load(self, a_Player) -- Check if there is a player file, if yes load it
+    if (self.islandNumber ~= -1) then -- Load island file
+        GetIslandInfo(self.islandNumber)        
+    end
     return self
 end
 
@@ -89,7 +92,7 @@ function cPlayerInfo.Save(self) -- Save PlayerInfo
             break
         end
         
-        for index, value in pairs(self.completedChallenges[LEVELS[i].levelName]) do
+        for index, _ in pairs(self.completedChallenges[LEVELS[i].levelName]) do
             if (first) then
                 first = false
             else
@@ -106,7 +109,7 @@ function cPlayerInfo.Save(self) -- Save PlayerInfo
     if (amount > 0) then
         local list = ""
         local counter = 0
-        for player, info in pairs(self.inFriendList) do
+        for player, _ in pairs(self.inFriendList) do
             list = list .. player .. ":" .. self.inFriendList[player][1] .. ":" .. self.inFriendList[player][2]
             if (counter ~= amount) then
                 list = list .. " "
