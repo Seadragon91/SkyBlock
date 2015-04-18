@@ -80,25 +80,32 @@ function OnWorldLoaded(a_World)
         return
     end
     
-    local area = cBlockArea()
-    if (area:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. SPAWN_SCHEMATIC)) then
-        local weOffset = area:GetWEOffset()
-        local wex = weOffset.x
-        local wey = weOffset.y
-        local wez = weOffset.z
-        
-        area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez) -- Paste the schematic
-        SPAWN_CREATED = true
-        SaveConfiguration()
-    else -- Error or no schematic found, create default spawn
-        for x = -5,5 do
-            for z = -5,5 do
-                SKYBLOCK:SetBlock(x, 169, z, E_BLOCK_STONE, 0)
+    -- Load chunks for spawn tower
+    SKYBLOCK:ChunkStay(
+        { {0,0}, {-1,0}, {-1,-1}, {0,-1} },
+        nil,
+        function()
+            local area = cBlockArea()
+            if (area:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. SPAWN_SCHEMATIC)) then
+                local weOffset = area:GetWEOffset()
+                local wex = weOffset.x
+                local wey = weOffset.y
+                local wez = weOffset.z
+                
+                area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez) -- Paste the schematic
+                SPAWN_CREATED = true
+                SaveConfiguration()
+            else -- Error or no schematic found, create default spawn
+                for x = -5,5 do
+                    for z = -5,5 do
+                        SKYBLOCK:SetBlock(x, 169, z, E_BLOCK_STONE, 0)
+                    end
+                end
+                SPAWN_CREATED = true
+                SaveConfiguration()
             end
         end
-        SPAWN_CREATED = true
-        SaveConfiguration()
-    end
+    )
 end
 
 function OnBlockPlacing(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_CursorX, a_CursorY, a_CursorZ, a_BlockType, a_BlockMeta)
