@@ -2,12 +2,12 @@
 function CommandChallenges(a_Split, a_Player) 
     if (#a_Split == 1) then -- List all challenge names, light gray for completed, light blue for repeatable and light green for not
         local pi = GetPlayerInfo(a_Player)
-        local isLevel = GetLevelAsNumer(pi.isLevel)
+        local isLevel = GetLevelAsNumber(pi.isLevel)
         local pos = -1
         
         for index, level in pairs(LEVELS) do
             -- Check if player has the level
-            local needLevel = GetLevelAsNumer(level.levelName)
+            local needLevel = GetLevelAsNumber(level.levelName)
         
             if (needLevel > isLevel) then
                 pos = index

@@ -20,8 +20,8 @@ function cChallengeInfo.IsCompleted(self, a_Player)
         return
     end
     
-    local isLevel = GetLevelAsNumer(pi.isLevel)
-    local needLevel = GetLevelAsNumer(self.inLevel)
+    local isLevel = GetLevelAsNumber(pi.isLevel)
+    local needLevel = GetLevelAsNumber(self.inLevel)
     
     if (needLevel > isLevel) then
         a_Player:SendMessageInfo("You don't have the level to complete that challenge.")
@@ -72,7 +72,7 @@ function cChallengeInfo.IsCompleted(self, a_Player)
     a_Player:SendMessageSuccess("Congrats you completed the challenge " .. self.challengeName)
     
     local amountDone = GetAmount(pi.completedChallenges[pi.isLevel])
-    local amountNeeded = GetAmount(LEVELS[GetLevelAsNumer(self.inLevel)].challenges)
+    local amountNeeded = GetAmount(LEVELS[GetLevelAsNumber(self.inLevel)].challenges)
     
     if (amountDone == amountNeeded) then
         if (isLevel == #LEVELS) then
