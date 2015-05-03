@@ -5,7 +5,8 @@ function CommandSkyBlock(a_Split, a_Player)
         return true
     end
     
-    if (a_Split[2] == "help") then -- Show the skyblock help
+    -- Show the skyblock help
+    if (a_Split[2] == "help") then
         a_Player:SendMessage("---"  .. cChatColor.LightGreen .. " Commands for the skyblock plugin " .. cChatColor.White .. " ---")
         a_Player:SendMessageInfo("/skyblock join - Join the world skyblock and comes to a spawn platform.")
         a_Player:SendMessageInfo("/skyblock play - Get an island and start playing.")
@@ -27,20 +28,19 @@ function CommandSkyBlock(a_Split, a_Player)
         return true
     end
     
-    if (a_Split[2] == "join") then -- Join the world
-        if (a_Player:GetWorld():GetName() == WORLD_NAME) then -- Check if player is already in the world
+    -- Join the world
+    if (a_Split[2] == "join") then
+        if (a_Player:GetWorld():GetName() == WORLD_NAME) then
             a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
             a_Player:SendMessageSuccess("Welcome back to the spawn platform.")
             return true
         end
     
         if (a_Player:MoveToWorld(WORLD_NAME)) then
-            -- a_Player moved
             a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
             a_Player:SendMessageSuccess("Welcome to the world skyblock. Type /skyblock play to get an island.")
             return true
         else
-            -- Didn't find the world
             a_Player:SendMessageFailure("Command failed. Couldn't find the world " .. WORLD_NAME .. ".")
             return true
         end
@@ -97,7 +97,8 @@ function CommandSkyBlock(a_Split, a_Player)
         end
     end
     
-    if (a_Split[2] == "recreate") then -- Recreate spawn
+    -- Recreate spawn
+    if (a_Split[2] == "recreate") then
         if (a_Player:HasPermission("skyblock.admin.recreate") == false) then
             a_Player:SendMessageFailure("You don't have the permission for that command.")
             return true

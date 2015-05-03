@@ -1,21 +1,23 @@
 -- Handle the command challenges
 function CommandChallenges(a_Split, a_Player) 
-    if (#a_Split == 1) then -- List all challenge names, light gray for completed, light blue for repeatable and light green for not
+    -- List all challenge names:
+    --     light gray for completed
+    --     light blue for repeatable 
+    --     light green for not completed
+    if (#a_Split == 1) then
         local pi = GetPlayerInfo(a_Player)
         local isLevel = GetLevelAsNumer(pi.isLevel)
         local pos = -1
         
         for index, level in pairs(LEVELS) do
-            -- Check if player has the level
+            -- Check if player has the required level
             local needLevel = GetLevelAsNumer(level.levelName)
-        
             if (needLevel > isLevel) then
                 pos = index
                 break
             end
         
             a_Player:SendMessageInfo("--- Level: " .. level.levelName .. " ---")
-            
             local first = true
             local list = ""
             for name, ci in pairs(level.challenges) do
@@ -58,7 +60,8 @@ function CommandChallenges(a_Split, a_Player)
         return true
     end
         
-    if (a_Split[2] == "info") then -- List all infos to a challenge
+    -- List all infos to a challenge
+    if (a_Split[2] == "info") then
         if (#a_Split == 2) then
             a_Player:SendMessageInfo("/challenges info <name>")
             return true
@@ -105,7 +108,8 @@ function CommandChallenges(a_Split, a_Player)
         return true
     end
     
-    if (a_Split[2] == "check") then -- For checking a challenge.
+    -- For checking a challenge
+    if (a_Split[2] == "check") then
         if (a_Player:HasPermission("challenges.admin.check") == false) then
             a_Player:SendMessageFailure("You don't have the permission for that command.")
             return true

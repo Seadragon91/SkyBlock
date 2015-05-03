@@ -1,4 +1,3 @@
-
 -- Returns the index of the level name
 function GetLevelAsNumer(a_Level)
     for i = 1, #LEVELS do

@@ -23,6 +23,7 @@ function cPlayerInfo.new(a_Player)
     return self
 end
 
+-- Check if player has completed the challenge
 function cPlayerInfo.HasCompleted(self, a_Level, a_ChallengeName)
     if (self.completedChallenges[a_Level] == nil) then
         return false
@@ -35,6 +36,7 @@ function cPlayerInfo.HasCompleted(self, a_Level, a_ChallengeName)
     return true
 end
 
+-- Add the player to the friend list
 function cPlayerInfo.AddEntry(self, a_IslandNumber, a_Player)
     local s = a_Player:GetName():lower()
 
@@ -45,6 +47,7 @@ function cPlayerInfo.AddEntry(self, a_IslandNumber, a_Player)
     end
 end
 
+-- Remove the player from the friend list
 function cPlayerInfo.RemoveEntry(self, a_PlayerName)
     if (self.inFriendList[a_PlayerName:lower()] == nil) then
         return false
@@ -54,6 +57,7 @@ function cPlayerInfo.RemoveEntry(self, a_PlayerName)
     return true
 end
 
+-- Check if the player can interact at the position
 function cPlayerInfo.HasPermissionThere(self, a_BlockX, a_BlockZ)
     local islandNumber = GetIslandNumber(a_BlockX, a_BlockZ)
     if (islandNumber == 0) then
@@ -76,7 +80,8 @@ function cPlayerInfo.HasPermissionThere(self, a_BlockX, a_BlockZ)
     return true
 end
 
-function cPlayerInfo.Save(self) -- Save PlayerInfo
+-- Save PlayerInfo
+function cPlayerInfo.Save(self) 
     if (self.islandNumber == -1) then -- Only save player info, if he has or is on a friends island
         return
     end
@@ -121,7 +126,8 @@ function cPlayerInfo.Save(self) -- Save PlayerInfo
     PlayerInfoIni:WriteFile(self.playerFile)
 end
 
-function cPlayerInfo.Load(self, a_Player) -- Load PlayerInfo
+-- Load PlayerInfo
+function cPlayerInfo.Load(self, a_Player)
     local PlayerInfoIni = cIniFile()
     
     -- Check for old file, backward compatibility
