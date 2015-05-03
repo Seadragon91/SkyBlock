@@ -117,6 +117,7 @@ function LoadPlayerInfos()
     end);
 end
 
+-- Loads all level challenges
 function LoadAllLevels(a_File)
     local ConfigIni = cIniFile()
     ConfigIni:ReadFile(a_File)

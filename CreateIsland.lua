@@ -21,7 +21,6 @@ function CreateIsland(a_Player, a_IslandNumber)
         local wex = weOffset.x
         local wey = weOffset.y
         local wez = weOffset.z
-        
         area:Write(SKYBLOCK, posX - wex, 150 - wey, posZ - wez) -- Place the schematic at the island position
 
         -- Add items to player inventory
@@ -38,39 +37,40 @@ function CreateIsland(a_Player, a_IslandNumber)
         a_Player:GetInventory():GetInventoryGrid():SetSlot(1, 1, cItem(E_ITEM_BONE, 3));
         a_Player:GetInventory():GetInventoryGrid():SetSlot(2, 1, cItem(E_BLOCK_CHEST, 1));
     else -- no schematic found, use default island as fallback
-    -- Create island at position
-    CreateLayer(posX, 148, posZ, E_BLOCK_DIRT)
-    CreateLayer(posX, 149, posZ, E_BLOCK_DIRT)
-    CreateLayer(posX, 150, posZ, E_BLOCK_GRASS)
-    
-    -- Plant a tree, 10 ticks later...
-    a_Player:GetWorld():ScheduleTask(10, function()
-        SKYBLOCK:GrowTreeFromSapling(5 + posX, 151, posZ, E_META_SAPLING_APPLE);
-    end);
-    
-    -- Create a chest and add items
-    SKYBLOCK:SetBlock(posX, 151, 4 + posZ, E_BLOCK_CHEST, 2)
-    SKYBLOCK:DoWithChestAt(posX, 151, 4 + posZ,
-        function(a_ChestEntity)
-            a_ChestEntity:SetSlot(0, 0, cItem(E_ITEM_LAVA_BUCKET, 1));
-            a_ChestEntity:SetSlot(1, 0, cItem(E_BLOCK_ICE, 2));
-            a_ChestEntity:SetSlot(2, 0, cItem(E_ITEM_MELON_SLICE, 1));
-            a_ChestEntity:SetSlot(3, 0, cItem(E_BLOCK_CACTUS, 1));
-            a_ChestEntity:SetSlot(4, 0, cItem(E_BLOCK_BROWN_MUSHROOM, 1));
-            a_ChestEntity:SetSlot(5, 0, cItem(E_BLOCK_RED_MUSHROOM, 1));
-            a_ChestEntity:SetSlot(6, 0, cItem(E_BLOCK_PUMPKIN, 1));
-            a_ChestEntity:SetSlot(7, 0, cItem(E_ITEM_SUGARCANE, 1));
-            a_ChestEntity:SetSlot(8, 0, cItem(E_ITEM_CARROT, 1));
-            a_ChestEntity:SetSlot(0, 1, cItem(E_ITEM_POTATO, 1));
-            a_ChestEntity:SetSlot(1, 1, cItem(E_ITEM_BONE, 3));
-        end
-    );
+        -- Create layers
+        CreateLayer(posX, 148, posZ, E_BLOCK_DIRT)
+        CreateLayer(posX, 149, posZ, E_BLOCK_DIRT)
+        CreateLayer(posX, 150, posZ, E_BLOCK_GRASS)
+        
+        -- Plant a tree, 10 ticks later...
+        a_Player:GetWorld():ScheduleTask(10, function()
+            SKYBLOCK:GrowTreeFromSapling(5 + posX, 151, posZ, E_META_SAPLING_APPLE);
+        end);
+        
+        -- Create a chest and add items
+        SKYBLOCK:SetBlock(posX, 151, 4 + posZ, E_BLOCK_CHEST, 2)
+        SKYBLOCK:DoWithChestAt(posX, 151, 4 + posZ,
+            function(a_ChestEntity)
+                a_ChestEntity:SetSlot(0, 0, cItem(E_ITEM_LAVA_BUCKET, 1));
+                a_ChestEntity:SetSlot(1, 0, cItem(E_BLOCK_ICE, 2));
+                a_ChestEntity:SetSlot(2, 0, cItem(E_ITEM_MELON_SLICE, 1));
+                a_ChestEntity:SetSlot(3, 0, cItem(E_BLOCK_CACTUS, 1));
+                a_ChestEntity:SetSlot(4, 0, cItem(E_BLOCK_BROWN_MUSHROOM, 1));
+                a_ChestEntity:SetSlot(5, 0, cItem(E_BLOCK_RED_MUSHROOM, 1));
+                a_ChestEntity:SetSlot(6, 0, cItem(E_BLOCK_PUMPKIN, 1));
+                a_ChestEntity:SetSlot(7, 0, cItem(E_ITEM_SUGARCANE, 1));
+                a_ChestEntity:SetSlot(8, 0, cItem(E_ITEM_CARROT, 1));
+                a_ChestEntity:SetSlot(0, 1, cItem(E_ITEM_POTATO, 1));
+                a_ChestEntity:SetSlot(1, 1, cItem(E_ITEM_BONE, 3));
+            end
+        );
     end
     
     return ISLAND_NUMBER, posX, posZ
 end
 
-function CreateLayer(posX, posY, posZ, material) -- Creates a layer for the island
+-- Creates a layer for the island
+function CreateLayer(posX, posY, posZ, material)
     for x = -1,6 do
         local X = x + posX
         for z = -1,1 do
@@ -86,7 +86,8 @@ function CreateLayer(posX, posY, posZ, material) -- Creates a layer for the isla
     end
 end
 
-function GetIslandPosition(n) -- Calculates with the island number the positions of the island. Returns x and z
+-- Calculates with the island number the positions of the island. Returns x and z
+function GetIslandPosition(n)
     if (n <= 0) then -- spawn platform
         return 0, 0
     end
@@ -123,12 +124,14 @@ function GetIslandPosition(n) -- Calculates with the island number the positions
     return posX, posZ
 end
 
-function round(num, idp) -- required for function below
+-- Required for function below
+function round(num, idp)
   local mult = 10^(idp or 0)
   return math.floor(num * mult + 0.5) / mult
 end
 
-function GetIslandNumber(posX, posZ) -- Calculates with the positions x and z an island number. Returns the island number
+-- Calculates with the positions x and z an island number. Returns the island number
+function GetIslandNumber(posX, posZ)
     local px = posX
     local pz = posZ
     local distance = ISLAND_DISTANCE
@@ -164,7 +167,8 @@ function GetIslandNumber(posX, posZ) -- Calculates with the positions x and z an
     return n
 end
 
-function RemoveIsland(posX, posZ) -- Regenerates all chunks in the area
+-- Regenerates all chunks in the area
+function RemoveIsland(posX, posZ)
     local radius = ISLAND_DISTANCE / 2
     
     for x = -radius,radius,16 do

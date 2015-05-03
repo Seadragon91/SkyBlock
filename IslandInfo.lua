@@ -1,4 +1,4 @@
--- Store informations of an island
+-- Stores informations of an island
 
 cIslandInfo = {}
 cIslandInfo.__index = cIslandInfo
@@ -44,6 +44,7 @@ function cIslandInfo.RemoveFriend(self, a_PlayerName)
     return true
 end
 
+-- Check if player name is in list
 function cIslandInfo.ContainsFriend(self, a_PlayerName)
     for _, playerName in pairs(self.friends) do
         if (a_PlayerName:lower() == playerName) then
@@ -53,7 +54,7 @@ function cIslandInfo.ContainsFriend(self, a_PlayerName)
     return false
 end
 
--- Save the island info
+-- Saves the island info
 function cIslandInfo.Save(self)
     local IslandInfoIni = cIniFile()
     
@@ -105,7 +106,6 @@ function cIslandInfo.Load(self)
             self.friends[player[1]] = player[2]
         end
     end
-    
     return true
 end
 

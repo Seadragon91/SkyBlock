@@ -25,7 +25,7 @@ function CommandIsland(a_Split, a_Player)
                 local yaw = a_Player:GetHeadYaw()
                 local pitch = a_Player:GetPitch()
                 
-                -- Checkf if player is in his island area
+                -- Check if player is in his island area
                 local islandNumber = GetIslandNumber(x, z)
                 if (pi.islandNumber ~= islandNumber) then
                     a_Player:SendMessageInfo("You can use this command only on your own island.")
@@ -117,8 +117,8 @@ function CommandIsland(a_Split, a_Player)
         return true
     end
     
+    -- Remove player
     if (a_Split[2] == "remove") then
-        -- Remove player
         if (#a_Split == 2) then
             a_Player:SendMessageInfo("/island remove <player>")
             return true
@@ -134,8 +134,8 @@ function CommandIsland(a_Split, a_Player)
         return true
     end
     
+    -- Join island
     if (a_Split[2] == "join") then
-        -- Join island
         if (#a_Split == 2) then
             a_Player:SendMessageInfo("/island join <player>")
             return true
@@ -173,8 +173,8 @@ function CommandIsland(a_Split, a_Player)
         return true
     end
     
+    -- List friends from island and islands who player can access
     if (a_Split[2] == "list") then
-        -- List friends from island and islands who player can access
         local hasFriends = "Your friends: "
         local amount = GetAmount(ii.friends)
         local counter = 0
@@ -202,8 +202,8 @@ function CommandIsland(a_Split, a_Player)
         return true
     end
     
+    -- Restart island
     if (a_Split[2] == "restart") then
-        -- Restart island
         if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
             a_Player:SendMessageFailure("This command works only in the world " + WORLD_NAME)
             return true
