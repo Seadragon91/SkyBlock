@@ -108,4 +108,3 @@ function cIslandInfo.Load(self)
     end
     return true
 end
-
