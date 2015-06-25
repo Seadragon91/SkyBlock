@@ -3,106 +3,93 @@
 cChallengeInfo = {}
 cChallengeInfo.__index = cChallengeInfo
 
-function cChallengeInfo.new(a_Challengename, a_ChallengesIni, a_LevelName)
-    local self = setmetatable({}, cChallengeInfo)
-    
-    self.challengeName = a_Challengename
-    self.inLevel = a_LevelName
-    self.Load(self, a_ChallengesIni)
-    return self
+
+function cChallengeInfo.new()
+	local self = setmetatable({}, cChallengeInfo)
+	return self
 end
 
-function cChallengeInfo.IsCompleted(self, a_Player)
-    local pi = GetPlayerInfo(a_Player)
-        
-    if (pi.completedChallenges[self.inLevel] == nil) then
-        a_Player:SendMessageInfo("You don't have the level to complete that challenge.")
-        return
-    end
-    
-    local isLevel = GetLevelAsNumber(pi.isLevel)
-    local needLevel = GetLevelAsNumber(self.inLevel)
-    
-    if (needLevel > isLevel) then
-        a_Player:SendMessageInfo("You don't have the level to complete that challenge.")
-        return
-    end
-    
-    if (pi.completedChallenges[self.inLevel][self.challengeName] == true) then
-        if (self.repeatable == false) then
-            a_Player:SendMessageInfo("This challenge is not repeatable.")
-            return
-        end
-        
-        for i = 1, #self.rpt_requiredItems do
-            if (not a_Player:GetInventory():HasItems(self.rpt_requiredItems[i])) then
-                a_Player:SendMessageFailure("You don't have the required items.")
-                return
-            end
-        end
-        
-        for i = 1, #self.rpt_requiredItems do
-            a_Player:GetInventory():RemoveItem(self.rpt_requiredItems[i])
-        end
-        
-        for i = 1, #self.rpt_rewardItems do
-            a_Player:GetInventory():AddItem(self.rpt_rewardItems[i])
-        end
-        
-        a_Player:SendMessageSuccess("Congrats you repeated the challenge " .. self.challengeName)
-        return
-    end
 
-    for i = 1, #self.requiredItems do
-        if (not a_Player:GetInventory():HasItems(self.requiredItems[i])) then
-            a_Player:SendMessageFailure("You don't have the required items.")
-            return
-        end
-    end
-    
-    for i = 1, #self.requiredItems do
-        a_Player:GetInventory():RemoveItem(self.requiredItems[i])
-    end
-    
-    for i = 1, #self.rewardItems do
-        a_Player:GetInventory():AddItem(self.rewardItems[i])
-    end
-    
-    pi.completedChallenges[self.inLevel][self.challengeName] = true
-    a_Player:SendMessageSuccess("Congrats you completed the challenge " .. self.challengeName)
-    
-    local amountDone = GetAmount(pi.completedChallenges[pi.isLevel])
-    local amountNeeded = GetAmount(LEVELS[GetLevelAsNumber(self.inLevel)].challenges)
-    
-    if (amountDone == amountNeeded) then
-        if (isLevel == #LEVELS) then
-            a_Player:SendMessageSuccess("You completed all levels and all challenges."); 
-            return
-        end
-        
-        pi.isLevel = LEVELS[isLevel + 1].levelName
-        pi.completedChallenges[pi.isLevel] = {}
-        a_Player:SendMessageSuccess("Congrats. You unlocked next level " .. LEVELS[isLevel + 1].levelName)
-    end
-    
-    pi:Save()
+function cChallengeInfo:HasRequirements(a_Player)
+	local playerInfo = GetPlayerInfo(a_Player)
+
+	if (playerInfo.m_CompletedChallenges[self.m_LevelName] == nil) then
+		a_Player:SendMessageInfo("You don't have the level to complete that challenge.")
+		return false
+	end
+
+	local isLevel = GetLevelAsNumber(playerInfo.m_IsLevel)
+	local needLevel = GetLevelAsNumber(self.m_LevelName)
+
+	if (needLevel > isLevel) then
+		a_Player:SendMessageInfo("You don't have the level to complete that challenge.")
+		return false
+	end
+
+	if (playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName]) then
+		if (not self.m_IsRepeatable) then
+			a_Player:SendMessageInfo("This challenge is not repeatable.")
+			return false
+		end
+	end
+	return true
 end
 
-function cChallengeInfo.Load(self, a_ChallengesIni)
-    self.description    = a_ChallengesIni:GetValue(self.challengeName, "description")
-    self.requiredItems  = ParseStringToItems(a_ChallengesIni:GetValue(self.challengeName, "requiredItems"))
-    self.requiredText   = a_ChallengesIni:GetValue(self.challengeName, "requiredText")
-    self.rewardItems    = ParseStringToItems(a_ChallengesIni:GetValue(self.challengeName, "rewardItems"))
-    self.rewardText     = a_ChallengesIni:GetValue(self.challengeName, "rewardText")
-    
-    -- Check if challenge is repeatable.
-    self.repeatable = a_ChallengesIni:GetValueB(self.challengeName, "repeatable")
-    if (self.repeatable == false) then
-        return
-    end
-    
-    self.rpt_requiredItems  = ParseStringToItems(a_ChallengesIni:GetValue(self.challengeName, "rpt_requiredItems"))
-    self.rpt_requiredText   = a_ChallengesIni:GetValue(self.challengeName, "rpt_requiredText")
-    self.rpt_rewardItems    = ParseStringToItems(a_ChallengesIni:GetValue(self.challengeName, "rpt_rewardItems"))
-    self.rpt_rewardText     = a_ChallengesIni:GetValue(self.challengeName, "rpt_rewardText")
+
+-- Overrided in the inheritanced classes
+function cChallengeInfo:IsCompleted(a_Player)
+	LOGERROR("cChallengeInfo:IsCompleted(): missing override in class " .. self:ToString())
+end
+
+
+-- Overrided in the inheritanced classes
+function cChallengeInfo:GetChallengeType()
+	LOGERROR("cChallengeInfo:GetChallengeType(): missing override in class " .. self:ToString())
+end
+
+
+-- Overrided in the inheritanced classes
+function cChallengeInfo:Load(a_LevelIni)
+	LOGERROR("cChallengeInfo:Load(): missing override in class " .. self:ToString())
+end
+
+
+-- Overrided. Returns the class as string
+function cChallengeInfo:ToString()
+	return "cChallengeInfo"
+end
+
+
+-- Not bound to class
+function LoadBasicInfos(a_ChallengeName, a_LevelIni, a_LevelName)	
+	local challengeType = a_LevelIni:GetValue(a_ChallengeName, "ChallengeType")
+	local challengeInfo = nil
+
+	-- challenges with no key challengeType are from type ITEMS
+	if ((challengeType == "ITEMS") or (challengeType == "")) then
+		challengeInfo = cChallengeItems.new(a_ChallengeName, a_LevelIni, a_LevelName)
+	else
+		LOGERROR("Unknown challengeType: " .. challengeType .. " in challenge " .. a_ChallengeName)
+		return
+	end
+
+	challengeInfo.m_ChallengeName = a_ChallengeName
+	challengeInfo.m_LevelName = a_LevelName
+	challengeInfo.m_Description = a_LevelIni:GetValue(a_ChallengeName, "Description")
+	challengeInfo.m_RequiredText = a_LevelIni:GetValue(a_ChallengeName, "RequiredText")
+	challengeInfo.m_RewardText = a_LevelIni:GetValue(a_ChallengeName, "RewardText")
+	challengeInfo.m_RewardItems = ParseStringToItems(a_LevelIni:GetValue(a_ChallengeName, "RewardItems"))
+
+	-- Check if challenge is repeatable.
+	local repeatable = a_LevelIni:GetValueB(a_ChallengeName, "Repeatable")
+	if (not repeatable) then
+		challengeInfo.m_IsRepeatable = false
+		return challengeInfo
+	end
+
+	challengeInfo.m_IsRepeatable = true
+	challengeInfo.m_RptRequiredText = a_LevelIni:GetValue(a_ChallengeName, "Rpt_RequiredText")
+	challengeInfo.m_RptRewardText = a_LevelIni:GetValue(a_ChallengeName, "Rpt_RewardText")
+	challengeInfo.m_RptRewardItems = ParseStringToItems(a_LevelIni:GetValue(a_ChallengeName, "Rpt_RewardItems"))
+	return challengeInfo
 end
