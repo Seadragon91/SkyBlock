@@ -16,8 +16,8 @@ end
 
 
 -- Returns a list of chunk coords
-function GetChunks(a_PosX, a_PosZ)
-	local radius = 16
+function GetChunks(a_PosX, a_PosZ, a_Radius)
+	local radius = a_Radius
 	local list = {}
 
 	for x = -radius,radius,16 do
@@ -35,7 +35,7 @@ end
 function CreateIsland(a_Player, a_PosX, a_PosZ)
 	-- Check for schematic file, if exists use it
 	local area = cBlockArea()
-	if (area:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. ISLAND_SCHEMATIC) == true) then
+	if (area:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. ISLAND_SCHEMATIC)) then
 		local weOffset = area:GetWEOffset()
 		local wex = weOffset.x
 		local wey = weOffset.y

@@ -16,7 +16,7 @@ function cPlayerInfo.new(a_Player)
 	self.m_InFriendList = {}
 	self.m_IsRestarting = false
 
-	self.Load(self, a_Player) -- Check if there is a player file, if yes load it
+	self:Load(a_Player) -- Check if there is a player file, if yes load it
 	if (self.m_IslandNumber ~= -1) then -- Load island file
 		GetIslandInfo(self.m_IslandNumber)		
 	end
@@ -48,7 +48,7 @@ function cPlayerInfo:AddEntry(a_IslandNumber, a_Player)
 end
 
 -- Remove the player from the friend list
-function cPlayerInfo.RemoveEntry(self, a_PlayerName)
+function cPlayerInfo:RemoveEntry(a_PlayerName)
 	if (self.m_InFriendList[a_PlayerName:lower()] == nil) then
 		return false
 	end
@@ -130,7 +130,7 @@ end
 function cPlayerInfo:Load(a_Player)
 	local PlayerInfoIni = cIniFile()
 
-	if (PlayerInfoIni:ReadFile(self.m_PlayerFile) == false) then
+	if (not PlayerInfoIni:ReadFile(self.m_PlayerFile)) then
 		return
 	end
 

@@ -52,7 +52,7 @@ function CommandSkyBlock(a_Split, a_Player)
 			local posX, posZ, islandNumber = ReserveIsland(-1)
 
 			  SKYBLOCK:ChunkStay(
-				{ unpack(GetChunks(posX, posZ)) },
+				{ unpack(GetChunks(posX, posZ, 16)) },
 				nil,
 				function()
 					CreateIsland(a_Player, posX, posZ)
@@ -102,7 +102,7 @@ function CommandSkyBlock(a_Split, a_Player)
 
 	-- Recreate spawn
 	if (a_Split[2] == "recreate") then
-		if (a_Player:HasPermission("skyblock.admin.recreate") == false) then
+		if (not a_Player:HasPermission("skyblock.admin.recreate")) then
 			a_Player:SendMessageFailure("You don't have the permission for that command.")
 			return true
 		end
@@ -122,6 +122,6 @@ function CommandSkyBlock(a_Split, a_Player)
 		return true
 	end
 
-	a_Player:SendMessageFailure("Unknown argument.")
+	a_Player:SendMessageInfo("Unknown argument.")
 	return true
 end

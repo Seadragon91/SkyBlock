@@ -14,6 +14,7 @@ ISLANDS = nil -- A table contains island numbers and IslandInfo
 WORLD_NAME = nil -- The world that the plugin is using
 LEVELS = nil -- Store all levels
 CONFIG_FILE = nil -- Config file for SkyBlock
+BLOCK_VALUES = nil -- Store the points of block / meta
 
 function Initialize(Plugin)
 	Plugin:SetName("SkyBlock")
@@ -30,6 +31,7 @@ function Initialize(Plugin)
 	WORLD_NAME = "skyblock"
 	LEVELS = {}
 	CONFIG_FILE = PLUGIN:GetLocalFolder() .. "/Config.ini"
+	BLOCK_VALUES = {}
 
 	-- Create players folder
 	cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/players/")
@@ -39,6 +41,9 @@ function Initialize(Plugin)
 
 	-- Load Config file
 	LoadConfiguration()
+
+	-- Load the points for block / meta
+	LoadBlockValues()
 
 	-- Get instance of world <WORLD_NAME>
 	SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
@@ -120,5 +125,30 @@ function LoadAllLevels(a_File)
 	for i = 1, amount do
 		local fileLevel = configIni:GetValue("Levels", i)
 		LEVELS[i] = cLevel.new(fileLevel)
+	end
+end
+
+
+function LoadBlockValues()
+	local f = io.open(PLUGIN:GetLocalFolder() .. "/blockvalues.txt")
+
+	while true do
+		local line = f:read()
+		if (line == nil) then break end
+		local values = StringSplit(line, ":")
+		local point = tonumber(values[2])
+		if (string.find(values[1], "#") == nil) then
+			local id = tonumber(values[1])
+			BLOCK_VALUES[id] = {}
+			BLOCK_VALUES[id][0] = point
+		else
+			local idMeta = StringSplit(values[1], "#")
+			local id = tonumber(idMeta[1])
+			local meta = tonumber(idMeta[2])
+			if (BLOCK_VALUES[id] == nil) then
+				BLOCK_VALUES[id] = {}
+			end
+			BLOCK_VALUES[id][meta] = point
+		end
 	end
 end

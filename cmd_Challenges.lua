@@ -68,18 +68,18 @@ function CommandChallenges(a_Split, a_Player)
 		end
 		local challengeInfo = GetChallenge(a_Split[3])
 		if (challengeInfo == nil) then
-			a_Player:SendMessageFailure("There is no challenge with that name.")
+			a_Player:SendMessageInfo("There is no challenge with that name.")
 			return true
 		end
 
 		a_Player:SendMessage("--- " .. cChatColor.Green .. challengeInfo.m_ChallengeName .. cChatColor.White .. " ---")
 		a_Player:SendMessage(cChatColor.LightBlue .. challengeInfo.m_Description)
-		a_Player:SendMessage(cChatColor.LightGreen .. "Gather this items: " .. cChatColor.White .. challengeInfo.m_RequiredText)
+		a_Player:SendMessage(cChatColor.LightGreen .. challengeInfo:InfoText() .. cChatColor.White .. challengeInfo.m_RequiredText)
 		a_Player:SendMessage(cChatColor.Gold .. "You get for completion: " .. cChatColor.White .. challengeInfo.m_RewardText)
 
 		if (challengeInfo.m_IsRepeatable) then
 			a_Player:SendMessage(cChatColor.Blue .. "For repeating:")
-			a_Player:SendMessage(cChatColor.LightGreen .. "Gather this items: " .. cChatColor.White .. challengeInfo.m_RptRequiredText)
+			a_Player:SendMessage(cChatColor.LightGreen .. challengeInfo:InfoText() .. cChatColor.White .. challengeInfo.m_RptRequiredText)
 			a_Player:SendMessage(cChatColor.Gold .. "You get for completion: " .. cChatColor.White .. challengeInfo.m_RptRewardText)
 		end
 
@@ -89,7 +89,7 @@ function CommandChallenges(a_Split, a_Player)
 	if (a_Split[2] == "complete") then -- Complete a challenge
 		local playerInfo = GetPlayerInfo(a_Player)
 		if (playerInfo.m_IslandNumber == -1) then
-			a_Player:SendMessageFailure("You have no island. Type /skyblock play first.")
+			a_Player:SendMessageInfo("You have no island. Type /skyblock play first.")
 			return true
 		end
 		if (#a_Split == 2) then
@@ -99,7 +99,7 @@ function CommandChallenges(a_Split, a_Player)
 
 		local challengeInfo = GetChallenge(a_Split[3])
 		if (challengeInfo == nil) then
-			a_Player:SendMessageFailure("There is no challenge with that name.")
+			a_Player:SendMessageInfo("There is no challenge with that name.")
 			return true
 		end
 
@@ -121,7 +121,7 @@ function CommandChallenges(a_Split, a_Player)
 
 		local challengeInfo = GetChallenge(a_Split[3])
 		if (challengeInfo == nil) then
-			a_Player:SendMessageFailure("There is no challenge with that name.")
+			a_Player:SendMessageInfo("There is no challenge with that name.")
 			return true
 		end
 
@@ -166,6 +166,6 @@ function CommandChallenges(a_Split, a_Player)
 		end
 	end
 
-	a_Player:SendMessageFailure("Unknwown argument.")
+	a_Player:SendMessageInfo("Unknown argument.")
 	return true
 end

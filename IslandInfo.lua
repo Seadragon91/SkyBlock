@@ -86,7 +86,7 @@ end
 function cIslandInfo:Load()
 	local IslandInfoIni = cIniFile()
 
-	if (IslandInfoIni:ReadFile(self.m_IslandFile) == false) then
+	if (not IslandInfoIni:ReadFile(self.m_IslandFile)) then
 		return false
 	end
 

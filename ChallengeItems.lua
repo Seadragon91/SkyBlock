@@ -1,4 +1,4 @@
--- Contains all informations for a Challenge
+-- Challenge class for items
 
 cChallengeItems = {}
 cChallengeItems.__index = cChallengeItems
@@ -22,7 +22,7 @@ function cChallengeItems:IsCompleted(a_Player)
 	if (playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName] and self.m_IsRepeatable) then
 		for i = 1, #self.m_RptRequiredItems do
 			if (not a_Player:GetInventory():HasItems(self.m_RptRequiredItems[i])) then
-				a_Player:SendMessageFailure("You don't have the required items.")
+				a_Player:SendMessageInfo("You don't have the required items.")
 				return
 			end
 		end
@@ -41,7 +41,7 @@ function cChallengeItems:IsCompleted(a_Player)
 
 	for i = 1, #self.m_RequiredItems do
 		if (not a_Player:GetInventory():HasItems(self.m_RequiredItems[i])) then
-			a_Player:SendMessageFailure("You don't have the required items.")
+			a_Player:SendMessageInfo("You don't have the required items.")
 			return
 		end
 	end
@@ -54,24 +54,7 @@ function cChallengeItems:IsCompleted(a_Player)
 		a_Player:GetInventory():AddItem(self.m_RewardItems[i])
 	end
 
-	playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName] = true
-	a_Player:SendMessageSuccess("Congrats you completed the challenge " .. self.m_ChallengeName)
-
-	local amountDone = GetAmount(playerInfo.m_CompletedChallenges[playerInfo.m_IsLevel])
-	local amountNeeded = GetAmount(LEVELS[GetLevelAsNumber(self.m_LevelName)].m_Challenges)
-
-	if (amountDone == amountNeeded) then
-		if (isLevel == #LEVELS) then
-			a_Player:SendMessageSuccess("You completed all levels and all challenges.");
-			playerInfo:Save()
-			return
-		end
-
-		playerInfo.m_IsLevel = LEVELS[isLevel + 1].m_LevelName
-		playerInfo.m_CompletedChallenges[playerInfo.m_IsLevel] = {}
-		a_Player:SendMessageSuccess("Congrats. You unlocked next level " .. LEVELS[isLevel + 1].m_LevelName)
-	end
-
+	self:Complete(a_Player)
 	playerInfo:Save()
 end
 
@@ -83,17 +66,22 @@ end
 
 
 -- Override
-function cChallengeInfo:ToString()
-	return "cChallengeInfo"
+function cChallengeItems:InfoText()
+	return "Gather this items: "
+end
+
+
+-- Override
+function cChallengeItems:ToString()
+	return "cChallengeItems"
 end
 
 
 -- Override
 function cChallengeItems:Load(a_LevelIni)
-	self.m_RequiredItems = ParseStringToItems(a_LevelIni:GetValue(self.m_ChallengeName, "RequiredItems"))
-	self.m_RewardItems = ParseStringToItems(a_LevelIni:GetValue(self.m_ChallengeName, "RewardItems"))
+	self.m_RequiredItems = ParseStringToItems(a_LevelIni:GetValue(self.m_ChallengeName, "requiredItems"))
 
 	if (self.m_IsRepeatable) then
-		self.m_RptRequiredItems = ParseStringToItems(a_LevelIni:GetValue(self.m_ChallengeName, "Rpt_RequiredItems"))
+		self.m_RptRequiredItems = ParseStringToItems(a_LevelIni:GetValue(self.m_ChallengeName, "rpt_requiredItems"))
 	end
 end

@@ -38,12 +38,12 @@ function CommandIsland(a_Split, a_Player)
 				return true
 			end
 
-			a_Player:SendMessageFailure("Unknown argument.")
+			a_Player:SendMessageInfo("Unknown argument.")
 			return true
 		end
 
 		if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-			if (a_Player:MoveToWorld(WORLD_NAME) == false) then
+			if (not a_Player:MoveToWorld(WORLD_NAME)) then
 				-- Didn't find the world
 				a_Player:SendMessageFailure("Command failed. Couldn't find the world " .. WORLD_NAME .. ".")
 				return true
@@ -113,7 +113,7 @@ function CommandIsland(a_Split, a_Player)
 				return true
 			end)
 
-		if (islandInfo:ContainsFriend(toAdd) == false) then
+		if (not islandInfo:ContainsFriend(toAdd)) then
 			a_Player:SendMessageInfo("There is no player with that name.")
 			return true
 		end
@@ -128,7 +128,7 @@ function CommandIsland(a_Split, a_Player)
 			return true
 		end
 
-		if (islandInfo:RemoveFriend(a_Split[3]) == false) then
+		if (not islandInfo:RemoveFriend(a_Split[3])) then
 			a_Player:SendMessageInfo("There is no player with that name.")
 		else
 			islandInfo:Save()
@@ -208,12 +208,7 @@ function CommandIsland(a_Split, a_Player)
 	-- Restart island
 	if (a_Split[2] == "restart") then
 		if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-			a_Player:SendMessageFailure("This command works only in the world " + WORLD_NAME)
-			return true
-		end
-
-		if (playerInfo.m_IslandNumber == -1) then
-			a_Player:SendMessageFailure("You have no island.")
+			a_Player:SendMessageInfo("This command works only in the world " + WORLD_NAME)
 			return true
 		end
 
@@ -235,7 +230,7 @@ function CommandIsland(a_Split, a_Player)
 			local posX, posZ, islandNumber = ReserveIsland(islandNumber)
 
 			SKYBLOCK:ChunkStay(
-				{ unpack(GetChunks(posX, posZ)) },
+				{ unpack(GetChunks(posX, posZ, 16)) },
 				nil,
 				function()
 					CreateIsland(a_Player, posX, posZ)
@@ -273,7 +268,7 @@ function CommandIsland(a_Split, a_Player)
 					CreateIsland(a_FoundPlayer, posX, posZ)
 
 					SKYBLOCK:ChunkStay(
-						{ unpack(GetChunks(posX, posZ)) },
+						{ unpack(GetChunks(posX, posZ, 16)) },
 						nil,
 						function()
 							a_FoundPlayer:TeleportToCoords(posX, 151, posZ);
@@ -295,6 +290,6 @@ function CommandIsland(a_Split, a_Player)
 		return true
 	end
 
-	a_Player:SendMessageFailure("Unknown argument.")
+	a_Player:SendMessageInfo("Unknown argument.")
 	return true
 end
