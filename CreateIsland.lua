@@ -1,19 +1,38 @@
--- Creates a island for the player, a_islandNuber for restart. Returns island number, positions x and z
-function CreateIsland(a_Player, a_IslandNumber)
-	local posX = 0
-	local posZ = 0
-
+--- Reserve the island
+function ReserveIsland(a_IslandNumber)
 	if (a_IslandNumber == -1) then -- New island for a player
 		-- Increase island number
 		ISLAND_NUMBER = ISLAND_NUMBER + 1
 		-- Save Config file to save island number
 		SaveConfiguration()
 		-- Get island position
-		posX, posZ = GetIslandPosition(ISLAND_NUMBER)
+		local posX, posZ = GetIslandPosition(ISLAND_NUMBER)
+		return posX, posZ, ISLAND_NUMBER
 	else -- Use his island number
-		posX, posZ = GetIslandPosition(a_IslandNumber)
+		local posX, posZ = GetIslandPosition(a_IslandNumber)
+		return posX, posZ, a_IslandNumber
 	end
+end
 
+
+-- Returns a list of chunk coords
+function GetChunks(a_PosX, a_PosZ)
+	local radius = 16
+	local list = {}
+
+	for x = -radius,radius,16 do
+		local cx = (a_PosX + x) / 16
+		for z = -radius,radius,16 do
+			local cz = (a_PosZ + z) / 16
+			table.insert(list, {cx, cz})
+		end
+	end
+	return list
+end
+
+
+-- Creates a island for the player.
+function CreateIsland(a_Player, a_PosX, a_PosZ)
 	-- Check for schematic file, if exists use it
 	local area = cBlockArea()
 	if (area:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. ISLAND_SCHEMATIC) == true) then
@@ -21,7 +40,7 @@ function CreateIsland(a_Player, a_IslandNumber)
 		local wex = weOffset.x
 		local wey = weOffset.y
 		local wez = weOffset.z
-		area:Write(SKYBLOCK, posX - wex, 150 - wey, posZ - wez) -- Place the schematic at the island position
+		area:Write(SKYBLOCK, a_PosX - wex, 150 - wey, a_PosZ - wez) -- Place the schematic at the island position
 
 		-- Add items to player inventory
 		a_Player:GetInventory():GetInventoryGrid():SetSlot(0, 0, cItem(E_ITEM_LAVA_BUCKET, 1));
@@ -38,18 +57,16 @@ function CreateIsland(a_Player, a_IslandNumber)
 		a_Player:GetInventory():GetInventoryGrid():SetSlot(2, 1, cItem(E_BLOCK_CHEST, 1));
 	else -- no schematic found, use default island as fallback
 		-- Create layers
-		CreateLayer(posX, 148, posZ, E_BLOCK_DIRT)
-		CreateLayer(posX, 149, posZ, E_BLOCK_DIRT)
-		CreateLayer(posX, 150, posZ, E_BLOCK_GRASS)
-	
-		-- Plant a tree, 10 ticks later...
-		a_Player:GetWorld():ScheduleTask(10, function()
-			SKYBLOCK:GrowTreeFromSapling(5 + posX, 151, posZ, E_META_SAPLING_APPLE);
-		end);
+		CreateLayer(a_PosX, 148, a_PosZ, E_BLOCK_DIRT)
+		CreateLayer(a_PosX, 149, a_PosZ, E_BLOCK_DIRT)
+		CreateLayer(a_PosX, 150, a_PosZ, E_BLOCK_GRASS)
+
+		-- Plant a tree
+		SKYBLOCK:GrowTreeFromSapling(5 + a_PosX, 151, a_PosZ, E_META_SAPLING_APPLE);
 
 		-- Create a chest and add items
-		SKYBLOCK:SetBlock(posX, 151, 4 + posZ, E_BLOCK_CHEST, 2)
-		SKYBLOCK:DoWithChestAt(posX, 151, 4 + posZ,
+		SKYBLOCK:SetBlock(a_PosX, 151, 4 + a_PosZ, E_BLOCK_CHEST, 2)
+		SKYBLOCK:DoWithChestAt(a_PosX, 151, 4 + a_PosZ,
 			function(a_ChestEntity)
 				a_ChestEntity:SetSlot(0, 0, cItem(E_ITEM_LAVA_BUCKET, 1));
 				a_ChestEntity:SetSlot(1, 0, cItem(E_BLOCK_ICE, 2));
@@ -69,20 +86,21 @@ function CreateIsland(a_Player, a_IslandNumber)
 	return ISLAND_NUMBER, posX, posZ
 end
 
+
 -- Creates a layer for the island
-function CreateLayer(posX, posY, posZ, material)
+function CreateLayer(a_PosX, a_PosY, a_PosZ, a_Material)
 	for x = -1,6 do
-		local X = x + posX
+		local X = x + a_PosX
 		for z = -1,1 do
-			SKYBLOCK:SetBlock(X, posY, z + posZ, material, 0)
-		end 
+			SKYBLOCK:SetBlock(X, a_PosX, z + a_PosZ, a_Material, 0)
+		end
 	end
 
 	for x = -1,1 do
-		local X = x + posX
+		local X = x + a_PosX
 		for z = 2,4 do
-			SKYBLOCK:SetBlock(X, posY, z + posZ, material, 0)
-		end 
+			SKYBLOCK:SetBlock(X, a_PosX, z + a_PosZ, a_Material, 0)
+		end
 	end
 end
 
@@ -92,7 +110,7 @@ function GetIslandPosition(n)
 		return 0, 0
 	end
 
-	local distance = ISLAND_DISTANCE	
+	local distance = ISLAND_DISTANCE
 	local posX = 0
 	local posZ = 0
 	local r = math.floor(0.5 + math.sqrt(n / 2.0 - 0.25))
@@ -127,9 +145,9 @@ function round(num, idp)
 end
 
 -- Calculates with the positions x and z an island number. Returns the island number
-function GetIslandNumber(posX, posZ)
-	local px = posX
-	local pz = posZ
+function GetIslandNumber(a_PosX, a_PosZ)
+	local px = a_PosX
+	local pz = a_PosZ
 	local distance = ISLAND_DISTANCE
 
 	-- spawn platform
@@ -164,13 +182,13 @@ function GetIslandNumber(posX, posZ)
 end
 
 -- Regenerates all chunks in the area
-function RemoveIsland(posX, posZ)
+function RemoveIsland(a_PosX, a_PosZ)
 	local radius = ISLAND_DISTANCE / 2
 
 	for x = -radius,radius,16 do
-		local cx = (posX + x) / 16
+		local cx = (a_PosX + x) / 16
 		for z = -radius,radius,16 do
-			local cz = (posZ + z) / 16
+			local cz = (a_PosZ + z) / 16
 			SKYBLOCK:RegenerateChunk(cx, cz)
 		end
 	end

@@ -66,7 +66,6 @@ function CommandChallenges(a_Split, a_Player)
 			a_Player:SendMessageInfo("/challenges info <name>")
 			return true
 		end
-
 		local challengeInfo = GetChallenge(a_Split[3])
 		if (challengeInfo == nil) then
 			a_Player:SendMessageFailure("There is no challenge with that name.")

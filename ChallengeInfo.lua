@@ -3,7 +3,6 @@
 cChallengeInfo = {}
 cChallengeInfo.__index = cChallengeInfo
 
-
 function cChallengeInfo.new()
 	local self = setmetatable({}, cChallengeInfo)
 	return self

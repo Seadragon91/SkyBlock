@@ -77,6 +77,7 @@ function CommandIsland(a_Split, a_Player)
 		-- Reset obsidian
 		local playerInfo = GetPlayerInfo(a_Player)
 		playerInfo.m_ResetObsidian = true
+
 		a_Player:SendMessageInfo("Make now an right-click on the obsidian block without any items")
 		return true
 	end
@@ -231,59 +232,62 @@ function CommandIsland(a_Split, a_Player)
 		if (playerInfo.m_IsRestarting == nil) then
 			playerInfo.m_IsRestarting = false
 			local islandNumber = -1
-			local posX = 0
-			local posZ = 0
+			local posX, posZ, islandNumber = ReserveIsland(islandNumber)
 
-			islandNumber, posX, posZ = CreateIsland(a_Player, -1)
-			playerInfo.m_IslandNumber = islandNumber
+			SKYBLOCK:ChunkStay(
+				{ unpack(GetChunks(posX, posZ)) },
+				nil,
+				function()
+					CreateIsland(a_Player, posX, posZ)
 
-			local islandInfo = cIslandInfo.new(islandNumber)
-			islandInfo:SetOwner(a_Player)
-			islandInfo:Save()
-			
-			if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-				a_Player:MoveToWorld(WORLD_NAME)
-			end
+					local islandInfo = cIslandInfo.new(islandNumber)
+					islandInfo:SetOwner(a_Player)
+					islandInfo:Save()
 
-			a_Player:TeleportToCoords(posX, 151, posZ)
-			a_Player:SendMessageSuccess("Welcome to your island. Do not fall and make no obsidian :-)")
-			playerInfo:Save()
+					if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
+						a_Player:MoveToWorld(WORLD_NAME)
+					end
+
+					a_Player:TeleportToCoords(posX, 151, posZ)
+					a_Player:SendMessageSuccess("Welcome to your island. Do not fall and make no obsidian :-)")
+					playerInfo:Save()
+				end
+			)
 			return true
 		end
 
 		playerInfo.m_IsRestarting = true
 		a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
 
-		local posX = 0
-		local posZ = 0
-
-		posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
+		local posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
 		RemoveIsland(posX, posZ) -- Recreates all chunks in the area of the island
 
 		a_Player:SendMessageInfo("Please wait 10s...");
 		local playerName = a_Player:GetName()
 
 		local Callback = function (a_World)
-			a_World:DoWithPlayer(playerName, 
-				function(a_FoundPlayer)				
+			a_World:DoWithPlayer(playerName,
+				function(a_FoundPlayer)
 					a_FoundPlayer:GetInventory():Clear()
-
 					local playerInfo = GetPlayerInfo(a_Player)
-					local islandNumber = -1
-					local posX = 0
-					local posZ = 0
+					CreateIsland(a_FoundPlayer, posX, posZ)
 
-					islandNumber, posX, posZ = CreateIsland(a_FoundPlayer, playerInfo.m_IslandNumber);
-					a_FoundPlayer:TeleportToCoords(posX, 151, posZ);
-					a_FoundPlayer:SetFoodLevel(20)
-					a_FoundPlayer:SetHealth(a_FoundPlayer:GetMaxHealth())
-					a_FoundPlayer:SendMessageSuccess("Good luck with your new island.")
+					SKYBLOCK:ChunkStay(
+						{ unpack(GetChunks(posX, posZ)) },
+						nil,
+						function()
+							a_FoundPlayer:TeleportToCoords(posX, 151, posZ);
+							a_FoundPlayer:SetFoodLevel(20)
+							a_FoundPlayer:SetHealth(a_FoundPlayer:GetMaxHealth())
+							a_FoundPlayer:SendMessageSuccess("Good luck with your new island.")
 
-					playerInfo.m_IsRestarting  = false
-					playerInfo.m_IsLevel = LEVELS[1].m_LevelName
-					playerInfo.m_CompletedChallenges = {}
-					playerInfo.m_CompletedChallenges[playerInfo.m_IsLevel] = {}
-					playerInfo:Save()
+							playerInfo.m_IsRestarting  = false
+							playerInfo.m_IsLevel = LEVELS[1].m_LevelName
+							playerInfo.m_CompletedChallenges = {}
+							playerInfo.m_CompletedChallenges[playerInfo.m_IsLevel] = {}
+							playerInfo:Save()
+						end
+					)
 				end)
 			end
 

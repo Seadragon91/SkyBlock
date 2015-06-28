@@ -21,14 +21,14 @@ end
 
 function RemovePlayer(a_Player, a_WorldName)
 	if (a_WorldName == WORLD_NAME) then
-		local pi = GetPlayerInfo(a_Player)
+		local playerInfo = GetPlayerInfo(a_Player)
 		PLAYERS[a_Player:GetUUID()] = nil
-		local islandNumber = pi.islandNumber
+		local islandNumber = playerInfo.m_IslandNumber
 		RemoveIslandInfo(islandNumber)
 
 		-- Try ro remove island info from ISLANDS list
-		for player, _ in pairs(pi.inFriendList) do
-			RemoveIslandInfo(pi.inFriendList[player][2])
+		for player, _ in pairs(playerInfo.m_InFriendList) do
+			RemoveIslandInfo(playerInfo.m_InFriendList[player][2])
 		end
 	end
 end
@@ -57,10 +57,7 @@ function OnPlayerSpawn(a_Player)
 			return -- His island, return here then he gets to the last position
 		end
 
-		local posX = 0
-		local posZ = 0
-
-		posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
+		local posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
 		local playerName = a_Player:GetName()
 
 		local Callback = function(a_World)

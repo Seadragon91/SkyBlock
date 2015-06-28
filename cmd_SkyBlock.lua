@@ -49,25 +49,29 @@ function CommandSkyBlock(a_Split, a_Player)
 	if (a_Split[2] == "play") then
 		local playerInfo = GetPlayerInfo(a_Player)
 		if (playerInfo.m_IslandNumber == -1) then -- Player has no island
-			local islandNumber = -1
-			local posX = 0
-			local posZ = 0
+			local posX, posZ, islandNumber = ReserveIsland(-1)
 
-			islandNumber, posX, posZ = CreateIsland(a_Player, -1)
-			playerInfo.m_IslandNumber = islandNumber
+			  SKYBLOCK:ChunkStay(
+				{ unpack(GetChunks(posX, posZ)) },
+				nil,
+				function()
+					CreateIsland(a_Player, posX, posZ)
+					playerInfo.m_IslandNumber = islandNumber
 
-			local islandInfo = cIslandInfo.new(islandNumber)
-			islandInfo:SetOwner(a_Player)
-			islandInfo:Save()
+					local islandInfo = cIslandInfo.new(islandNumber)
+					islandInfo:SetOwner(a_Player)
+					islandInfo:Save()
 
-			if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-				a_Player:MoveToWorld(WORLD_NAME)
-			end
+					if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
+						a_Player:MoveToWorld(WORLD_NAME)
+					end
 
-			a_Player:TeleportToCoords(posX, 151, posZ)
-			a_Player:SendMessageSuccess("Welcome to your island. Do not fall and make no obsidian :-)")
+					a_Player:TeleportToCoords(posX, 151, posZ)
+					a_Player:SendMessageSuccess("Welcome to your island. Do not fall and make no obsidian :-)")
 
-			playerInfo:Save()
+					playerInfo:Save()
+				end
+			)
 			return true
 		else -- Player has an island
 			if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then

@@ -13,7 +13,7 @@ function cLevel.new(a_File)
 end
 
 
-function cLevel.Load(self, a_File)
+function cLevel:Load(a_File)
 	local levelIni = cIniFile()
 	levelIni:ReadFile(PLUGIN:GetLocalFolder() .. "/challenges/" .. a_File)
 
