@@ -15,15 +15,20 @@ end
 
 -- Player quits
 function OnPlayerQuit(a_Player)
-	if (a_Player:GetWorld():GetName() == WORLD_NAME) then
-		local playerInfo = GetPlayerInfo(a_Player)
+	RemovePlayer(a_Player, a_Player:GetWorld():GetName())
+end
+
+
+function RemovePlayer(a_Player, a_WorldName)
+	if (a_WorldName == WORLD_NAME) then
+		local pi = GetPlayerInfo(a_Player)
 		PLAYERS[a_Player:GetUUID()] = nil
-		local islandNumber = playerInfo.m_IslandNumber
+		local islandNumber = pi.islandNumber
 		RemoveIslandInfo(islandNumber)
 
 		-- Try ro remove island info from ISLANDS list
-		for player, _ in pairs(playerInfo.m_InFriendList) do
-			RemoveIslandInfo(playerInfo.m_InFriendList[player][2])
+		for player, _ in pairs(pi.inFriendList) do
+			RemoveIslandInfo(pi.inFriendList[player][2])
 		end
 	end
 end
@@ -67,6 +72,13 @@ function OnPlayerSpawn(a_Player)
 
 		a_Player:GetWorld():ScheduleTask(10, Callback)
 	end
+end
+
+function OnPlayerChangedWorld(a_Entity, a_FromWorld)
+	if (not a_Entity:IsPlayer()) then
+		return
+	end
+	RemovePlayer(a_Entity, a_FromWorld:GetName())
 end
 
 -- Handle the spawn schematic
