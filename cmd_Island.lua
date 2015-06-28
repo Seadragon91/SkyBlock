@@ -63,8 +63,7 @@ function CommandIsland(a_Split, a_Player)
 			local pitch = islandInfo.homeLocation[5]
 
 			a_Player:TeleportToCoords(x, y, z)
-			a_Player:SetYaw(yaw)
-			a_Player:SetPitch(pitch)
+			a_Player:SendRotation(yaw, pitch)
 		end
 		a_Player:SendMessageSuccess("Welcome back " .. a_Player:GetName())
 		return true
@@ -169,8 +168,7 @@ function CommandIsland(a_Split, a_Player)
 			local pitch = islandInfoFriend.homeLocation[5]
 		
 			a_Player:TeleportToCoords(x, y, z)
-			a_Player:SetYaw(yaw)
-			a_Player:SetPitch(pitch)
+			a_Player:SendRotation(yaw, pitch)
 		end
 
 		a_Player:SendMessageSuccess("Teleported you to the island.")
