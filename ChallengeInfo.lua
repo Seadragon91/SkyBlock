@@ -35,15 +35,9 @@ function cChallengeInfo:HasRequirements(a_Player)
 end
 
 
--- Overrided in the inheritanced classes
-function cChallengeInfo:IsCompleted(a_Player)
-	LOGERROR("cChallengeInfo:IsCompleted(): missing override in class " .. self:ToString())
-end
-
-
-
 function cChallengeInfo:Complete(a_Player)
 	local playerInfo = GetPlayerInfo(a_Player)
+	local isLevel = GetLevelAsNumber(playerInfo.m_IsLevel)
 
 	playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName] = true
 	a_Player:SendMessageSuccess("Congrats you completed the challenge " .. self.m_ChallengeName)
@@ -63,6 +57,12 @@ function cChallengeInfo:Complete(a_Player)
 		a_Player:SendMessageSuccess("Congrats. You unlocked next level " .. LEVELS[isLevel + 1].m_LevelName)
 	end
 	playerInfo:Save()
+end
+
+
+-- Overrided in the inheritanced classes
+function cChallengeInfo:IsCompleted(a_Player)
+	LOGERROR("cChallengeInfo:IsCompleted(): missing override in class " .. self:ToString())
 end
 
 

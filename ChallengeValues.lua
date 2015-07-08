@@ -7,17 +7,17 @@ function cChallengeValues.new()
 	local self = setmetatable({}, cChallengeValues)
 	setmetatable(cChallengeValues, {__index = cChallengeInfo})
 	
-	self.m_Values = {}
+	self.m_Calculations = {}
 	return self
 end
 
 
 function cChallengeValues:CalculateValue(a_Player)
-	CALLBACK =
+	self.callback =
 		function(a_World)
-			local position = self.m_Values[a_Player:GetName()]["position"]
-			local chunks = self.m_Values[a_Player:GetName()]["chunks"]
-			local points = self.m_Values[a_Player:GetName()]["points"]
+			local position = self.m_Calculations[a_Player:GetName()]["position"]
+			local chunks = self.m_Calculations[a_Player:GetName()]["chunks"]
+			local points = self.m_Calculations[a_Player:GetName()]["points"]
 			local counter = 1
 			if counter == 0 then
 				counter = 1
@@ -44,8 +44,8 @@ function cChallengeValues:CalculateValue(a_Player)
 				end
 
 				if (position + counter) == #chunks then
-					local value = round(self.m_Values[a_Player:GetName()]["points"] / 1000)
-					self.m_Values[a_Player:GetName()] = nil
+					local value = round(self.m_Calculations[a_Player:GetName()]["points"] / 1000)
+					self.m_Calculations[a_Player:GetName()] = nil
 					if (value >= self.m_RequiredValue) then
 						self:Complete(a_Player)
 						return
@@ -53,16 +53,16 @@ function cChallengeValues:CalculateValue(a_Player)
 						a_Player:SendMessageInfo("Your island value is " .. value .. ", your need " .. self.m_RequiredValue .. " for completing.")
 						return
 					end
-				elseif counter == 2 then
-					self.m_Values[a_Player:GetName()]["position"] = position + counter
-					self.m_Values[a_Player:GetName()]["points"] = points
-					a_Player:GetWorld():ScheduleTask(5, CALLBACK)
+				elseif counter == 1 then
+					self.m_Calculations[a_Player:GetName()]["position"] = position + counter
+					self.m_Calculations[a_Player:GetName()]["points"] = points
+					a_Player:GetWorld():ScheduleTask(5, self.callback)
 					return
 				end
 				counter = counter + 1
 			end
 		end
-	a_Player:GetWorld():ScheduleTask(5, CALLBACK)
+	a_Player:GetWorld():ScheduleTask(5, self.callback)
 end
 
 
@@ -71,8 +71,8 @@ end
 function cChallengeValues:IsCompleted(a_Player)
 	local playerInfo = GetPlayerInfo(a_Player)
 	
-	if (self.m_Values[a_Player:GetName()] ~= nil) then
-		a_Player:SendMessageInfo("Your island value is calculating. Please wait...")
+	if (self.m_Calculations[a_Player:GetName()] ~= nil) then
+		a_Player:SendMessageInfo("Your island value is already calculating. Please wait...")
 		return
 	end
 
@@ -82,11 +82,12 @@ function cChallengeValues:IsCompleted(a_Player)
 	
 	local posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
 	local chunks = GetChunks(posX, posZ, ISLAND_DISTANCE / 2)
-	self.m_Values[a_Player:GetName()] = {}
-	self.m_Values[a_Player:GetName()]["position"] = 0
-	self.m_Values[a_Player:GetName()]["points"] = 0
-	self.m_Values[a_Player:GetName()]["chunks"] = chunks
+	self.m_Calculations[a_Player:GetName()] = {}
+	self.m_Calculations[a_Player:GetName()]["position"] = 0
+	self.m_Calculations[a_Player:GetName()]["points"] = 0
+	self.m_Calculations[a_Player:GetName()]["chunks"] = chunks
 	
+	a_Player:SendMessageInfo("Your island value is calculating...")
 	self:CalculateValue(a_Player)
 end
 
