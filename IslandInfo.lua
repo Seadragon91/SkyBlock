@@ -10,6 +10,7 @@ function cIslandInfo.new(a_IslandNumber)
 	self.m_IslandFile = PLUGIN:GetLocalFolder() .. "/islands/" .. a_IslandNumber .. ".ini"
 	self.m_IslandNumber = tonumber(a_IslandNumber)
 	self.m_Friends = {}
+	self.m_HomeLocation = nil
 
 	return self
 end

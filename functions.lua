@@ -113,6 +113,57 @@ function RemoveIslandInfo(a_IslandNumber)
 	ISLANDS[a_IslandNumber] = nil
 end
 
+
+function TeleportToIsland(a_Player, a_IslandInfo)
+if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
+	if (not a_Player:MoveToWorld(WORLD_NAME)) then
+		-- Didn't find the world
+		a_Player:SendMessageFailure("Command failed. Couldn't find the world " .. WORLD_NAME .. ".")
+		return
+	end
+
+	local playerInfo = GetPlayerInfo(a_Player)
+
+	local posX, posY, posZ
+	local yaw, pitch = nil
+	if (a_IslandInfo.m_HomeLocation == nil) then
+		posX, posZ = GetIslandPosition(a_IslandInfo.m_IslandNumber)
+		posY = 151
+	else
+		posX = a_IslandInfo.m_HomeLocation[1]
+		posY = a_IslandInfo.m_HomeLocation[2]
+		posZ = a_IslandInfo.m_HomeLocation[3]
+		local yaw = islandInfo.m_HomeLocation[4]
+		local pitch = a_IslandInfo.m_HomeLocation[5]
+	end
+
+	SKYBLOCK:ChunkStay(
+		{ unpack(GetChunks(posX, posZ, 16)) },
+		nil,
+		function()
+			a_Player:TeleportToCoords(posX, posY, posZ)
+			if (yaw ~= nil) then
+				a_Player:SendRotation(yaw, pitch)
+			end
+
+			local playerX = a_Player:GetPosX()
+			local playerX = a_Player:GetPosZ()
+			local currentIslandNumber = GetIslandNumber(playerX, playerZ)
+
+			-- Don't send message, if player is already in the island area
+			if (currentIslandNumber == a_IslandInfo.m_IslandNumber) then
+				return
+			end
+
+			if (playerInfo.m_IslandNumber == a_IslandInfo.m_IslandNumber) then
+				a_Player:SendMessageSuccess("Welcome back " .. a_Player:GetName() .. "!")
+				return
+			end
+			a_Player:SendMessageSuccess("Welcome to " .. a_IslandInfo.m_OwnerName .. " island!")
+		end
+	)
+end
+
 -- For debugging
 function DEBUG(s)
 	print("[DEBUG] " .. s)

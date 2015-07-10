@@ -42,30 +42,7 @@ function CommandIsland(a_Split, a_Player)
 			return true
 		end
 
-		if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-			if (not a_Player:MoveToWorld(WORLD_NAME)) then
-				-- Didn't find the world
-				a_Player:SendMessageFailure("Command failed. Couldn't find the world " .. WORLD_NAME .. ".")
-				return true
-			end
-		end
-
-		-- Send player home, check home location
-		if (islandInfo.homeLocation == nil) then
-			local posX, posZ
-			posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
-			a_Player:TeleportToCoords(posX, 151, posZ)
-		else
-			local x = islandInfo.homeLocation[1]
-			local y = islandInfo.homeLocation[2]
-			local z = islandInfo.homeLocation[3]
-			local yaw = islandInfo.homeLocation[4]
-			local pitch = islandInfo.homeLocation[5]
-
-			a_Player:TeleportToCoords(x, y, z)
-			a_Player:SendRotation(yaw, pitch)
-		end
-		a_Player:SendMessageSuccess("Welcome back " .. a_Player:GetName())
+		TeleportToIsland(a_Player, islandInfo)
 		return true
 	end
 
@@ -156,23 +133,8 @@ function CommandIsland(a_Split, a_Player)
 			a_Player:SendMessageInfo("You have been removed from his friend list.")
 			return true
 		end
-
-		if (islandInfoFriend.homeLocation == nil) then
-			local posX, posZ
-			posX, posZ = GetIslandPosition(islandInfoFriend.m_IslandNumber)
-			a_Player:TeleportToCoords(posX, 151, posZ)
-		else
-			local x = islandInfoFriend.homeLocation[1]
-			local y = islandInfoFriend.homeLocation[2]
-			local z = islandInfoFriend.homeLocation[3]
-			local yaw = islandInfoFriend.homeLocation[4]
-			local pitch = islandInfoFriend.homeLocation[5]
 		
-			a_Player:TeleportToCoords(x, y, z)
-			a_Player:SendRotation(yaw, pitch)
-		end
-
-		a_Player:SendMessageSuccess("Teleported you to the island.")
+		TeleportToIsland(a_Player, islandInfoFriend)
 		return true
 	end
 
