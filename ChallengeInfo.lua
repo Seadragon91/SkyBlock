@@ -39,6 +39,19 @@ function cChallengeInfo:Complete(a_Player)
 	local playerInfo = GetPlayerInfo(a_Player)
 	local isLevel = GetLevelAsNumber(playerInfo.m_IsLevel)
 
+	if (playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName]) then
+		for i = 1, #self.m_RptRewardItems do
+			a_Player:GetInventory():AddItem(self.m_RptRewardItems[i])
+		end
+
+		a_Player:SendMessageSuccess("Congrats you repeated the challenge " .. self.m_ChallengeName)
+		return
+	end
+
+	for i = 1, #self.m_RewardItems do
+		a_Player:GetInventory():AddItem(self.m_RewardItems[i])
+	end
+
 	playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName] = true
 	a_Player:SendMessageSuccess("Congrats you completed the challenge " .. self.m_ChallengeName)
 

@@ -19,7 +19,7 @@ function cChallengeItems:IsCompleted(a_Player)
 
 	local isLevel = GetLevelAsNumber(playerInfo.m_IsLevel)
 
-	if (playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName] and self.m_IsRepeatable) then
+	if (playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName]) then
 		for i = 1, #self.m_RptRequiredItems do
 			if (not a_Player:GetInventory():HasItems(self.m_RptRequiredItems[i])) then
 				a_Player:SendMessageInfo("You don't have the required items.")
@@ -31,11 +31,7 @@ function cChallengeItems:IsCompleted(a_Player)
 			a_Player:GetInventory():RemoveItem(self.m_RptRequiredItems[i])
 		end
 
-		for i = 1, #self.m_RptRewardItems do
-			a_Player:GetInventory():AddItem(self.m_RptRewardItems[i])
-		end
-
-		a_Player:SendMessageSuccess("Congrats you repeated the challenge " .. self.m_ChallengeName)
+		self:Complete(a_Player)
 		return
 	end
 
@@ -48,10 +44,6 @@ function cChallengeItems:IsCompleted(a_Player)
 
 	for i = 1, #self.m_RequiredItems do
 		a_Player:GetInventory():RemoveItem(self.m_RequiredItems[i])
-	end
-
-	for i = 1, #self.m_RewardItems do
-		a_Player:GetInventory():AddItem(self.m_RewardItems[i])
 	end
 
 	self:Complete(a_Player)
