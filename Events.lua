@@ -1,6 +1,6 @@
 -- Air generator
 function OnChunkGenerating(a_World, a_ChunkX, a_ChunkZ, a_ChunkDesc)
-	if a_World:GetName() == WORLD_NAME then
+	if (a_World:GetName() == WORLD_NAME) then
 		FillBlocks(a_ChunkDesc) -- fill entire chunk with air
 	end
 end
@@ -136,20 +136,20 @@ function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
 		if(a_Player:GetEquippedItem().m_ItemType == 280) then
 			local islandNumber = GetIslandNumber(posX, posZ)
 			if (islandNumber == 0) then
-				a_Player:SendMessageInfo("This is the spawn area.")
+				a_Player:SendMessageInfo(GetLanguage(a_Player):Get(4, 2, "spawnArea"))
 				return true
 			end
 
 			local islandInfo = GetIslandInfo(islandNumber)
 			if (islandInfo == nil) then
-				a_Player:SendMessageInfo("Unknown area.")
+				a_Player:SendMessageInfo(GetLanguage(a_Player):Get(4, 2, "unknownArea"))
 				return true
 			end
 
-			a_Player:SendMessageInfo("Island number: " .. islandInfo.m_IslandNumber)
-			a_Player:SendMessageInfo("Owner: " .. islandInfo.m_OwnerName)
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(4, 2, "islandNumber", { ["%1"] = islandInfo.m_IslandNumber }))
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(4, 2, "islandOwner", { ["%1"] = islandInfo.m_OwnerName }))
 
-			local friends = "Friends: "
+			local friends = GetLanguage(a_Player):Get(4, 2, "friends")
 			local amount = GetAmount(islandInfo.m_Friends)
 			local counter = 0
 			for _, playerName in pairs(islandInfo.m_Friends) do
@@ -182,7 +182,7 @@ function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
 	if (a_Player:GetWorld():GetBlock(a_BlockX, a_BlockY, a_BlockZ) == E_BLOCK_OBSIDIAN) then
 		a_Player:GetWorld():SetBlock(a_BlockX, a_BlockY, a_BlockZ, E_BLOCK_LAVA, 0)
 		playerInfo.m_ResetObsidian = false
-		a_Player:SendMessageInfo("Changed obsidian back to lava")
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(4, 2, "obsidianToLava"))
 	end
 end
 

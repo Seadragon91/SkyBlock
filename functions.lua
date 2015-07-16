@@ -115,17 +115,18 @@ end
 
 
 function TeleportToIsland(a_Player, a_IslandInfo)
-if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-	if (not a_Player:MoveToWorld(WORLD_NAME)) then
-		-- Didn't find the world
-		a_Player:SendMessageFailure("Command failed. Couldn't find the world " .. WORLD_NAME .. ".")
-		return
+	if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
+		if (not a_Player:MoveToWorld(WORLD_NAME)) then
+			-- Didn't find the world
+			a_Player:SendMessageFailure(GetLanguage(a_Player):Get(3, 2, "notHere", { ["%1"] = WORLD_NAME }))
+			return
+		end
 	end
 
 	local playerInfo = GetPlayerInfo(a_Player)
-
 	local posX, posY, posZ
 	local yaw, pitch = nil
+
 	if (a_IslandInfo.m_HomeLocation == nil) then
 		posX, posZ = GetIslandPosition(a_IslandInfo.m_IslandNumber)
 		posY = 151
@@ -133,7 +134,7 @@ if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
 		posX = a_IslandInfo.m_HomeLocation[1]
 		posY = a_IslandInfo.m_HomeLocation[2]
 		posZ = a_IslandInfo.m_HomeLocation[3]
-		local yaw = islandInfo.m_HomeLocation[4]
+		local yaw = a_IslandInfo.m_HomeLocation[4]
 		local pitch = a_IslandInfo.m_HomeLocation[5]
 	end
 
@@ -147,7 +148,7 @@ if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
 			end
 
 			local playerX = a_Player:GetPosX()
-			local playerX = a_Player:GetPosZ()
+			local playerZ = a_Player:GetPosZ()
 			local currentIslandNumber = GetIslandNumber(playerX, playerZ)
 
 			-- Don't send message, if player is already in the island area
@@ -156,12 +157,20 @@ if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
 			end
 
 			if (playerInfo.m_IslandNumber == a_IslandInfo.m_IslandNumber) then
-				a_Player:SendMessageSuccess("Welcome back " .. a_Player:GetName() .. "!")
+				a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 5, "welcomeBack", { ["%1"] = a_Player:GetName() }))
 				return
 			end
-			a_Player:SendMessageSuccess("Welcome to " .. a_IslandInfo.m_OwnerName .. " island!")
+			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 5, "welcomeTo", { ["%1"] = a_IslandInfo.m_OwnerName }))
 		end
 	)
+end
+
+function GetLanguage(a_Player)
+	local playerInfo = GetPlayerInfo(a_Player)
+	if (playerInfo.m_Language == "") then
+		return LANGUAGES[LANGUAGE_DEFAULT]
+	end
+	return LANGUAGES[playerInfo.m_Language]
 end
 
 -- For debugging

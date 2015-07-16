@@ -1,30 +1,30 @@
 -- Handle the command skyblock
 function CommandSkyBlock(a_Split, a_Player)
 	if (#a_Split == 1) then
-		a_Player:SendMessageInfo("Command for the skyblock plugin. Type skyblock help for a list of commands and arguments.")
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 2, "skyblock"))
 		return true
 	end
 
 	-- Show the skyblock help
 	if (a_Split[2] == "help") then
-		a_Player:SendMessage("---" .. cChatColor.LightGreen .. " Commands for the skyblock plugin " .. cChatColor.White .. " ---")
-		a_Player:SendMessageInfo("/skyblock join - Join the world skyblock and comes to a spawn platform.")
-		a_Player:SendMessageInfo("/skyblock play - Get an island and start playing.")
+		a_Player:SendMessage("---" .. cChatColor.LightGreen .. GetLanguage(a_Player):Get(1, 3, "title") .. cChatColor.White .. " ---")
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "1"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "2"))
 
 		-- cmd_Challenges.lua
-		a_Player:SendMessageInfo("/challenges - List all challenges")
-		a_Player:SendMessageInfo("/challenges info <name> - Shows informations to the challenge")
-		a_Player:SendMessageInfo("/challenges complete <name> -Complete the challenge")
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "3"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "4"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "5"))
 
 		-- cmd_Island.lua
-		a_Player:SendMessageInfo("/island home - Teleport back to your home location of the island")
-		a_Player:SendMessageInfo("/island home set - Change home location on island")
-		a_Player:SendMessageInfo("/island obsidian - Change obsidian backt to lava")
-		a_Player:SendMessageInfo("/island add <player> - Add player to your friend list")
-		a_Player:SendMessageInfo("/island remove <player> - Remove player from your friend list")
-		a_Player:SendMessageInfo("/island join <player> - Teleport to a friends island")
-		a_Player:SendMessageInfo("/island list - List your friends and islands who you can join")
-		a_Player:SendMessageInfo("/island restart - Start an new island")
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "6"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "7"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "8"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "9"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "10"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "11"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "12"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "13"))
 		return true
 	end
 
@@ -32,16 +32,16 @@ function CommandSkyBlock(a_Split, a_Player)
 	if (a_Split[2] == "join") then
 		if (a_Player:GetWorld():GetName() == WORLD_NAME) then
 			a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
-			a_Player:SendMessageSuccess("Welcome back to the spawn platform.")
+			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcomeBack", { ["%1"] = a_Player:GetName() }))
 			return true
 		end
 
 		if (a_Player:MoveToWorld(WORLD_NAME)) then
 			a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
-			a_Player:SendMessageSuccess("Welcome to the world skyblock. Type /skyblock play to get an island.")
+			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcome"))
 			return true
 		else
-			a_Player:SendMessageFailure("Command failed. Couldn't find the world " .. WORLD_NAME .. ".")
+			a_Player:SendMessageFailure(GetLanguage(a_Player):Get(1, 4, "missingWorld"))
 			return true
 		end
 	end
@@ -67,7 +67,7 @@ function CommandSkyBlock(a_Split, a_Player)
 					end
 
 					a_Player:TeleportToCoords(posX, 151, posZ)
-					a_Player:SendMessageSuccess("Welcome to your island. Do not fall and make no obsidian :-)")
+					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 5, "welcome"))
 
 					playerInfo:Save()
 				end
@@ -83,7 +83,7 @@ function CommandSkyBlock(a_Split, a_Player)
 	-- Recreate spawn
 	if (a_Split[2] == "recreate") then
 		if (not a_Player:HasPermission("skyblock.admin.recreate")) then
-			a_Player:SendMessageFailure("You don't have the permission for that command.")
+			a_Player:SendMessageFailure(GetLanguage(a_Player):Get(1, 2, "noPermission"))
 			return true
 		end
 
@@ -95,13 +95,41 @@ function CommandSkyBlock(a_Split, a_Player)
 			local wez = weOffset.z
 
 			area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez) -- Paste the schematic
-			a_Player:SendMessageSuccess("Recreated spawn from schematic file.")
+			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 6, "recreatedSpawn"))
 		else
-			a_Player:SendMessageInfo("Schematic not found or error occured.")
+			a_Player:SendMessageInfo(schematicError)
 		end
 		return true
 	end
 
-	a_Player:SendMessageInfo("Unknown argument.")
+    if (a_Split[2] == "language") then
+        if (#a_Split == 2) then
+            local amount = GetAmount(LANGUAGES)
+            local counter = 0
+            local list = ""
+            for language, _ in pairs(LANGUAGES) do
+                list = list .. language
+                counter = counter + 1
+                if (counter ~= amount) then
+                   list = list .. ", "
+                end
+            end
+            a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 7, "languageFiles", { ["%1"] = list }))
+            return true
+        end
+
+        local language = a_Split[3]
+        if (LANGUAGES[language] == nil) then
+            a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 7, "unknownLanguage"))
+            return true
+        end
+
+        local pi = GetPlayerInfo(a_Player)
+        pi.language = language
+        a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 7, "changedLanguage", { ["%1"] = language }))
+        return true
+    end
+
+	a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 2, "unknownArg"))
 	return true
 end

@@ -15,6 +15,7 @@ function cPlayerInfo.new(a_Player)
 	self.m_CompletedChallenges[self.m_IsLevel] = {}
 	self.m_InFriendList = {}
 	self.m_IsRestarting = false
+	self.m_Language = ""
 
 	self:Load(a_Player) -- Check if there is a player file, if yes load it
 	if (self.m_IslandNumber ~= -1) then -- Load island file
@@ -89,7 +90,8 @@ function cPlayerInfo:Save()
 	local PlayerInfoIni = cIniFile()
 	PlayerInfoIni:SetValue("Player", "Name", self.m_PlayerName, true)
 	PlayerInfoIni:SetValue("Island", "Number", self.m_IslandNumber, true)
-	
+	PlayerInfoIni:SetValue("Player", "Language", self.m_Language, true)
+
 	for i = 1, #LEVELS do
 		local res = ""
 		local first = true
@@ -152,6 +154,11 @@ function cPlayerInfo:Load(a_Player)
 	self.m_IsLevel = PlayerInfoIni:GetValue("Player", "IsLevel")
 	if (self.m_IsLevel == "") then
 		self.m_IsLevel = LEVELS[1].m_LevelName
+	end
+
+	self.m_Language = PlayerInfoIni:GetValue("Player", "Language")
+	if (self.m_Language == "") then
+		self.m_Language = "english.ini"
 	end
 
 	local temp = PlayerInfoIni:GetValue("Player", "InFriendList")

@@ -68,19 +68,19 @@ function CommandChallenges(a_Split, a_Player)
 		end
 		local challengeInfo = GetChallenge(a_Split[3])
 		if (challengeInfo == nil) then
-			a_Player:SendMessageInfo("There is no challenge with that name.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "unknownName"))
 			return true
 		end
 
 		a_Player:SendMessage("--- " .. cChatColor.Green .. challengeInfo.m_ChallengeName .. cChatColor.White .. " ---")
 		a_Player:SendMessage(cChatColor.LightBlue .. challengeInfo.m_Description)
-		a_Player:SendMessage(cChatColor.LightGreen .. challengeInfo:InfoText() .. cChatColor.White .. challengeInfo.m_RequiredText)
-		a_Player:SendMessage(cChatColor.Gold .. "You get for completion: " .. cChatColor.White .. challengeInfo.m_RewardText)
+		a_Player:SendMessage(cChatColor.LightGreen .. challengeInfo:InfoText(a_Player) .. cChatColor.White .. challengeInfo.m_RequiredText)
+		a_Player:SendMessage(cChatColor.Gold .. GetLanguage(a_Player):Get(2, 3, "forCompletion") .. cChatColor.White .. challengeInfo.m_RewardText)
 
 		if (challengeInfo.m_IsRepeatable) then
-			a_Player:SendMessage(cChatColor.Blue .. "For repeating:")
-			a_Player:SendMessage(cChatColor.LightGreen .. challengeInfo:InfoText() .. cChatColor.White .. challengeInfo.m_RptRequiredText)
-			a_Player:SendMessage(cChatColor.Gold .. "You get for completion: " .. cChatColor.White .. challengeInfo.m_RptRewardText)
+			a_Player:SendMessage(cChatColor.Blue .. GetLanguage(a_Player):Get(2, 3, "forRepeating"))
+			a_Player:SendMessage(cChatColor.LightGreen .. challengeInfo:InfoText(a_Player) .. cChatColor.White .. challengeInfo.m_RptRequiredText)
+			a_Player:SendMessage(cChatColor.Gold .. GetLanguage(a_Player):Get(2, 3, "forCompletion") .. cChatColor.White .. challengeInfo.m_RptRewardText)
 		end
 
 		return true
@@ -99,7 +99,7 @@ function CommandChallenges(a_Split, a_Player)
 
 		local challengeInfo = GetChallenge(a_Split[3])
 		if (challengeInfo == nil) then
-			a_Player:SendMessageInfo("There is no challenge with that name.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "unknownName"))
 			return true
 		end
 
@@ -110,7 +110,7 @@ function CommandChallenges(a_Split, a_Player)
 	-- For checking a challenge
 	if (a_Split[2] == "check") then
 		if (not a_Player:HasPermission("challenges.admin.check")) then
-			a_Player:SendMessageFailure("You don't have the permission for that command.")
+			a_Player:SendMessageFailure(GetLanguage(a_Player):Get(1, 2, "noPermission"))
 			return true
 		end
 
@@ -121,14 +121,14 @@ function CommandChallenges(a_Split, a_Player)
 
 		local challengeInfo = GetChallenge(a_Split[3])
 		if (challengeInfo == nil) then
-			a_Player:SendMessageInfo("There is no challenge with that name.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "unknownName"))
 			return true
 		end
 
 		 if (a_Split[4] == "req") then
 			if (#a_Split == 5 and a_Split[5] == "rpt") then
 				if (not challengeInfo.m_IsRepeatable) then
-					a_Player:SendMessageInfo("This challenge has no repeatable items.")
+					a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 5, "noRepeatableItems"))
 					return true
 				end
 
@@ -141,14 +141,14 @@ function CommandChallenges(a_Split, a_Player)
 				end
 			end
 
-			a_Player:SendMessageInfo("You got the required items.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 5, "gotRequiredItems"))
 			return true
 		end
 
 		if (a_Split[4] == "rew") then
 			if (#a_Split == 5 and a_Split[5] == "rpt") then
 				if (not challengeInfo.m_IsRepeatable) then
-					a_Player:SendMessageInfo("This challenge has no repeatable items.")
+					a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 5, "noRepeatableItems"))
 					return true
 				end
 
@@ -161,11 +161,11 @@ function CommandChallenges(a_Split, a_Player)
 				end
 			end
 
-			a_Player:SendMessageInfo("You got the reward items.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 5, "gotRewardItems"))
 			return true
 		end
 	end
 
-	a_Player:SendMessageInfo("Unknown argument.")
+	a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 2, "unknownArg"))
 	return true
 end

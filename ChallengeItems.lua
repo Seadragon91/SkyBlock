@@ -22,7 +22,7 @@ function cChallengeItems:IsCompleted(a_Player)
 	if (playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName]) then
 		for i = 1, #self.m_RptRequiredItems do
 			if (not a_Player:GetInventory():HasItems(self.m_RptRequiredItems[i])) then
-				a_Player:SendMessageInfo("You don't have the required items.")
+				a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "notRequiredItems"))
 				return
 			end
 		end
@@ -37,7 +37,7 @@ function cChallengeItems:IsCompleted(a_Player)
 
 	for i = 1, #self.m_RequiredItems do
 		if (not a_Player:GetInventory():HasItems(self.m_RequiredItems[i])) then
-			a_Player:SendMessageInfo("You don't have the required items.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "notRequiredItems"))
 			return
 		end
 	end
@@ -59,7 +59,7 @@ end
 
 -- Override
 function cChallengeItems:InfoText()
-	return "Gather this items: "
+	return GetLanguage(a_Player):Get(2, 4, "itemsInfo")
 end
 
 

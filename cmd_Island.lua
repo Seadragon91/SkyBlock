@@ -7,7 +7,7 @@ function CommandIsland(a_Split, a_Player)
 	local playerInfo = GetPlayerInfo(a_Player)
 	local islandInfo = GetIslandInfo(playerInfo.m_IslandNumber)
 	if (islandInfo == nil) then
-		a_Player:SendMessageInfo("You have no island. Type /skyblock play first.")
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 2, "noIsland"))
 		return true
 	end
 
@@ -15,7 +15,7 @@ function CommandIsland(a_Split, a_Player)
 		if (#a_Split == 3) then
 			if (a_Split[3] == "set") then
 				if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-					a_Player:SendMessageInfo("You can use this command only in world " + WORLD_NAME)
+					a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 2, "notHere", { ["%1"] = WORLD_NAME }))
 					return true
 				end
 
@@ -28,17 +28,17 @@ function CommandIsland(a_Split, a_Player)
 				-- Check if player is in his island area
 				local islandNumber = GetIslandNumber(x, z)
 				if (playerInfo.m_IslandNumber ~= islandNumber) then
-					a_Player:SendMessageInfo("You can use this command only on your own island.")
+					a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 3, "set_ownIsland"))
 					return true
 				end
 
 				islandInfo.homeLocation = { x, y, z, yaw, pitch }
 				islandInfo:Save()
-				a_Player:SendMessageSuccess("Island home location changed.")
+				a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(3, 3, "set_changed"))
 				return true
 			end
 
-			a_Player:SendMessageInfo("Unknown argument.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 2, "unknownArg"))
 			return true
 		end
 
@@ -48,14 +48,14 @@ function CommandIsland(a_Split, a_Player)
 
 	if (a_Split[2] == "obsidian") then
 		if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-			a_Player:SendMessageInfo("You can use this command only in " .. WORLD_NAME .. ".")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 2, "notHere", { ["%1"] = WORLD_NAME }))
 			return true
 		end
 		-- Reset obsidian
 		local playerInfo = GetPlayerInfo(a_Player)
 		playerInfo.m_ResetObsidian = true
 
-		a_Player:SendMessageInfo("Make now an right-click on the obsidian block without any items")
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 4, "right-Click"))
 		return true
 	end
 
@@ -86,12 +86,12 @@ function CommandIsland(a_Split, a_Player)
 				end
 				playerInfo_Added:Save()
 
-				a_Player:SendMessageSuccess("Added player " .. a_FoundPlayer:GetName() .. " to your island.")
+				a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(3, 5, "addedPlayer", { ["%1"] = toAdd }))
 				return true
 			end)
 
 		if (not islandInfo:ContainsFriend(toAdd)) then
-			a_Player:SendMessageInfo("There is no player with that name.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 2, "noPlayer"))
 			return true
 		end
 
@@ -106,10 +106,10 @@ function CommandIsland(a_Split, a_Player)
 		end
 
 		if (not islandInfo:RemoveFriend(a_Split[3])) then
-			a_Player:SendMessageInfo("There is no player with that name.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 2, "noPlayer"))
 		else
 			islandInfo:Save()
-			a_Player:SendMessageSuccess("Removed player from friend list.")
+			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(3, 6, "removedPlayer"))
 		end
 
 		return true
@@ -124,13 +124,13 @@ function CommandIsland(a_Split, a_Player)
 
 		local toJoin = a_Split[3]
 		if (playerInfo.m_InFriendList[toJoin:lower()] == nil) then
-			a_Player:SendMessageInfo("You are not in his friend list.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 7, "notInFriendlist"))
 			return true
 		end
 
 		local islandInfoFriend = GetIslandInfo(playerInfo.m_InFriendList[toJoin:lower()][2])
 		if (islandInfoFriend.m_Friends[a_Player:GetUUID()] == nil) then
-			a_Player:SendMessageInfo("You have been removed from his friend list.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 7, "removedFromFriendList"))
 			return true
 		end
 		
@@ -140,7 +140,7 @@ function CommandIsland(a_Split, a_Player)
 
 	-- List friends from island and islands who player can access
 	if (a_Split[2] == "list") then
-		local hasFriends = "Your friends: "
+		local hasFriends = GetLanguage(a_Player):Get(3, 8, "friends")
 		local amount = GetAmount(islandInfo.m_Friends)
 		local counter = 0
 		for _, playerName in pairs(islandInfo.m_Friends) do
@@ -151,7 +151,7 @@ function CommandIsland(a_Split, a_Player)
 			end
 		end
 
-		local canJoin = "Islands you can enter: "
+		local canJoin = GetLanguage(a_Player):Get(3, 8, "canEnter")
 		amount = GetAmount(playerInfo.m_InFriendList)
 		counter = 0
 		for playerName, _ in pairs(playerInfo.m_InFriendList) do
@@ -170,18 +170,18 @@ function CommandIsland(a_Split, a_Player)
 	-- Restart island
 	if (a_Split[2] == "restart") then
 		if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-			a_Player:SendMessageInfo("This command works only in the world " + WORLD_NAME)
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 2, "notHere", { ["%1"] = WORLD_NAME }))
 			return true
 		end
 
-		if (playerInfo.m_IsRestarting ~= nil and playerInfo.m_IsRestarting) then -- Avoid running the command multiple
-			a_Player:SendMessageInfo("This command is running. Please wait...")
+		if (playerInfo.m_IsRestarting) then -- Avoid running the command multiple
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 9, "running"))
 			return true
 		end
 
 		-- Check if player is the real owner
 		if (islandInfo.m_OwnerUUID ~= a_Player:GetUUID() and playerInfo.m_IsRestarting ~= nil) then
-			a_Player:SendMessageInfo("Restart not possible, you are not the real owner of this island. If you want to start an own one, type again /island restart.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 9, "notOwner"))
 			playerInfo.m_IsRestarting = nil -- Player wants to start an own island.
 			return true
 		end
@@ -206,7 +206,7 @@ function CommandIsland(a_Split, a_Player)
 					end
 
 					a_Player:TeleportToCoords(posX, 151, posZ)
-					a_Player:SendMessageSuccess("Welcome to your island. Do not fall and make no obsidian :-)")
+					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 5, "welcome"))
 					playerInfo:Save()
 				end
 			)
@@ -236,7 +236,7 @@ function CommandIsland(a_Split, a_Player)
 							a_FoundPlayer:TeleportToCoords(posX, 151, posZ);
 							a_FoundPlayer:SetFoodLevel(20)
 							a_FoundPlayer:SetHealth(a_FoundPlayer:GetMaxHealth())
-							a_FoundPlayer:SendMessageSuccess("Good luck with your new island.")
+							a_FoundPlayer:SendMessageSuccess(GetLanguage(a_Player):Get(3, 9, "newIsland"))
 
 							playerInfo.m_IsRestarting  = false
 							playerInfo.m_IsLevel = LEVELS[1].m_LevelName
@@ -252,6 +252,6 @@ function CommandIsland(a_Split, a_Player)
 		return true
 	end
 
-	a_Player:SendMessageInfo("Unknown argument.")
+	a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 2, "unknownArg"))
 	return true
 end

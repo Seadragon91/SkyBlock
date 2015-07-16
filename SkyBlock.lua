@@ -15,6 +15,9 @@ WORLD_NAME = nil -- The world that the plugin is using
 LEVELS = nil -- Store all levels
 CONFIG_FILE = nil -- Config file for SkyBlock
 BLOCK_VALUES = nil -- Store the points of block / meta
+LANGUAGES = nil -- Contains a list of languages
+LANGUAGE_DEFAULT = nil -- Default language file
+LANGUAGE_OTHERS = nil -- Enable other language files
 
 function Initialize(Plugin)
 	Plugin:SetName("SkyBlock")
@@ -32,6 +35,9 @@ function Initialize(Plugin)
 	LEVELS = {}
 	CONFIG_FILE = PLUGIN:GetLocalFolder() .. "/Config.ini"
 	BLOCK_VALUES = {}
+	LANGUAGES = {}
+	LANGUAGE_DEFAULT = "english.ini"
+	LANGUAGE_OTHERS = 1
 
 	-- Create players folder
 	cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/players/")
@@ -41,6 +47,10 @@ function Initialize(Plugin)
 
 	-- Load Config file
 	LoadConfiguration()
+
+    -- Create language folder
+	cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/languages/")
+	LoadLanguageFiles()
 
 	-- Load the points for block / meta
 	LoadBlockValues()
@@ -89,7 +99,9 @@ function LoadConfiguration()
 	SPAWN_SCHEMATIC = configIni:GetValue("Schematic", "Spawn")
 	WORLD_NAME = configIni:GetValue("General", "Worldname")
 	SPAWN_CREATED = configIni:GetValueB("PluginValues", "SpawnCreated")
-	
+	LANGUAGE_DEFAULT = configIni:GetValue("Language", "Default")
+	LANGUAGE_OTHERS = configIni:GetValueB("Language", "EnableOthers")
+
 	-- Reminder: Any new settings who gets added in new versions, should be added, to the config file trough the plugin, if not existent
 end
 
@@ -151,4 +163,22 @@ function LoadBlockValues()
 			BLOCK_VALUES[id][meta] = point
 		end
 	end
+end
+
+function LoadLanguageFiles()
+    local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/languages")
+    if (#files == 2) then -- Write Default language file
+        LANGUAGES["english.ini"] = cLanguage.new()
+        return
+    end
+
+    if (LANGUAGE_OTHERS) then
+        for i = 1, #files do
+            if (cFile:IsFile(PLUGIN:GetLocalFolder() .. "/languages/" .. files[i])) then
+                LANGUAGES[files[i]] = cLanguage.new(files[i])
+            end
+        end
+    else
+        LANGUAGES[LANGUAGE_DEFAULT] = cLanguage.new(LANGUAGE_DEFAULT)
+    end
 end

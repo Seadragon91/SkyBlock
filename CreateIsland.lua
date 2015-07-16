@@ -146,6 +146,9 @@ end
 
 -- Calculates with the positions x and z an island number. Returns the island number
 function GetIslandNumber(a_PosX, a_PosZ)
+	assert(a_PosX ~= nil)
+	assert(a_PosZ ~= nil)
+
 	local px = a_PosX
 	local pz = a_PosZ
 	local distance = ISLAND_DISTANCE

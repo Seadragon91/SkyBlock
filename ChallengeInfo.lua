@@ -13,7 +13,7 @@ function cChallengeInfo:HasRequirements(a_Player)
 	local playerInfo = GetPlayerInfo(a_Player)
 
 	if (playerInfo.m_CompletedChallenges[self.m_LevelName] == nil) then
-		a_Player:SendMessageInfo("You don't have the level to complete that challenge.")
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "notLevel"))
 		return false
 	end
 
@@ -21,13 +21,13 @@ function cChallengeInfo:HasRequirements(a_Player)
 	local needLevel = GetLevelAsNumber(self.m_LevelName)
 
 	if (needLevel > isLevel) then
-		a_Player:SendMessageInfo("You don't have the level to complete that challenge.")
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "notLevel"))
 		return false
 	end
 
 	if (playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName]) then
 		if (not self.m_IsRepeatable) then
-			a_Player:SendMessageInfo("This challenge is not repeatable.")
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "notRepeatable"))
 			return false
 		end
 	end
@@ -44,7 +44,7 @@ function cChallengeInfo:Complete(a_Player)
 			a_Player:GetInventory():AddItem(self.m_RptRewardItems[i])
 		end
 
-		a_Player:SendMessageSuccess("Congrats you repeated the challenge " .. self.m_ChallengeName)
+		a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(2, 4, "repeated", { ["%1"] = self.m_ChallengeName}))
 		return
 	end
 
@@ -53,21 +53,21 @@ function cChallengeInfo:Complete(a_Player)
 	end
 
 	playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName] = true
-	a_Player:SendMessageSuccess("Congrats you completed the challenge " .. self.m_ChallengeName)
+	a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(2, 4, "completed", { ["%1"] = self.m_ChallengeName}))
 
 	local amountDone = GetAmount(playerInfo.m_CompletedChallenges[playerInfo.m_IsLevel])
 	local amountNeeded = GetAmount(LEVELS[GetLevelAsNumber(self.m_LevelName)].m_Challenges)
 
 	if (amountDone == amountNeeded) then
 		if (isLevel == #LEVELS) then
-			a_Player:SendMessageSuccess("You completed all levels and all challenges.");
+			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(2, 4, "allLevels"))
 			playerInfo:Save()
 			return
 		end
 
 		playerInfo.m_IsLevel = LEVELS[isLevel + 1].m_LevelName
 		playerInfo.m_CompletedChallenges[playerInfo.m_IsLevel] = {}
-		a_Player:SendMessageSuccess("Congrats. You unlocked next level " .. LEVELS[isLevel + 1].m_LevelName)
+		a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(2, 4, "nextLevel", { ["%1"] = LEVELS[isLevel + 1].m_LevelName}))
 	end
 	playerInfo:Save()
 end
