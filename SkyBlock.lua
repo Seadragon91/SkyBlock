@@ -38,6 +38,9 @@ function Initialize(Plugin)
 	LANGUAGES = {}
 	LANGUAGE_DEFAULT = "english.ini"
 	LANGUAGE_OTHERS = 1
+	
+	-- Load all lua files
+	LoadLuaFiles()
 
 	-- Create players folder
 	cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/players/")
@@ -95,8 +98,8 @@ function LoadConfiguration()
 	configIni:ReadFile(CONFIG_FILE)
 	ISLAND_NUMBER = configIni:GetValueI("Island", "Number")
 	ISLAND_DISTANCE = configIni:GetValueI("Island", "Distance")
-	ISLAND_SCHEMATIC = configIni:GetValue("Schematic", "Island")
-	SPAWN_SCHEMATIC = configIni:GetValue("Schematic", "Spawn")
+	ISLAND_SCHEMATIC = "schematics/" .. configIni:GetValue("Schematic", "Island")
+	SPAWN_SCHEMATIC = "schematics/" .. configIni:GetValue("Schematic", "Spawn")
 	WORLD_NAME = configIni:GetValue("General", "Worldname")
 	SPAWN_CREATED = configIni:GetValueB("PluginValues", "SpawnCreated")
 	LANGUAGE_DEFAULT = configIni:GetValue("Language", "Default")
@@ -181,4 +184,27 @@ function LoadLanguageFiles()
     else
         LANGUAGES[LANGUAGE_DEFAULT] = cLanguage.new(LANGUAGE_DEFAULT)
     end
+end
+
+function LoadLuaFiles()
+	-- classes
+	local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/classes")
+	if (#files > 2) then
+		for _, file in pairs(files) do
+			if (string.sub(file, #file -3, #file) == ".lua") then
+				dofile(PLUGIN:GetLocalFolder() .. "/classes/" .. file)
+			end
+		end
+	end
+	
+	-- commands
+	files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/commands")
+	if (#files > 2) then
+		for _, file in pairs(files) do
+			if (string.sub(file, #file -3, #file) == ".lua") then
+				dofile(PLUGIN:GetLocalFolder() .. "/commands/" .. file)
+			end
+		end
+	end
+	
 end

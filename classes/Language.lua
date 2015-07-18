@@ -132,7 +132,7 @@ function cLanguage:Create()
 	self.m_Sentences[2][4]["itemsInfo"] = "Gather this items: "
 
 	-- ChallengeValues.lua
-	self.m_Sentences[2][4]["calculated"] = "Your island value is %1, your need %2 for completing."
+	self.m_Sentences[2][4]["calculated"] = "Your island value is %1, you need %2 for completing."
 	self.m_Sentences[2][4]["calculatingWait"] = "Your island value is already calculating. Please wait..."
 	self.m_Sentences[2][4]["calculatingStarted"] = "Your island value is calculating..."
 	self.m_Sentences[2][4]["valueInfo"] = "Reach that island value: "

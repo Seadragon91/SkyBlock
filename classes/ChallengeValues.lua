@@ -18,7 +18,7 @@ function cChallengeValues:CalculateValue(a_Player)
 			local position = self.m_Calculations[a_Player:GetName()]["position"]
 			local chunks = self.m_Calculations[a_Player:GetName()]["chunks"]
 			local points = self.m_Calculations[a_Player:GetName()]["points"]
-			local counter = 0
+			local counter = 1
 
 			while true do
 				local cx = chunks[position + counter][1] * 16
@@ -39,7 +39,6 @@ function cChallengeValues:CalculateValue(a_Player)
 						end
 					end
 				end
-                counter = counter + 1
 
 				if (position + counter) == #chunks then
 					local value = round(self.m_Calculations[a_Player:GetName()]["points"] / 1000)
@@ -56,7 +55,7 @@ function cChallengeValues:CalculateValue(a_Player)
 					a_Player:GetWorld():ScheduleTask(5, self.callback)
 					return
 				end
-				
+				counter = counter + 1
 			end
 		end
 	a_Player:GetWorld():ScheduleTask(5, self.callback)
