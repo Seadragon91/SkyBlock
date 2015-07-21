@@ -229,7 +229,7 @@ end
 
 function cLanguage:Load()
 	local languageIni = cIniFile()
-	if (languageIni:ReadFile(PLUGIN:GetLocalFolder() .. "/languages/" .. self.m_Language) == false) then
+	if (not languageIni:ReadFile(PLUGIN:GetLocalFolder() .. "/languages/" .. self.m_Language)) then
 		self.WriteDefault(self)
 		return
 	end

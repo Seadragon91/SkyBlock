@@ -1,5 +1,5 @@
 -- SkyBlock plugin for cuberite.
--- Before starting the server, you need to add a (configurable world name in Config.ini) world in the settings.ini under the toplayerInfoc [Worlds]
+-- Before starting the server, you need to add a (configurable world name in Config.ini) world in the settings.ini under the section [Worlds]
 -- Example: World=skyblock
 
 PLUGIN = nil
@@ -187,24 +187,33 @@ function LoadLanguageFiles()
 end
 
 function LoadLuaFiles()
-	-- classes
-	local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/classes")
+	-- code
+	local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/code")
 	if (#files > 2) then
 		for _, file in pairs(files) do
 			if (string.sub(file, #file -3, #file) == ".lua") then
-				dofile(PLUGIN:GetLocalFolder() .. "/classes/" .. file)
+				dofile(PLUGIN:GetLocalFolder() .. "/code/" .. file)
+			end
+		end
+	end
+
+	-- code/classes
+	local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/code/classes")
+	if (#files > 2) then
+		for _, file in pairs(files) do
+			if (string.sub(file, #file -3, #file) == ".lua") then
+				dofile(PLUGIN:GetLocalFolder() .. "/code/classes/" .. file)
 			end
 		end
 	end
 	
-	-- commands
-	files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/commands")
+	-- code/commands
+	files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/code/commands")
 	if (#files > 2) then
 		for _, file in pairs(files) do
 			if (string.sub(file, #file -3, #file) == ".lua") then
-				dofile(PLUGIN:GetLocalFolder() .. "/commands/" .. file)
+				dofile(PLUGIN:GetLocalFolder() .. "/code/commands/" .. file)
 			end
 		end
 	end
-	
 end
