@@ -1,4 +1,4 @@
--- Handle the command skyblock
+-- Handle the skyblock command
 function CommandSkyBlock(a_Split, a_Player)
 	if (#a_Split == 1) then
 		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 2, "skyblock"))

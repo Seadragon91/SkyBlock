@@ -198,7 +198,7 @@ function LoadLuaFiles()
 	end
 
 	-- code/classes
-	local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/code/classes")
+	files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/code/classes")
 	if (#files > 2) then
 		for _, file in pairs(files) do
 			if (string.sub(file, #file -3, #file) == ".lua") then

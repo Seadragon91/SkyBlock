@@ -47,7 +47,6 @@ function cChallengeItems:IsCompleted(a_Player)
 	end
 
 	self:Complete(a_Player)
-	playerInfo:Save()
 end
 
 
@@ -58,7 +57,7 @@ end
 
 
 -- Override
-function cChallengeItems:InfoText()
+function cChallengeItems:InfoText(a_Player)
 	return GetLanguage(a_Player):Get(2, 4, "itemsInfo")
 end
 

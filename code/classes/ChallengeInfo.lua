@@ -73,34 +73,33 @@ function cChallengeInfo:Complete(a_Player)
 end
 
 
--- Overrided in the inheritanced classes
+-- Overridden in inherited classes
 function cChallengeInfo:IsCompleted(a_Player)
 	LOGERROR("cChallengeInfo:IsCompleted(): missing override in class " .. self:ToString())
 end
 
 
--- Overrided in the inheritanced classes
+-- Overridden in inherited classes
 function cChallengeInfo:GetChallengeType()
 	LOGERROR("cChallengeInfo:GetChallengeType(): missing override in class " .. self:ToString())
 end
 
 
--- Overrided in the inheritanced classes
+-- Overridden in inherited classes
 function cChallengeInfo:Load(a_LevelIni)
 	LOGERROR("cChallengeInfo:Load(): missing override in class " .. self:ToString())
 end
 
--- Overrided in the inheritanced classes
-function cChallengeInfo:InfoText()
+-- Overridden in inherited classes
+function cChallengeInfo:InfoText(a_Player)
 	LOGERROR("cChallengeInfo:InfoText(): missing override in class " .. self:ToString())
 end
 
 
--- Overrided. Returns the class name
+-- Overridden. Returns the class name
 function cChallengeInfo:ToString()
 	return "cChallengeInfo"
 end
-
 
 
 -- Not bound to class

@@ -1,4 +1,4 @@
--- Lannguage file
+-- Language file
 
 cLanguage = {}
 cLanguage.__index = cLanguage

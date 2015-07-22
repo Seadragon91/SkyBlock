@@ -15,7 +15,7 @@ function ReserveIsland(a_IslandNumber)
 end
 
 
--- Returns a list of chunk coords
+-- Returns a list of chunk positions
 function GetChunks(a_PosX, a_PosZ, a_Radius)
 	local radius = a_Radius
 	local list = {}
