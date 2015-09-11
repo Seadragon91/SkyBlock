@@ -46,7 +46,7 @@ function OnPlayerSpawn(a_Player)
 		local Callback = function(a_World)
 			a_World:DoWithPlayer(playerName,
 				function(a_FoundPlayer)
-					a_FoundPlayer:TeleportToCoords(0, 170, 0)
+					TeleportToIsland(a_FoundPlayer)
 				end)
 			end
 

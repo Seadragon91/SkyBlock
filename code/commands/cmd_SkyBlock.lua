@@ -31,14 +31,12 @@ function CommandSkyBlock(a_Split, a_Player)
 	-- Join the world
 	if (a_Split[2] == "join") then
 		if (a_Player:GetWorld():GetName() == WORLD_NAME) then
-			a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
-			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcomeBack", { ["%1"] = a_Player:GetName() }))
+			TeleportToIsland(a_Player) -- spawn platform
 			return true
 		end
 
 		if (a_Player:MoveToWorld(WORLD_NAME)) then
-			a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
-			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcome"))
+			TeleportToIsland(a_Player) -- spawn platform
 			return true
 		else
 			a_Player:SendMessageFailure(GetLanguage(a_Player):Get(1, 4, "missingWorld"))

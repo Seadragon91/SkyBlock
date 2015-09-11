@@ -127,7 +127,10 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 	local posX, posY, posZ
 	local yaw, pitch = nil
 
-	if (a_IslandInfo.m_HomeLocation == nil) then
+	if (a_IslandInfo == nil) then
+		posX = 0
+		posZ = 0
+	elseif (a_IslandInfo.m_HomeLocation == nil) then
 		posX, posZ = GetIslandPosition(a_IslandInfo.m_IslandNumber)
 		posY = 151
 	else
@@ -142,6 +145,15 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 		{ unpack(GetChunks(posX, posZ, 16)) },
 		nil,
 		function()
+			if (a_IslandInfo == nil) then
+				local valid, posY = SKYBLOCK:TryGetHeight(posX, posZ)
+				assert(not valid, "TryGetHeight is not valid.") -- Should never occur
+
+				a_Player:TeleportToCoords(posX, posY - 16, posZ)
+				a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcome"))
+				return
+			end
+
 			a_Player:TeleportToCoords(posX, posY, posZ)
 			if (yaw ~= nil) then
 				a_Player:SendRotation(yaw, pitch)

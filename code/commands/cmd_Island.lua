@@ -214,7 +214,7 @@ function CommandIsland(a_Split, a_Player)
 		end
 
 		playerInfo.m_IsRestarting = true
-		a_Player:TeleportToCoords(0, 170, 0) -- spawn platform
+		TeleportToIsland(a_Player) -- spawn platform
 
 		local posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
 		RemoveIsland(posX, posZ) -- Recreates all chunks in the area of the island
