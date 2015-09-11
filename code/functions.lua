@@ -147,7 +147,7 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 		function()
 			if (a_IslandInfo == nil) then
 				local valid, posY = SKYBLOCK:TryGetHeight(posX, posZ)
-				assert(not valid, "TryGetHeight is not valid.") -- Should never occur
+				assert(valid, "TryGetHeight is not valid.") -- Should never occur
 
 				a_Player:TeleportToCoords(posX, posY - 16, posZ)
 				a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcome"))
@@ -184,6 +184,21 @@ function GetLanguage(a_Player)
 	end
 	return LANGUAGES[playerInfo.m_Language]
 end
+
+
+function StringToLocation(a_Location)
+	local playerX, posZ, posY
+	local aLoc = StringSplit(a_Location, ":")
+
+	if (#aLoc ~= 3) then
+		return nil
+	end
+	playerX = aLoc[1]
+	posY = aLoc[2]
+	posZ = aLoc[3]
+	return { playerX, posZ,posY }
+end
+
 
 -- For debugging
 function DEBUG(s)

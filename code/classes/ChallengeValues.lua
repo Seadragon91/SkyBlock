@@ -62,7 +62,6 @@ function cChallengeValues:CalculateValue(a_Player)
 end
 
 
-
 -- Override
 function cChallengeValues:IsCompleted(a_Player)
 	local playerInfo = GetPlayerInfo(a_Player)
@@ -109,5 +108,10 @@ end
 -- Override
 function cChallengeValues:Load(a_LevelIni)
 	self.m_RequiredValue = a_LevelIni:GetValueI(self.m_ChallengeName, "requiredValue")
+	if (self.m_RequiredValue == 0) then
+		LOGERROR(self.m_ChallengeName .. " requiredValue is not valid. Has to be a integer greater than 0.")
+		return false
+	end
+	return true
 end
 

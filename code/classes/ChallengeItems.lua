@@ -75,4 +75,5 @@ function cChallengeItems:Load(a_LevelIni)
 	if (self.m_IsRepeatable) then
 		self.m_RptRequiredItems = ParseStringToItems(a_LevelIni:GetValue(self.m_ChallengeName, "rpt_requiredItems"))
 	end
+	return true
 end

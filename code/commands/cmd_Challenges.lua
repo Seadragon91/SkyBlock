@@ -74,12 +74,12 @@ function CommandChallenges(a_Split, a_Player)
 
 		a_Player:SendMessage("--- " .. cChatColor.Green .. challengeInfo.m_ChallengeName .. cChatColor.White .. " ---")
 		a_Player:SendMessage(cChatColor.LightBlue .. challengeInfo.m_Description)
-		a_Player:SendMessage(cChatColor.LightGreen .. challengeInfo:InfoText(a_Player) .. cChatColor.White .. challengeInfo.m_RequiredText)
+		a_Player:SendMessage(cChatColor.LightGreen .. challengeInfo:InfoText(a_Player) .. cChatColor.White .. challengeInfo:GetRequiredText(a_Player))
 		a_Player:SendMessage(cChatColor.Gold .. GetLanguage(a_Player):Get(2, 3, "forCompletion") .. cChatColor.White .. challengeInfo.m_RewardText)
 
 		if (challengeInfo.m_IsRepeatable) then
 			a_Player:SendMessage(cChatColor.Blue .. GetLanguage(a_Player):Get(2, 3, "forRepeating"))
-			a_Player:SendMessage(cChatColor.LightGreen .. challengeInfo:InfoText(a_Player) .. cChatColor.White .. challengeInfo.m_RptRequiredText)
+			a_Player:SendMessage(cChatColor.LightGreen .. challengeInfo:InfoText(a_Player) .. cChatColor.White .. challengeInfo:GetRptRequiredText(a_Player))
 			a_Player:SendMessage(cChatColor.Gold .. GetLanguage(a_Player):Get(2, 3, "forCompletion") .. cChatColor.White .. challengeInfo.m_RptRewardText)
 		end
 

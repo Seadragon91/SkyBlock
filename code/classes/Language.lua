@@ -137,6 +137,8 @@ function cLanguage:Create()
 	self.m_Sentences[2][4]["calculatingStarted"] = "Your island value is calculating..."
 	self.m_Sentences[2][4]["valueInfo"] = "Reach that island value: "
 
+	-- ChallengeLocation.lua
+	self.m_Sentences[2][4]["locationInfo"] = "Reach that location: "
 
 	-- cmd_Island.lua
 

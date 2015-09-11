@@ -90,9 +90,22 @@ function cChallengeInfo:Load(a_LevelIni)
 	LOGERROR("cChallengeInfo:Load(): missing override in class " .. self:ToString())
 end
 
+
 -- Overridden in inherited classes
 function cChallengeInfo:InfoText(a_Player)
 	LOGERROR("cChallengeInfo:InfoText(): missing override in class " .. self:ToString())
+end
+
+
+-- Can be overridden in inherited classes
+function cChallengeInfo:GetRequiredText(a_Player)
+	return self.m_RequiredText
+end
+
+
+-- Can be overridden in inherited classes
+function cChallengeInfo:GetRptRequiredText(a_Player)
+	return self.m_RptRequiredText
 end
 
 
@@ -103,7 +116,7 @@ end
 
 
 -- Not bound to class
-function LoadBasicInfos(a_ChallengeName, a_LevelIni, a_LevelName)	
+function LoadBasicInfos(a_ChallengeName, a_LevelIni, a_LevelName)
 	local challengeType = a_LevelIni:GetValue(a_ChallengeName, "challengeType")
 	local challengeInfo = nil
 
@@ -112,6 +125,8 @@ function LoadBasicInfos(a_ChallengeName, a_LevelIni, a_LevelName)
 		challengeInfo = cChallengeItems.new()
 	elseif (challengeType == "VALUES") then
 		challengeInfo = cChallengeValues.new()
+	elseif (challengeType == "LOCATION") then
+		challengeInfo = cChallengeLocation.new()
 	else
 		LOGERROR("Unknown challengeType: " .. challengeType .. " in challenge " .. a_ChallengeName)
 		return nil
