@@ -1,5 +1,6 @@
 -- SkyBlock plugin for cuberite.
--- Before starting the server, you need to add a (configurable world name in Config.ini) world in the settings.ini under the section [Worlds]
+-- Before starting the server, you need to add a (configurable world name in Config.ini)
+-- world in the settings.ini under the section [Worlds]
 -- Example: World=skyblock
 
 PLUGIN = nil
@@ -38,18 +39,21 @@ function Initialize(Plugin)
 	LANGUAGES = {}
 	LANGUAGE_DEFAULT = "english.ini"
 	LANGUAGE_OTHERS = 1
-	
+
 	-- Load all lua files
 	LoadLuaFiles()
 
-	-- Create players folder
-	cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/players/")
-
-	-- Create islands folder
-	cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/islands/")
-
 	-- Load Config file
 	LoadConfiguration()
+
+	-- Check for world <WORLD NAME>
+	SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
+	if (SKYBLOCK == nil) then
+		LOGERROR("This plugin requires the world " .. WORLD_NAME .. ". Please add this line")
+		LOGERROR("World=" .. WORLD_NAME)
+		LOGERROR("to the section [Worlds] in the settings.ini.")
+		LOGERROR("Then stop and start the server again.")
+	end
 
     -- Create language folder
 	cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/languages/")
@@ -57,9 +61,6 @@ function Initialize(Plugin)
 
 	-- Load the points for block / meta
 	LoadBlockValues()
-
-	-- Get instance of world <WORLD_NAME>
-	SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
 
 	-- Load all ChallengeInfos
 	LoadAllLevels(PLUGIN:GetLocalFolder() .. "/challenges/Config.ini")
@@ -94,6 +95,16 @@ function OnDisable()
 end
 
 function LoadConfiguration()
+	-- Create players folder
+	if (not cFile:IsFolder(PLUGIN:GetLocalFolder() .. "/players/")) then
+		cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/players/")
+	end
+
+	-- Create islands folder
+	if (not cFile:IsFolder(PLUGIN:GetLocalFolder() .. "/islands/")) then
+		cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/islands/")
+	end
+
 	local configIni = cIniFile()
 	configIni:ReadFile(CONFIG_FILE)
 	ISLAND_NUMBER = configIni:GetValueI("Island", "Number")
