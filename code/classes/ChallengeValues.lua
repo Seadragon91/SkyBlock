@@ -6,7 +6,7 @@ cChallengeValues.__index = cChallengeValues
 function cChallengeValues.new()
 	local self = setmetatable({}, cChallengeValues)
 	setmetatable(cChallengeValues, {__index = cChallengeInfo})
-	
+
 	self.m_Calculations = {}
 	return self
 end
@@ -65,7 +65,7 @@ end
 -- Override
 function cChallengeValues:IsCompleted(a_Player)
 	local playerInfo = GetPlayerInfo(a_Player)
-	
+
 	if (self.m_Calculations[a_Player:GetName()] ~= nil) then
 		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "calculatingWait"))
 		return
@@ -74,14 +74,14 @@ function cChallengeValues:IsCompleted(a_Player)
 	if (not self:HasRequirements(a_Player)) then
 		return
 	end
-	
+
 	local posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
 	local chunks = GetChunks(posX, posZ, ISLAND_DISTANCE / 2)
 	self.m_Calculations[a_Player:GetName()] = {}
 	self.m_Calculations[a_Player:GetName()]["position"] = 0
 	self.m_Calculations[a_Player:GetName()]["points"] = 0
 	self.m_Calculations[a_Player:GetName()]["chunks"] = chunks
-	
+
 	a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "calculatingStarted"))
 	self:CalculateValue(a_Player)
 end
@@ -114,4 +114,3 @@ function cChallengeValues:Load(a_LevelIni)
 	end
 	return true
 end
-

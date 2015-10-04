@@ -58,7 +58,7 @@ end
 -- Saves the island info
 function cIslandInfo:Save()
 	local IslandInfoIni = cIniFile()
-	
+
 	IslandInfoIni:SetValueI("General", "IslandNumber", self.m_IslandNumber, true)
 	IslandInfoIni:SetValue("General", "OwnerUUID", self.m_OwnerUUID, true)
 	IslandInfoIni:SetValue("General", "OwnerName", self.m_OwnerName, true)

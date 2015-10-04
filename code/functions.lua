@@ -115,12 +115,15 @@ end
 
 
 function TeleportToIsland(a_Player, a_IslandInfo)
+	local movedWorld = false
+
 	if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
 		if (not a_Player:MoveToWorld(WORLD_NAME)) then
 			-- Didn't find the world
-			a_Player:SendMessageFailure(GetLanguage(a_Player):Get(3, 2, "notHere", { ["%1"] = WORLD_NAME }))
+			a_Player:SendMessageFailure(GetLanguage(a_Player):Get(3, 2, "missingWorld", { ["%1"] = WORLD_NAME }))
 			return
 		end
+		movedWorld = true
 	end
 
 	local playerInfo = GetPlayerInfo(a_Player)
@@ -141,7 +144,8 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 		local pitch = a_IslandInfo.m_HomeLocation[5]
 	end
 
-	SKYBLOCK:ChunkStay(
+	SKYBLOCK:ChunkStay
+	(
 		{ unpack(GetChunks(posX, posZ, 16)) },
 		nil,
 		function()
@@ -150,7 +154,11 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 				assert(valid, "TryGetHeight is not valid.") -- Should never occur
 
 				a_Player:TeleportToCoords(posX, posY - 16, posZ)
-				a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcome"))
+				if movedWorld then
+					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcome"))
+				else
+					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcomeBack"))
+				end
 				return
 			end
 
@@ -187,16 +195,16 @@ end
 
 
 function StringToLocation(a_Location)
-	local playerX, posZ, posY
-	local aLoc = StringSplit(a_Location, ":")
+	local posX, posZ, posY
+	local arrLoc = StringSplit(a_Location, ":")
 
-	if (#aLoc ~= 3) then
+	if (#arrLoc ~= 3) then
 		return nil
 	end
-	playerX = aLoc[1]
-	posY = aLoc[2]
-	posZ = aLoc[3]
-	return { playerX, posZ,posY }
+	posX = arrLoc[1]
+	posY = arrLoc[2]
+	posZ = arrLoc[3]
+	return { posX, posZ, posY }
 end
 
 

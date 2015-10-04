@@ -72,7 +72,7 @@ function CommandIsland(a_Split, a_Player)
 
 		local toAdd = a_Split[3]
 		a_Player:GetWorld():DoWithPlayer(toAdd,
-			function (a_FoundPlayer)			
+			function (a_FoundPlayer)
 				islandInfo:AddFriend(a_FoundPlayer)
 				islandInfo:Save()
 
@@ -133,7 +133,7 @@ function CommandIsland(a_Split, a_Player)
 			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 7, "removedFromFriendList"))
 			return true
 		end
-		
+
 		TeleportToIsland(a_Player, islandInfoFriend)
 		return true
 	end

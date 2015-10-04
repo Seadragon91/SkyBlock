@@ -42,7 +42,7 @@ function OnPlayerSpawn(a_Player)
 	local playerInfo = GetPlayerInfo(a_Player)
 	if (playerInfo.m_IslandNumber == -1) then -- no island
 		local playerName = a_Player:GetName()
-		
+
 		local Callback = function(a_World)
 			a_World:DoWithPlayer(playerName,
 				function(a_FoundPlayer)
@@ -62,7 +62,7 @@ function OnPlayerSpawn(a_Player)
 
 		local Callback = function(a_World)
 			a_World:DoWithPlayer(playerName,
-				function(a_FoundPlayer)				
+				function(a_FoundPlayer)
 					a_FoundPlayer:TeleportToCoords(posX, 151, posZ)
 				end)
 			end

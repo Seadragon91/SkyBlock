@@ -1,8 +1,8 @@
 -- Handle the command challenges
-function CommandChallenges(a_Split, a_Player) 
+function CommandChallenges(a_Split, a_Player)
 	-- List all challenge names:
 	--	 light gray for completed
-	--	 light blue for repeatable 
+	--	 light blue for repeatable
 	--	 light green for not completed
 	if (#a_Split == 1) then
 		local playerInfo = GetPlayerInfo(a_Player)

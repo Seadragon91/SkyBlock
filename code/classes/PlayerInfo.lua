@@ -19,7 +19,7 @@ function cPlayerInfo.new(a_Player)
 
 	self:Load(a_Player) -- Check if there is a player file, if yes load it
 	if (self.m_IslandNumber ~= -1) then -- Load island file
-		GetIslandInfo(self.m_IslandNumber)		
+		GetIslandInfo(self.m_IslandNumber)
 	end
 	return self
 end
@@ -82,7 +82,7 @@ function cPlayerInfo:HasPermissionThere(a_BlockX, a_BlockZ)
 end
 
 -- Save PlayerInfo
-function cPlayerInfo:Save() 
+function cPlayerInfo:Save()
 	if (self.m_IslandNumber == -1) then -- Only save player info, if he has or is on a friends island
 		return
 	end

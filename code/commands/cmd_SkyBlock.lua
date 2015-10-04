@@ -30,18 +30,8 @@ function CommandSkyBlock(a_Split, a_Player)
 
 	-- Join the world
 	if (a_Split[2] == "join") then
-		if (a_Player:GetWorld():GetName() == WORLD_NAME) then
-			TeleportToIsland(a_Player) -- spawn platform
-			return true
-		end
-
-		if (a_Player:MoveToWorld(WORLD_NAME)) then
-			TeleportToIsland(a_Player) -- spawn platform
-			return true
-		else
-			a_Player:SendMessageFailure(GetLanguage(a_Player):Get(1, 4, "missingWorld"))
-			return true
-		end
+		TeleportToIsland(a_Player) -- spawn platform
+		return true
 	end
 
 	if (a_Split[2] == "play") then

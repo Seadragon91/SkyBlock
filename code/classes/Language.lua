@@ -68,7 +68,7 @@ function cLanguage:Create()
 	self.m_Sentences[1][5] = {}
 	self.m_Sentences[1][5]["welcome"] = "Welcome to your island. Do not fall and make no obsidian :-)"
 	self.m_Sentences[1][5]["welcomeBack"] = "Welcome back %1"
-	self.m_Sentences[1][5]["welcomeTo"] = "Welcome to the island from %1!" -- functions.lua	
+	self.m_Sentences[1][5]["welcomeTo"] = "Welcome to the island from %1!" -- functions.lua
 
 	-- Recreate = 6
 	self.m_Indexes[1][6] = "Recreate"
