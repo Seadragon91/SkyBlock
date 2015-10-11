@@ -144,8 +144,7 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 		local pitch = a_IslandInfo.m_HomeLocation[5]
 	end
 
-	SKYBLOCK:ChunkStay
-	(
+	SKYBLOCK:ChunkStay(
 		{ unpack(GetChunks(posX, posZ, 16)) },
 		nil,
 		function()
