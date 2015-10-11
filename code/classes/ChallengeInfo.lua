@@ -126,7 +126,8 @@ function LoadBasicInfos(a_ChallengeName, a_LevelIni, a_LevelName)
 	elseif (challengeType == "VALUES") then
 		challengeInfo = cChallengeValues.new()
 	elseif (challengeType == "LOCATION") then
-		challengeInfo = cChallengeLocation.new()
+		-- challengeInfo = cChallengeLocation.new()
+		return nil
 	else
 		LOGERROR("Unknown challengeType: " .. challengeType .. " in challenge " .. a_ChallengeName)
 		return nil
