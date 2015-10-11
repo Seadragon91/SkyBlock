@@ -22,7 +22,7 @@ LANGUAGE_OTHERS = nil -- Enable other language files
 
 function Initialize(Plugin)
 	Plugin:SetName("SkyBlock")
-	Plugin:SetVersion(2)
+	Plugin:SetVersion(3)
 
 	PLUGIN = Plugin
 	ISLAND_NUMBER = 0
