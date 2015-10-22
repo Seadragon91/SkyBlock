@@ -20,11 +20,11 @@ function GetChunks(a_PosX, a_PosZ, a_Radius)
 	local radius = a_Radius
 	local list = {}
 
-	for x = -radius,radius,16 do
+	for x = -radius, radius, 16 do
 		local cx = (a_PosX + x) / 16
-		for z = -radius,radius,16 do
+		for z = -radius, radius, 16 do
 			local cz = (a_PosZ + z) / 16
-			table.insert(list, {cx, cz})
+			table.insert(list, {math.floor(cx), math.floor(cz)})
 		end
 	end
 	return list

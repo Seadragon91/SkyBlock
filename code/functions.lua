@@ -203,7 +203,7 @@ function StringToLocation(a_Location)
 	posX = arrLoc[1]
 	posY = arrLoc[2]
 	posZ = arrLoc[3]
-	return { posX, posZ, posY }
+	return { posX, posy, posZ }
 end
 
 

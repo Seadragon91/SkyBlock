@@ -133,7 +133,7 @@ function LoadPlayerInfos()
 	cRoot:Get():ForEachPlayer(function(a_Player)
 		if (a_Player:GetWorld():GetName() == WORLD_NAME) then
 			local playerInfo = cPlayerInfo.new(a_Player)
-			if (cFile:Exists(PLUGIN:GetLocalFolder() .. "/islands/" .. playerInfo.m_IslandNumber .. ".ini")) then
+			if (cFile:IsFolder(PLUGIN:GetLocalFolder() .. "/islands/" .. playerInfo.m_IslandNumber .. ".ini")) then
 				GetIslandInfo(playerInfo.m_IslandNumber)
 			end
 
@@ -198,32 +198,15 @@ function LoadLanguageFiles()
 end
 
 function LoadLuaFiles()
-	-- code
-	local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/code")
-	if (#files > 2) then
-		for _, file in pairs(files) do
-			if (string.sub(file, #file -3, #file) == ".lua") then
-				dofile(PLUGIN:GetLocalFolder() .. "/code/" .. file)
-			end
-		end
-	end
+	local folders =  { "/code", "/code/classes", "/code/commands" }
 
-	-- code/classes
-	files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/code/classes")
-	if (#files > 2) then
-		for _, file in pairs(files) do
-			if (string.sub(file, #file -3, #file) == ".lua") then
-				dofile(PLUGIN:GetLocalFolder() .. "/code/classes/" .. file)
-			end
-		end
-	end
-	
-	-- code/commands
-	files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/code/commands")
-	if (#files > 2) then
-		for _, file in pairs(files) do
-			if (string.sub(file, #file -3, #file) == ".lua") then
-				dofile(PLUGIN:GetLocalFolder() .. "/code/commands/" .. file)
+	for _, folder in pairs(folders) do
+		local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. folder)
+		if (#files > 2) then
+			for _, file in pairs(files) do
+				if (string.sub(file, #file -3, #file) == ".lua") then
+					dofile(PLUGIN:GetLocalFolder() .. folder .. "/" .. file)
+				end
 			end
 		end
 	end

@@ -32,7 +32,7 @@ function CommandIsland(a_Split, a_Player)
 					return true
 				end
 
-				islandInfo.homeLocation = { x, y, z, yaw, pitch }
+				islandInfo.m_HomeLocation = { x, y, z, yaw, pitch }
 				islandInfo:Save()
 				a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(3, 3, "set_changed"))
 				return true
