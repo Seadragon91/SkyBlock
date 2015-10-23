@@ -188,7 +188,7 @@ end
 
 function OnTakeDamage(a_Receiver, a_TDI)
 	if (a_Receiver:GetWorld():GetName() ~= WORLD_NAME) then
-		return true
+		return
 	end
 
 	if ((a_TDI.Attacker ~= nil) and (a_TDI.Attacker:IsA("cPlayer"))) then
