@@ -3,6 +3,29 @@
 -- world in the settings.ini under the section [Worlds]
 -- Example: World=skyblock
 
+
+-- Load all lua files
+-- Has to be called outside of the Initialize function
+-- Because if Info.lua is called without the command files loaded
+-- The variables Handler in Info.lua would be all nil
+function LoadLuaFiles()
+	local folders =  { "/code", "/code/classes", "/code/commands" }
+	local localFolder = cPluginManager:GetCurrentPlugin():GetLocalFolder()
+
+	for _, folder in pairs(folders) do
+		local files = cFile:GetFolderContents(localFolder .. "/" .. folder)
+		if (#files > 2) then
+			for _, file in pairs(files) do
+				if (string.sub(file, #file -3, #file) == ".lua") then
+					dofile(localFolder .. folder .. "/" .. file)
+				end
+			end
+		end
+	end
+end
+LoadLuaFiles()
+
+
 PLUGIN = nil
 ISLAND_NUMBER = nil -- Gets increased, before a new island is created
 ISLAND_DISTANCE = nil -- Distance betweens the islands
@@ -40,19 +63,17 @@ function Initialize(Plugin)
 	LANGUAGE_DEFAULT = "english.ini"
 	LANGUAGE_OTHERS = 1
 
-	-- Load all lua files
-	LoadLuaFiles()
-
 	-- Load Config file
 	LoadConfiguration()
 
-	-- Check for world <WORLD NAME>
+	-- Check for world <WORLD_NAME>
 	SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
 	if (SKYBLOCK == nil) then
-		LOGERROR("This plugin requires the world " .. WORLD_NAME .. ". Please add this line")
-		LOGERROR("World=" .. WORLD_NAME)
-		LOGERROR("to the section [Worlds] in the settings.ini.")
-		LOGERROR("Then stop and start the server again.")
+		LOGWARNING("Plugin SkyBlock requires the world " .. WORLD_NAME .. ". Please add this line")
+		LOGWARNING("World=" .. WORLD_NAME)
+		LOGWARNING("to the section [Worlds] in the settings.ini.")
+		LOGWARNING("Then stop and start the server again.")
+		return false
 	end
 
     -- Create language folder
@@ -81,10 +102,9 @@ function Initialize(Plugin)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_LEFT_CLICK, OnPlayerLeftClick)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_RIGHT_CLICK, OnPlayerRightClick)
 
-	-- Command Bindings
-	cPluginManager.BindCommand("/skyblock", "skyblock.command", CommandSkyBlock , " - Access to the skyblock plugin")
-	cPluginManager.BindCommand("/challenges", "skyblock.command", CommandChallenges , " - Access to the challenges")
-	cPluginManager.BindCommand("/island", "skyblock.command", CommandIsland , " - Access to the island commands")
+	-- Info.lua
+	dofile(cPluginManager:GetPluginsPath() .. "/InfoReg.lua")
+	RegisterPluginInfoCommands()
 
 	LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
@@ -195,19 +215,4 @@ function LoadLanguageFiles()
     else
         LANGUAGES[LANGUAGE_DEFAULT] = cLanguage.new(LANGUAGE_DEFAULT)
     end
-end
-
-function LoadLuaFiles()
-	local folders =  { "/code", "/code/classes", "/code/commands" }
-
-	for _, folder in pairs(folders) do
-		local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. folder)
-		if (#files > 2) then
-			for _, file in pairs(files) do
-				if (string.sub(file, #file -3, #file) == ".lua") then
-					dofile(PLUGIN:GetLocalFolder() .. folder .. "/" .. file)
-				end
-			end
-		end
-	end
 end
