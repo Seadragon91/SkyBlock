@@ -92,14 +92,14 @@ function CreateLayer(a_PosX, a_PosY, a_PosZ, a_Material)
 	for x = -1,6 do
 		local X = x + a_PosX
 		for z = -1,1 do
-			SKYBLOCK:SetBlock(X, a_PosX, z + a_PosZ, a_Material, 0)
+			SKYBLOCK:SetBlock(X, a_PosY, z + a_PosZ, a_Material, 0)
 		end
 	end
 
 	for x = -1,1 do
 		local X = x + a_PosX
 		for z = 2,4 do
-			SKYBLOCK:SetBlock(X, a_PosX, z + a_PosZ, a_Material, 0)
+			SKYBLOCK:SetBlock(X, a_PosY, z + a_PosZ, a_Material, 0)
 		end
 	end
 end
