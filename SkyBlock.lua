@@ -49,10 +49,11 @@ function Initialize(Plugin)
 	-- Check for world <WORLD NAME>
 	SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
 	if (SKYBLOCK == nil) then
-		LOGERROR("This plugin requires the world " .. WORLD_NAME .. ". Please add this line")
+		LOGERROR("The plugin SkyBlock requires the world " .. WORLD_NAME .. ". Please add this line")
 		LOGERROR("World=" .. WORLD_NAME)
 		LOGERROR("to the section [Worlds] in the settings.ini.")
 		LOGERROR("Then stop and start the server again.")
+		return false
 	end
 
     -- Create language folder
@@ -181,7 +182,7 @@ end
 
 function LoadLanguageFiles()
     local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/languages")
-    if (#files == 2) then -- Write Default language file
+    if (#files == 0) then -- Write Default language file
         LANGUAGES["english.ini"] = cLanguage.new()
         return
     end
@@ -202,11 +203,9 @@ function LoadLuaFiles()
 
 	for _, folder in pairs(folders) do
 		local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. folder)
-		if (#files > 2) then
-			for _, file in pairs(files) do
-				if (string.sub(file, #file -3, #file) == ".lua") then
-					dofile(PLUGIN:GetLocalFolder() .. folder .. "/" .. file)
-				end
+		for _, file in pairs(files) do
+			if (string.sub(file, #file -3, #file) == ".lua") then
+				dofile(PLUGIN:GetLocalFolder() .. folder .. "/" .. file)
 			end
 		end
 	end
