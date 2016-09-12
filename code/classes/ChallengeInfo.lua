@@ -118,7 +118,7 @@ end
 -- Not bound to class
 function LoadBasicInfos(a_ChallengeName, a_LevelIni, a_LevelName)
 	local challengeType = a_LevelIni:GetValue(a_ChallengeName, "challengeType")
-	local challengeInfo = nil
+	local challengeInfo
 
 	-- challenges with no key challengeType are from type ITEMS
 	if ((challengeType == "ITEMS") or (challengeType == "")) then

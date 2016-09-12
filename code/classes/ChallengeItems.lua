@@ -17,8 +17,6 @@ function cChallengeItems:IsCompleted(a_Player)
 		return
 	end
 
-	local isLevel = GetLevelAsNumber(playerInfo.m_IsLevel)
-
 	if (playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName]) then
 		for i = 1, #self.m_RptRequiredItems do
 			if (not a_Player:GetInventory():HasItems(self.m_RptRequiredItems[i])) then
