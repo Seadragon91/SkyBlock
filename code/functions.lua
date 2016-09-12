@@ -46,7 +46,6 @@ function CancelEvent(a_Player, a_BlockX, a_BlockZ)
 	end
 
 	local playerInfo = GetPlayerInfo(a_Player)
-	local islandNumber = GetIslandNumber(a_BlockX, a_BlockZ)
 	if (a_Player:HasPermission("skyblock.admin.build")) then
 		return false
 	end
@@ -128,8 +127,7 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 
 	local playerInfo = GetPlayerInfo(a_Player)
 	local posX, posY, posZ
-	local yaw, pitch = nil
-
+	local yaw, pitch
 	if (a_IslandInfo == nil) then
 		posX = 0
 		posZ = 0
@@ -140,8 +138,8 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 		posX = a_IslandInfo.m_HomeLocation[1]
 		posY = a_IslandInfo.m_HomeLocation[2]
 		posZ = a_IslandInfo.m_HomeLocation[3]
-		local yaw = a_IslandInfo.m_HomeLocation[4]
-		local pitch = a_IslandInfo.m_HomeLocation[5]
+		yaw = a_IslandInfo.m_HomeLocation[4]
+		pitch = a_IslandInfo.m_HomeLocation[5]
 	end
 
 	SKYBLOCK:ChunkStay(
@@ -149,10 +147,10 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 		nil,
 		function()
 			if (a_IslandInfo == nil) then
-				local valid, posY = SKYBLOCK:TryGetHeight(posX, posZ)
+				local valid, posYHeight = SKYBLOCK:TryGetHeight(posX, posZ)
 				assert(valid, "TryGetHeight is not valid.") -- Should never occur
 
-				a_Player:TeleportToCoords(posX, posY - 16, posZ)
+				a_Player:TeleportToCoords(posX, posYHeight - 16, posZ)
 				if movedWorld then
 					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcome"))
 				else
@@ -203,7 +201,7 @@ function StringToLocation(a_Location)
 	posX = arrLoc[1]
 	posY = arrLoc[2]
 	posZ = arrLoc[3]
-	return { posX, posy, posZ }
+	return { posX, posY, posZ }
 end
 
 

@@ -52,7 +52,6 @@ function CommandIsland(a_Split, a_Player)
 			return true
 		end
 		-- Reset obsidian
-		local playerInfo = GetPlayerInfo(a_Player)
 		playerInfo.m_ResetObsidian = true
 
 		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(3, 4, "right-Click"))
@@ -188,7 +187,6 @@ function CommandIsland(a_Split, a_Player)
 
 		if (playerInfo.m_IsRestarting == nil) then
 			playerInfo.m_IsRestarting = false
-			local islandNumber = -1
 			local posX, posZ, islandNumber = ReserveIsland(islandNumber)
 
 			SKYBLOCK:ChunkStay(

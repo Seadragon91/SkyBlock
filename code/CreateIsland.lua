@@ -111,8 +111,7 @@ function GetIslandPosition(n)
 	end
 
 	local distance = ISLAND_DISTANCE
-	local posX = 0
-	local posZ = 0
+	local posX, posZ
 	local r = math.floor(0.5 + math.sqrt(n / 2.0 - 0.25))
 	local nAufRing = n - 2 * r * (r - 1)
 	local seite = math.ceil(nAufRing / r)
@@ -164,8 +163,7 @@ function GetIslandNumber(a_PosX, a_PosZ)
 	local zd = math.floor(round(pz / (distance)))
 	local ring = math.abs(xd) + math.abs(zd)
 
-	local seite = 0
-	local posSeite = 0
+	local seite, posSeite
 	if (xd < 0 and zd <= 0) then
 		seite = 1
 		posSeite = -zd
