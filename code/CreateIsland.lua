@@ -82,8 +82,6 @@ function CreateIsland(a_Player, a_PosX, a_PosZ)
 			end
 		);
 	end
-
-	return ISLAND_NUMBER, posX, posZ
 end
 
 

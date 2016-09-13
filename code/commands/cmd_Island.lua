@@ -187,7 +187,7 @@ function CommandIsland(a_Split, a_Player)
 
 		if (playerInfo.m_IsRestarting == nil) then
 			playerInfo.m_IsRestarting = false
-			local posX, posZ, islandNumber = ReserveIsland(islandNumber)
+			local posX, posZ, islandNumber = ReserveIsland(playerInfo.m_IslandNumber)
 
 			SKYBLOCK:ChunkStay(
 				{ unpack(GetChunks(posX, posZ, 16)) },

@@ -85,7 +85,7 @@ function CommandSkyBlock(a_Split, a_Player)
 			area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez) -- Paste the schematic
 			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 6, "recreatedSpawn"))
 		else
-			a_Player:SendMessageInfo(schematicError)
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 6, "schematicError"))
 		end
 		return true
 	end
