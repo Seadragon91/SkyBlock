@@ -21,8 +21,8 @@ function cLevel:Load(a_File)
 	self.m_Description = levelIni:GetValue("General", "Description")
 
 	local amount = levelIni:GetNumValues("Challenges")
-	for i = 1, amount do
-		local challengeName = levelIni:GetValue("Challenges", i)
+	for counter = 1, amount do
+		local challengeName = levelIni:GetValue("Challenges", tostring(counter))
 		local challengeInfo = LoadBasicInfos(challengeName, levelIni, self.m_LevelName)
 		if (challengeInfo ~= nil) then
 			-- Load the challenge specific values

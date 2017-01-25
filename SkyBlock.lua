@@ -83,9 +83,9 @@ function Initialize(Plugin)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_RIGHT_CLICK, OnPlayerRightClick)
 
 	-- Command Bindings
-	cPluginManager.BindCommand("/skyblock", "skyblock.command", CommandSkyBlock , " - Access to the skyblock plugin")
-	cPluginManager.BindCommand("/challenges", "skyblock.command", CommandChallenges , " - Access to the challenges")
-	cPluginManager.BindCommand("/island", "skyblock.command", CommandIsland , " - Access to the island commands")
+	cPluginManager:BindCommand("/skyblock", "skyblock.command", CommandSkyBlock , " - Access to the skyblock plugin")
+	cPluginManager:BindCommand("/challenges", "skyblock.command", CommandChallenges , " - Access to the challenges")
+	cPluginManager:BindCommand("/island", "skyblock.command", CommandIsland , " - Access to the island commands")
 
 	LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
@@ -149,9 +149,9 @@ function LoadAllLevels(a_File)
 	configIni:ReadFile(a_File)
 
 	local amount = configIni:GetNumValues("Levels")
-	for i = 1, amount do
-		local fileLevel = configIni:GetValue("Levels", i)
-		LEVELS[i] = cLevel.new(fileLevel)
+	for counter = 1, amount do
+		local fileLevel = configIni:GetValue("Levels", tostring(counter))
+		LEVELS[counter] = cLevel.new(fileLevel)
 	end
 end
 
