@@ -200,10 +200,9 @@ function CommandIsland(a_Split, a_Player)
 					islandInfo:Save()
 
 					if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-						a_Player:MoveToWorld(WORLD_NAME)
+						a_Player:ScheduleMoveToWorld(SKYBLOCK, Vector3d(posX, 151, posZ))
 					end
 
-					a_Player:TeleportToCoords(posX, 151, posZ)
 					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 5, "welcome"))
 					playerInfo:Save()
 				end

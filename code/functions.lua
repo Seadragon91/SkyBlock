@@ -114,20 +114,8 @@ end
 
 
 function TeleportToIsland(a_Player, a_IslandInfo)
-	local movedWorld = false
-
-	if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-		if (not a_Player:MoveToWorld(WORLD_NAME)) then
-			-- Didn't find the world
-			a_Player:SendMessageFailure(GetLanguage(a_Player):Get(3, 2, "missingWorld", { ["%1"] = WORLD_NAME }))
-			return
-		end
-		movedWorld = true
-	end
-
 	local playerInfo = GetPlayerInfo(a_Player)
-	local posX, posY, posZ
-	local yaw, pitch
+	local posX, posY, posZ, yaw, pitch
 	if (a_IslandInfo == nil) then
 		posX = 0
 		posZ = 0
@@ -150,10 +138,11 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 				local valid, posYHeight = SKYBLOCK:TryGetHeight(posX, posZ)
 				assert(valid, "TryGetHeight is not valid.") -- Should never occur
 
-				a_Player:TeleportToCoords(posX, posYHeight - 16, posZ)
-				if movedWorld then
+				if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
+					a_Player:ScheduleMoveToWorld(SKYBLOCK, Vector3d(posX, posY, posZ))
 					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcome"))
 				else
+					a_Player:TeleportToCoords(posX, posYHeight - 16, posZ)
 					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcomeBack"))
 				end
 				return
@@ -181,6 +170,7 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 		end
 	)
 end
+
 
 function GetLanguage(a_Player)
 	local playerInfo = GetPlayerInfo(a_Player)
