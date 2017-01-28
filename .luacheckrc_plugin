@@ -1,0 +1,5 @@
+ignore =
+{
+	"431",  -- Shadowing an upvalue.
+	"131/DEBUG",  -- Unused implicitly defined global variable.
+}
