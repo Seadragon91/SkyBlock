@@ -139,7 +139,7 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 				assert(valid, "TryGetHeight is not valid.") -- Should never occur
 
 				if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-					a_Player:ScheduleMoveToWorld(SKYBLOCK, Vector3d(posX, posY, posZ))
+					a_Player:ScheduleMoveToWorld(SKYBLOCK, Vector3d(posX, posYHeight - 16, posZ))
 					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 4, "welcome"))
 				else
 					a_Player:TeleportToCoords(posX, posYHeight - 16, posZ)
