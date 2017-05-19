@@ -182,7 +182,12 @@ end
 
 function LoadLanguageFiles()
     local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/languages")
-    if (#files == 0) then -- Write Default language file
+
+	if
+		#files == 0 or
+		not(cFile:IsFile(PLUGIN:GetLocalFolder() .. "/languages/english.ini"))
+	then
+		 -- Write Default language file
         LANGUAGES["english.ini"] = cLanguage.new()
         return
     end
