@@ -34,13 +34,12 @@ end
 -- Creates a island for the player.
 function CreateIsland(a_Player, a_PosX, a_PosZ)
 	-- Check for schematic file, if exists use it
-	local area = cBlockArea()
-	if (area:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. ISLAND_SCHEMATIC)) then
-		local weOffset = area:GetWEOffset()
+	if (ISLAND_AREA) then
+		local weOffset = ISLAND_AREA:GetWEOffset()
 		local wex = weOffset.x
 		local wey = weOffset.y
 		local wez = weOffset.z
-		area:Write(SKYBLOCK, a_PosX - wex, 150 - wey, a_PosZ - wez) -- Place the schematic at the island position
+		ISLAND_AREA:Write(SKYBLOCK, a_PosX - wex, 150 - wey, a_PosZ - wez, 3) -- Place the schematic at the island position
 
 		-- Add items to player inventory
 		a_Player:GetInventory():GetInventoryGrid():SetSlot(0, 0, cItem(E_ITEM_LAVA_BUCKET, 1));

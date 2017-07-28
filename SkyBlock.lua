@@ -19,6 +19,7 @@ BLOCK_VALUES = nil -- Store the points of block / meta
 LANGUAGES = nil -- Contains a list of languages
 LANGUAGE_DEFAULT = nil -- Default language file
 LANGUAGE_OTHERS = nil -- Enable other language files
+ISLAND_AREA = nil -- The island file
 
 function Initialize(Plugin)
 	Plugin:SetName("SkyBlock")
@@ -39,6 +40,11 @@ function Initialize(Plugin)
 	LANGUAGES = {}
 	LANGUAGE_DEFAULT = "english.ini"
 	LANGUAGE_OTHERS = 1
+
+	ISLAND_AREA = cBlockArea()
+	if not(ISLAND_AREA:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. ISLAND_SCHEMATIC)) then
+		ISLAND_AREA = nil
+	end
 
 	-- Load all lua files
 	LoadLuaFiles()

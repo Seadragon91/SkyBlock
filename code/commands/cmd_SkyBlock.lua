@@ -50,10 +50,7 @@ function CommandSkyBlock(a_Split, a_Player)
 					islandInfo:SetOwner(a_Player)
 					islandInfo:Save()
 
-					if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-						a_Player:ScheduleMoveToWorld(SKYBLOCK, Vector3d(posX, 151, posZ))
-					end
-
+					TeleportToIsland(a_Player, islandInfo)
 					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 5, "welcome"))
 					playerInfo:Save()
 				end
@@ -80,7 +77,7 @@ function CommandSkyBlock(a_Split, a_Player)
 			local wey = weOffset.y
 			local wez = weOffset.z
 
-			area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez) -- Paste the schematic
+			area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez, 3) -- Paste the schematic
 			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 6, "recreatedSpawn"))
 		else
 			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 6, "schematicError"))

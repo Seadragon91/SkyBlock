@@ -100,7 +100,7 @@ function OnWorldLoaded(a_World)
 				local wey = weOffset.y
 				local wez = weOffset.z
 
-				area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez) -- Paste the schematic
+				area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez, 3) -- Paste the schematic
 				SPAWN_CREATED = true
 				SaveConfiguration()
 			else -- Error or no schematic found, create default spawn
