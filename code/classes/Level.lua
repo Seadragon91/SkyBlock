@@ -4,31 +4,56 @@ cLevel = {}
 cLevel.__index = cLevel
 
 
-function cLevel.new(a_File)
+function cLevel.new(a_LevelName, a_Json)
 	local self = setmetatable({}, cLevel)
 
 	self.m_Challenges = {}
-	self:Load(a_File)
+	self:Load(a_LevelName, a_Json)
 	return self
 end
 
 
-function cLevel:Load(a_File)
-	local levelIni = cIniFile()
-	levelIni:ReadFile(PLUGIN:GetLocalFolder() .. "/challenges/" .. a_File)
 
-	self.m_LevelName = levelIni:GetValue("General", "LevelName")
-	self.m_Description = levelIni:GetValue("General", "Description")
+function cLevel:Load(a_LevelName, a_Json)
+	local fileChallenge = io.open(PLUGIN:GetLocalFolder() .. "/challenges/" .. a_Json.file, "rb")
+	local content = fileChallenge:read("*a")
+	fileChallenge:close()
 
-	local amount = levelIni:GetNumValues("Challenges")
-	for counter = 1, amount do
-		local challengeName = levelIni:GetValue("Challenges", tostring(counter))
-		local challengeInfo = LoadBasicInfos(challengeName, levelIni, self.m_LevelName)
-		if (challengeInfo ~= nil) then
-			-- Load the challenge specific values
-			if (challengeInfo:Load(levelIni)) then
-				self.m_Challenges[challengeName] = challengeInfo
-			end
+	self.m_LevelName = a_LevelName
+	self.m_DisplayItem = a_Json.displayItem
+
+	if a_Json.completeForNextLevel ~= nil then
+		self.m_CompleteForNextLevel = a_Json.completeForNextLevel or nil
+	end
+
+	local jsonChallenges = cJson:Parse(content)
+
+	for challengeName, tbChallenge in pairs(jsonChallenges) do
+		-- Default challengeType is items
+		local challengeType = tbChallenge.challengeType or "items"
+
+		local challengeInfo
+		if challengeType == "items" then
+			challengeInfo = cChallengeItems.new()
+		elseif challengeType == "value" then
+			challengeInfo = cChallengeValues.new()
+		elseif challengeType == "blocks" then
+			-- TODO:
+			-- challengeInfo = cChallengeBlocks.new()
+		else
+			assert(false, "Unknown challengeType: " .. challengeType)
 		end
+
+		if challengeInfo ~= nil then
+			challengeInfo:Load(self.m_LevelName, challengeName, tbChallenge)
+			self.m_Challenges[challengeName] = challengeInfo
+		end
+	end
+
+	local amount = GetAmount(self.m_Challenges)
+	if self.m_CompleteForNextLevel == nil then
+		self.m_CompleteForNextLevel = amount
+	elseif self.m_CompleteForNextLevel > amount then
+		self.m_CompleteForNextLevel = amount
 	end
 end

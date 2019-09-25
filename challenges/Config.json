@@ -1,0 +1,22 @@
+{
+	"levels": [ "Easy", "Medium", "Hard", "Master" ],
+	"Easy": {
+		"displayItem": 3,
+		"file": "Easy.json",
+		"completeForNextLevel": 7
+	},
+	"Medium": {
+		"displayItem": 42,
+		"file": "Medium.json",
+		"completeForNextLevel": 5
+	},
+	"Hard": {
+		"displayItem": 41,
+		"file": "Hard.json",
+		"completeForNextLevel": 5
+	},
+	"Master": {
+		"displayItem": 57,
+		"file": "Master.json"
+	}
+}

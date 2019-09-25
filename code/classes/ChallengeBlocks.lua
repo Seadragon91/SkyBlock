@@ -1,30 +1,29 @@
--- Challenge class for island value
+-- Challenge class for blocks in the island area
 
-cChallengeValues = {}
-cChallengeValues.__index = cChallengeValues
+cChallengeBlocks = {}
+cChallengeBlocks.__index = cChallengeBlocks
 
-function cChallengeValues.new()
-	local self = setmetatable({}, cChallengeValues)
-	setmetatable(cChallengeValues, {__index = cChallengeInfo})
+function cChallengeBlocks.new()
+	local self = setmetatable({}, cChallengeBlocks)
+	setmetatable(cChallengeBlocks, {__index = cChallengeInfo})
 
-	self.m_Calculations = {}
-	-- self.m_BlocksCounted = {}
+	self.m_CheckingBlocks = {}
 	return self
 end
 
 
-function cChallengeValues:CalculateValue(a_PlayerName)
+function cChallengeBlocks:CalculateValue(a_PlayerName)
 	self.callback =
 		function(a_World)
 			local foundPlayer = SKYBLOCK:DoWithPlayer(a_PlayerName, function() end)
 			if not(foundPlayer) then
-				-- Player left the skyblock world, abort calculating
+				-- Player left the skyblock world, abort checking for the blocks
 				return
 			end
 
-			local position = self.m_Calculations[a_PlayerName]["position"]
-			local chunks = self.m_Calculations[a_PlayerName]["chunks"]
-			local points = self.m_Calculations[a_PlayerName]["points"]
+			local position = self.m_CheckingBlocks[a_PlayerName]["position"]
+			local chunks = self.m_CheckingBlocks[a_PlayerName]["chunks"]
+			local points = self.m_CheckingBlocks[a_PlayerName]["points"]
 			local counter = 1
 
 			while true do
@@ -83,13 +82,15 @@ function cChallengeValues:CalculateValue(a_PlayerName)
 						local id = tonumber(tbIdMeta[1])
 						local meta = tonumber(tbIdMeta[2])
 
-						if (BLOCK_VALUES[id] ~= nil) then
-							if BLOCK_VALUES[id][meta] == nil then
-								points = points + (BLOCK_VALUES[id][0] * amount)
-							else
-								points = points + (BLOCK_VALUES[id][meta] * amount)
-							end
-						end
+
+
+						-- if (BLOCK_VALUES[id] ~= nil) then
+						-- 	if BLOCK_VALUES[id][meta] == nil then
+						-- 		points = points + (BLOCK_VALUES[id][0] * amount)
+						-- 	else
+						-- 		points = points + (BLOCK_VALUES[id][meta] * amount)
+						-- 	end
+						-- end
 					end
 
 
@@ -114,11 +115,12 @@ function cChallengeValues:CalculateValue(a_PlayerName)
 					-- 		end
 					-- 	end
 					-- end
+					print("Calc: ", sw:GetElapsedMilliseconds())
 				end
 
 				if (position + counter) == #chunks then
-					local value = round(self.m_Calculations[a_PlayerName]["points"] / 1000)
-					self.m_Calculations[a_PlayerName] = nil
+					local value = round(self.m_CheckingBlocks[a_PlayerName]["points"] / 1000)
+					self.m_CheckingBlocks[a_PlayerName] = nil
 					if (value >= self.m_Default.required.value) then
 						SKYBLOCK:DoWithPlayer(a_PlayerName,
 							function(a_Player)
@@ -128,13 +130,13 @@ function cChallengeValues:CalculateValue(a_PlayerName)
 					end
 					SKYBLOCK:DoWithPlayer(a_PlayerName,
 						function(a_Player)
-							a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.value.calculated", { ["%1"] = value, ["%2"] = self.m_Default.required.value}))
+							a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.info.calculated", { ["%1"] = value, ["%2"] = self.m_Default.required.value}))
 						end)
 
 					return
 				elseif counter == 1 then
-					self.m_Calculations[a_PlayerName]["position"] = position + counter
-					self.m_Calculations[a_PlayerName]["points"] = points
+					self.m_CheckingBlocks[a_PlayerName]["position"] = position + counter
+					self.m_CheckingBlocks[a_PlayerName]["points"] = points
 					SKYBLOCK:ScheduleTask(1, self.callback)
 					return
 				end
@@ -146,11 +148,11 @@ end
 
 
 -- Override
-function cChallengeValues:IsCompleted(a_Player)
+function cChallengeBlocks:IsCompleted(a_Player)
 	local playerInfo = GetPlayerInfo(a_Player)
 
-	if (self.m_Calculations[a_Player:GetName()] ~= nil) then
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.value.calculatingWait"))
+	if (self.m_CheckingBlocks[a_Player:GetName()] ~= nil) then
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.info.calculatingWait"))
 		return
 	end
 
@@ -160,10 +162,10 @@ function cChallengeValues:IsCompleted(a_Player)
 
 	local posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
 	local chunks = GetChunks(posX, posZ, ISLAND_DISTANCE / 2)
-	self.m_Calculations[a_Player:GetName()] = {}
-	self.m_Calculations[a_Player:GetName()]["position"] = 0
-	self.m_Calculations[a_Player:GetName()]["points"] = 0
-	self.m_Calculations[a_Player:GetName()]["chunks"] = chunks
+	self.m_CheckingBlocks[a_Player:GetName()] = {}
+	self.m_CheckingBlocks[a_Player:GetName()]["position"] = 0
+	self.m_CheckingBlocks[a_Player:GetName()]["points"] = 0
+	self.m_CheckingBlocks[a_Player:GetName()]["chunks"] = chunks
 
 	a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.info.calculatingStarted"))
 	self:CalculateValue(a_Player:GetName())
@@ -171,25 +173,25 @@ end
 
 
 -- Override
-function cChallengeValues:GetChallengeType()
-	return "VALUES"
+function cChallengeBlocks:GetChallengeType()
+	return "BLOCKS"
 end
 
 
 -- Override
-function cChallengeValues:InfoText(a_Player)
+function cChallengeBlocks:InfoText(a_Player)
 	return GetLanguage(a_Player):Get("challenges.info.valueInfo")
 end
 
 
 -- Override
-function cChallengeValues:ToString()
-	return "cChallengeValues"
+function cChallengeBlocks:ToString()
+	return "cChallengeBlocks"
 end
 
 
 -- Override
-function cChallengeValues:Load(a_LevelName, a_ChallengeName, a_Json)
+function cChallengeBlocks:Load(a_LevelName, a_ChallengeName, a_Json)
 	-- Read basic info from challenge
 	cChallengeInfo.Load(self, a_LevelName, a_ChallengeName, a_Json)
 

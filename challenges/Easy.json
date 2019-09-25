@@ -1,0 +1,211 @@
+{
+    "applecollector": {
+        "description": "Collect apples from trees.",
+        "displayItem": 260,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "apple:3",
+                "text": "3 apples"
+            },
+            "reward": {
+                "items": "sapling:1 sapling:1:1 sapling:1:2 sapling:1:3 sapling:1:4 sapling:2:5",
+                "text": "saplings from every type",
+                "xp": 5
+            }
+        },
+        "required": {
+            "items": "apple:2",
+            "text": "2 apples"
+        },
+        "reward": {
+		    "items": "sapling:2 sapling:2:1 sapling:2:2 sapling:2:3 sapling:2:4 sapling:4:5",
+            "text": "saplings from every type",
+            "xp": 30
+        }
+    },
+    "cactusfarmer": {
+        "challengeType": "items",
+        "description": "Harvest cactus from a farm.",
+        "displayItem": 81,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "cactus:70",
+                "text": "70 cactus"
+            },
+            "reward": {
+                "items": "sand:1",
+                "text": "1 sand",
+                "xp": 5
+            }
+        },
+        "required": {
+            "items": "cactus:64",
+            "text": "64 cactus"
+        },
+        "reward": {
+            "items": "sand:10",
+            "text": "10 sand",
+            "xp": 30
+        }
+    },
+    "cobblestonegenerator": {
+        "challengeType": "items",
+        "description": "Mine from a cobblestone generator.",
+        "displayItem": 4,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "cobblestone:80",
+                "text": "80 cobble stone"
+            },
+            "reward": {
+                "items": "leather:1",
+                "text": "1 leather",
+                "xp": 5
+            }
+        },
+        "required": {
+            "items": "cobblestone:64",
+            "text": "64 cobble stone"
+        },
+        "reward": {
+            "items": "leather:3",
+            "text": "3 leather",
+            "xp": 30
+        }
+    },
+    "grassmaker": {
+        "challengeType": "items",
+        "description": "Trade a dirt for an grass block",
+        "displayItem": 2,
+        "required": {
+            "items": "dirt:1",
+            "text": "1 dirt block"
+        },
+        "reward": {
+            "items": "grass:1",
+            "text": "1 grass block",
+            "xp": 5
+        }
+    },
+    "melonfarmer": {
+        "challengeType": "items",
+        "description": "Harvest slices of melon from a farm.",
+        "displayItem": 360,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "melon:140",
+                "text": "140 melon slices"
+            },
+            "reward": {
+                "items": "dirt:1",
+                "text": "1 dirt",
+                "xp": 5
+            }
+        },
+        "required": {
+            "items": "melon:128",
+            "text": "128 melon slices"
+        },
+        "reward": {
+            "items": "dirt:5",
+            "text": "5 dirt",
+            "xp": 30
+        }
+    },
+    "novicebuilder": {
+        "challengeType": "value",
+        "description": "Reach island value 20",
+        "displayItem": 86,
+        "required": {
+            "text": "value 20",
+            "value": 20
+        },
+        "reward": {
+            "items": "iron_pickaxe:1 dirt:5",
+            "text": "1 iron pickaxe and 5 dirt",
+            "xp": 50
+        }
+    },
+    "pumpkinfarmer": {
+        "challengeType": "items",
+        "description": "Harvest pumpkins from a farm.",
+        "displayItem": 86,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "pumpkin:70",
+                "text": "70 pumpkins"
+            },
+            "reward": {
+                "items": "dirt:1",
+                "text": "1 dirt",
+                "xp": 5
+            }
+        },
+        "required": {
+            "items": "pumpkin:64",
+            "text": "64 pumpkins"
+        },
+        "reward": {
+            "items": "dirt:5",
+            "text": "5 dirt",
+            "xp": 30
+        }
+    },
+    "sugarfarmer": {
+        "challengeType": "items",
+        "description": "Harvest sugar canes from a farm.",
+        "displayItem": 338,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "reeds:70",
+                "text": "70 sugar canes"
+            },
+            "reward": {
+                "items": "dirt:1 clay:1",
+                "text": "1 dirt and 1 clay blocks",
+                "xp": 5
+            }
+        },
+        "required": {
+            "items": "reeds:64",
+            "text": "64 sugar canes"
+        },
+        "reward": {
+            "items": "dirt:5 clay:15",
+            "text": "5 dirt and 15 clay blocks",
+            "xp": 30
+        }
+    },
+    "wheatfarmer": {
+        "challengeType": "items",
+        "description": "Harvest wheat from a farm.",
+        "displayItem": 296,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "wheat:70",
+                "text": "70 wheat"
+            },
+            "reward": {
+                "items": "dirt:1",
+                "text": "1 dirt",
+                "xp": 5
+            }
+        },
+        "required": {
+            "items": "wheat:64",
+            "text": "64 wheat"
+        },
+        "reward": {
+            "items": "dirt:5",
+            "text": "5 dirt",
+            "xp": 30
+        }
+    }
+}

@@ -1,0 +1,149 @@
+{
+    "baker": {
+        "challengeType": "items",
+        "description": "Bake cakes, pumpkin pies, and cookies.",
+        "displayItem": 354,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "cake:7 pumpkin_pie:7 cookie:150",
+                "text": "7 cakes, 7 pumpkin pies and 150 cookies"
+            },
+            "reward": {
+                "items": "iron_ore:2 gold_ingot:1",
+                "text": "2 iron and 1 gold",
+                "xp": 10
+            }
+        },
+        "required": {
+            "items": "cake:5 pumpkin_pie:5 cookie:128",
+            "text": "5 cakes, 5 pumpkin pies and 128 cookies"
+        },
+        "reward": {
+            "items": "gold_ingot:5 diamond:1",
+            "text": "5 gold and 1 diamond",
+            "xp": 100
+        },
+        "takeItems": true
+    },
+    "eggfarmer": {
+        "challengeType": "items",
+        "description": "Collect eggs, lots of eggs",
+        "displayItem": 344,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "egg:300",
+                "text": "300 eggs"
+            },
+            "reward": {
+                "items": "gold_ingot:1 emerald:2",
+                "text": "1 gold and 2 emeralds",
+                "xp": 10
+            }
+        },
+        "required": {
+            "items": "egg:256",
+            "text": "256 eggs"
+        },
+        "reward": {
+            "items": "gold_ingot:5 emerald:5",
+            "text": "5 gold and 5 emeralds",
+            "xp": 100
+        }
+    },
+    "expertbuilder": {
+        "challengeType": "value",
+        "description": "Reach island value 250.",
+        "displayItem": 41,
+        "required": {
+            "text": "value 250",
+            "value": 250
+        },
+        "reward": {
+            "items": "diamond:1 dirt:32 sand:32",
+            "text": "1 diamond, 32 dirt and 32 sand",
+            "xp": 200
+        }
+    },
+    "explorer": {
+        "challengeType": "items",
+        "description": "Collect items for exploration, nether items.",
+        "displayItem": 370,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "netherrack:80 soul_sand:38 ghast_tear:1 map:1 compass:1 clock:1",
+                "text": "80 nether rack, 38 soul sand, 1 ghast tear, 1 map, 1 compass and 1 clock"
+            },
+            "reward": {
+                "items": "rail:64 iron_ore:1 name_tag:1 emerald:5",
+                "text": "64 rails, 1 iron, 1 tag and 5 emerald",
+                "xp": 10
+            }
+        },
+        "required": {
+            "items": "netherrack:64 soul_sand:32 ghast_tear:1 map:1 compass:1 clock:1",
+            "text": "64 nether rack, 32 soul sand, 1 ghast tear, 1 map, 1 compass and 1 clock"
+        },
+        "reward": {
+            "items": "golden_rail:32 rail:256 diamond:1 spawn_egg:98",
+            "text": "288 rails, 1 ocelot, 1 diamond",
+            "xp": 100
+        }
+    },
+    "homeowner": {
+        "challengeType": "blocks",
+        "description": "Build a house with furnishings.",
+        "displayItem": 324,
+        "required": {
+            "blocks": "::bed_block workbench glass wooden_door bookshelf torch",
+            "text": "a bed, workbench, glass, wooden door, bookshelf and a torch"
+        },
+        "reward": {
+            "items": "::84:1 2267:1 22:10",
+            "text": "1 jukebox, 1 disc and 10 lapis lazuli",
+            "xp": 100
+        }
+    },
+    "netherportal": {
+        "challengeType": "blocks",
+        "description": "Build a nether portal on your island.",
+        "displayItem": 87,
+        "required": {
+            "blocks": "::obsidian:10 portal:1",
+            "text": "a active nether portal"
+        },
+        "reward": {
+            "items": "diamond_sword:1",
+            "text": "1 diamond sword",
+            "xp": 100
+        }
+    },
+    "pearlcollector": {
+        "challengeType": "items",
+        "description": "Collect enderpearls from endermen.",
+        "displayItem": 368,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "ender_pearl:15",
+                "text": "15 ender pearls"
+            },
+            "reward": {
+                "items": "gold_ingot:1 blaze_rod:1",
+                "text": "1 gold and 1 blaze rod",
+                "xp": 10
+            }
+        },
+        "required": {
+            "items": "ender_pearl:10",
+            "text": "10 ender pearls"
+        },
+        "reward": {
+            "items": "gold_ingot:5 blaze_rod:1",
+            "text": "5 gold and 1 blaze rod",
+            "xp": 100
+        }
+    }
+}

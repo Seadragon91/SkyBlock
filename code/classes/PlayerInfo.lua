@@ -16,6 +16,7 @@ function cPlayerInfo.new(a_Player)
 	self.m_InFriendList = {}
 	self.m_IsRestarting = false
 	self.m_Language = ""
+	self.m_WinChallengePosition = 1
 
 	self:Load(a_Player) -- Check if there is a player file, if yes load it
 	if (self.m_IslandNumber ~= -1) then -- Load island file
@@ -23,6 +24,8 @@ function cPlayerInfo.new(a_Player)
 	end
 	return self
 end
+
+
 
 -- Check if player has completed the challenge
 function cPlayerInfo:HasCompleted(a_LevelName, a_ChallengeName)

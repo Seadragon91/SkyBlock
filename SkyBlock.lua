@@ -62,7 +62,7 @@ function Initialize(Plugin)
 		return false
 	end
 
-    -- Create language folder
+	-- Create language folder
 	cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/languages/")
 	LoadLanguageFiles()
 
@@ -70,7 +70,7 @@ function Initialize(Plugin)
 	LoadBlockValues()
 
 	-- Load all ChallengeInfos
-	LoadAllLevels(PLUGIN:GetLocalFolder() .. "/challenges/Config.ini")
+	LoadAllLevels(PLUGIN:GetLocalFolder() .. "/challenges/Config.json")
 
 	-- Load all PlayerInfos and IslandInfos from players who are in the world
 	LoadPlayerInfos()
@@ -90,8 +90,13 @@ function Initialize(Plugin)
 
 	-- Command Bindings
 	cPluginManager:BindCommand("/skyblock", "skyblock.command", CommandSkyBlock , " - Access to the skyblock plugin")
-	cPluginManager:BindCommand("/challenges", "skyblock.command", CommandChallenges , " - Access to the challenges")
 	cPluginManager:BindCommand("/island", "skyblock.command", CommandIsland , " - Access to the island commands")
+	cPluginManager:BindCommand("/challenges", "skyblock.command",
+		function(a_Split, a_Player)
+			cChallengeWindow.Open(a_Player)
+			return true
+		end,
+	" - Access to the challenges")
 
 	LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
@@ -137,27 +142,23 @@ end
 
 -- Only for the world that the plugin is using
 function LoadPlayerInfos()
-	cRoot:Get():ForEachPlayer(function(a_Player)
-		if (a_Player:GetWorld():GetName() == WORLD_NAME) then
-			local playerInfo = cPlayerInfo.new(a_Player)
-			if (cFile:IsFolder(PLUGIN:GetLocalFolder() .. "/islands/" .. playerInfo.m_IslandNumber .. ".ini")) then
-				GetIslandInfo(playerInfo.m_IslandNumber)
-			end
-
-			PLAYERS[a_Player:GetUUID()] = playerInfo
-		end
-	end);
+	SKYBLOCK:ForEachPlayer(
+		function(a_Player)
+			GetPlayerInfo(a_Player)
+		end);
 end
 
 -- Loads all level challenges
 function LoadAllLevels(a_File)
-	local configIni = cIniFile()
-	configIni:ReadFile(a_File)
+	local fileLevels = io.open(a_File, "rb")
+	local content = fileLevels:read("*a")
+	fileLevels:close()
 
-	local amount = configIni:GetNumValues("Levels")
-	for counter = 1, amount do
-		local fileLevel = configIni:GetValue("Levels", tostring(counter))
-		LEVELS[counter] = cLevel.new(fileLevel)
+	local jsonLevels = cJson:Parse(content)
+
+	for counter = 1, #jsonLevels.levels do
+		local levelName = jsonLevels.levels[counter]
+		LEVELS[counter] = cLevel.new(levelName, jsonLevels[levelName])
 	end
 end
 
@@ -187,26 +188,26 @@ function LoadBlockValues()
 end
 
 function LoadLanguageFiles()
-    local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/languages")
+	local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/languages")
 
 	if
 		#files == 0 or
 		not(cFile:IsFile(PLUGIN:GetLocalFolder() .. "/languages/english.ini"))
 	then
 		 -- Write Default language file
-        LANGUAGES["english.ini"] = cLanguage.new()
-        return
-    end
+	    LANGUAGES["english.ini"] = cLanguage.new()
+	    return
+	end
 
-    if (LANGUAGE_OTHERS) then
-        for i = 1, #files do
-            if (cFile:IsFile(PLUGIN:GetLocalFolder() .. "/languages/" .. files[i])) then
-                LANGUAGES[files[i]] = cLanguage.new(files[i])
-            end
-        end
-    else
-        LANGUAGES[LANGUAGE_DEFAULT] = cLanguage.new(LANGUAGE_DEFAULT)
-    end
+	if (LANGUAGE_OTHERS) then
+	    for i = 1, #files do
+	        if (cFile:IsFile(PLUGIN:GetLocalFolder() .. "/languages/" .. files[i])) then
+	            LANGUAGES[files[i]] = cLanguage.new(files[i])
+	        end
+	    end
+	else
+	    LANGUAGES[LANGUAGE_DEFAULT] = cLanguage.new(LANGUAGE_DEFAULT)
+	end
 end
 
 function LoadLuaFiles()

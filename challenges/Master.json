@@ -1,0 +1,171 @@
+{
+    "emeraldcollector": {
+        "challengeType": "items",
+        "description": "Collect emeralds.",
+        "displayItem": 388,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "emerald:60",
+                "text": "60 emeralds"
+            },
+            "reward": {
+                "items": "diamond:1",
+                "text": "1 diamond",
+                "xp": 20
+            }
+        },
+        "required": {
+            "items": "emerald:50",
+            "text": "50 emeralds"
+        },
+        "reward": {
+            "items": "diamond:2",
+            "text": "2 diamonds",
+            "xp": 150
+        }
+    },
+    "glassmaker": {
+        "challengeType": "items",
+        "description": "Collect every color of stained glass.",
+        "displayItem": 95,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "stained_glass:20:0 stained_glass:20:1 stained_glass:20:2 stained_glass:20:3 stained_glass:20:4 stained_glass:20:5 stained_glass:20:6 stained_glass:20:7 stained_glass:20:8 stained_glass:20:9 stained_glass:20:10 stained_glass:20:11 stained_glass:20:12 stained_glass:20:13 stained_glass:20:14 stained_glass:20:15",
+                "text": "20 of every stained glass color"
+            },
+            "reward": {
+                "items": "emerald:5 spawn_egg:1:91",
+                "text": "5 emeralds and 1 spawn egg for sheep",
+                "xp": 20
+            }
+        },
+        "required": {
+            "items": "stained_glass:16:0 stained_glass:16:1 stained_glass:16:2 stained_glass:16:3 stained_glass:16:4 stained_glass:16:5 stained_glass:16:6 stained_glass:16:7 stained_glass:16:8 stained_glass:16:9 stained_glass:16:10 stained_glass:16:11 stained_glass:16:12 stained_glass:16:13 stained_glass:16:14 stained_glass:16:15",
+            "text": "16 of every stained glass color"
+        },
+        "reward": {
+            "items": "diamond:2 record_mellohi:1 record_stal:1 record_mall:1 spawn_egg:1:91 emerald:5",
+            "text": "2 diamonds, 1 spawn egg for sheep, 5 emeralds and music discs",
+            "xp": 150
+        }
+    },
+    "maestro": {
+        "challengeType": "items",
+        "description": "Make a jukebox and collect all music discs.",
+        "displayItem": 2256,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "record_13:1 record_cat:1 record_blocks:1 record_chirp:1 record_far:1 record_mall:1 record_mellohi:1 record_stal:1 record_strad:1 record_ward:1 record_11:1 record_wait:1 jukebox:1",
+                "text": "1 juke box and every type of music disc"
+            },
+            "reward": {
+                "items": "gold_ingot:2 diamond:2",
+                "text": "2 gold and 2 diamond",
+                "xp": 20
+            }
+        },
+        "required": {
+            "items": "record_13:1 record_cat:1 record_blocks:1 record_chirp:1 record_far:1 record_mall:1 record_mellohi:1 record_stal:1 record_strad:1 record_ward:1 record_11:1 record_wait:1 jukebox:1",
+            "text": "1 juke box and every type of music disc"
+        },
+        "reward": {
+            "items": "diamond:3 emerald:10",
+            "text": "3 diamonds and 10 emeralds"
+        }
+    },
+    "masterfarmer": {
+        "challengeType": "items",
+        "description": "Collect a large amount of farmed items.",
+        "displayItem": 293,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "melon:150 sugar:150 wheat:150 potato:150 carrot:150 pumpkin:150 cactus:150 golden_carrot:1 golden_apple:1",
+                "text": "150 melon slices, 150 sugar, 150 wheat, 150 potatoes, 150 carrots, 150 pumpkins, 150 catus, 1 golden carrot and 1 golden apple"
+            },
+            "reward": {
+                "items": "emerald:5 gold_ingot:2",
+                "text": "5 emeralds and 2 gold",
+                "xp": 20
+            }
+        },
+        "required": {
+            "items": "melon:128 sugar:128 wheat:128 potato:128 carrot:128 pumpkin:128 cactus:128 golden_carrot:1 golden_apple:1",
+            "text": "128 melon slices, 128 sugar, 128 wheat, 128 potatoes, 128 carrots, 128 pumpkins, 128 catus, 1 golden carrot and 1 golden apple"
+        },
+        "reward": {
+            "items": "diamond:3 emerald:5",
+            "text": "3 diamonds and 5 emeralds",
+            "xp": 150
+        }
+    },
+    "skylord": {
+        "challengeType": "value",
+        "description": "Get an island value of 1000.",
+        "displayItem": 57,
+        "required": {
+            "text": "value 1000",
+            "value": 1000
+        },
+        "reward": {
+            "items": "diamond:9",
+            "text": "9 diamonds",
+            "xp": 500
+        }
+    },
+    "topchef": {
+        "challengeType": "items",
+        "description": "Collect every kind of edible food.",
+        "displayItem": 391,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "potato:1 bread:1 cake:1 cooked_chicken:1 cookedfished:1:0 cookedfished:1:1 fish:1:0 cooked_porkchop:1 cookie:1 golden_apple:1:0 golden_carrot:1 mushroom_stew:1 pumpkin_pie:1 cooked_beef:1 melon:1 carrot:1",
+                "text": "a potatoe, bread, cake, cooked chicken, cooked fish, cooked salmon, raw fish, cooked popkchop, cookie, golden apple, golden carrot, mushroom soup, pumpkin pie, steak, melon slice and a carrot"
+            },
+            "reward": {
+                "items": "gold_ingot:3 spawn_egg:96 emerald:5",
+                "text": "3 gold, 1 mushroom cow and 5 emeralds",
+                "xp": 20
+            }
+        },
+        "required": {
+            "items": "potato:1 bread:1 cake:1 cooked_chicken:1 cookedfished:1:0 cookedfished:1:1 fish:1:0 cooked_porkchop:1 cookie:1 golden_apple:1:0 golden_carrot:1 mushroom_stew:1 pumpkin_pie:1 cooked_beef:1 melon:1 carrot:1",
+            "text": "a potatoe, bread, cake, cooked chicken, cooked fish, cooked salmon, raw fish, cooked popkchop, cookie, golden apple, golden carrot, mushroom soup, pumpkin pie, steak, melon slice and a carrot"
+        },
+        "reward": {
+            "items": "diamond:2 record_cat:1 record_blocks:1 record_far:1 spawn_egg:96 emerald:5",
+            "text": "2 diamonds, 3 music discs, 1 spawn egg for mushroom cow and 5 emeralds",
+            "xp": 150
+        }
+    },
+    "woolcollector": {
+        "challengeType": "items",
+        "description": "Collect every color of wool.",
+        "displayItem": 35,
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "wool:40:0 wool:40:1 wool:40:2 wool:40:3 wool:40:4 wool:40:5 wool:40:6 wool:40:7 wool:40:8 wool:40:9 wool:40:10 wool:40:11 wool:40:12 wool:40:13 wool:40:14 wool:40:15",
+                "text": "40 of every colored wool"
+            },
+            "reward": {
+                "items": "emerald:5 spawn_egg:1:91",
+                "text": "5 emeralds and 1 spawn egg for sheep",
+                "xp": 20
+            }
+        },
+        "required": {
+            "items": "wool:35:0 wool:40:1 wool:40:2 wool:40:3 wool:40:4 wool:40:5 wool:40:6 wool:40:7 wool:40:8 wool:40:9 wool:40:10 wool:40:11 wool:40:12 wool:40:13 wool:40:14 wool:40:15",
+            "text": "35 of every colored wool"
+        },
+        "reward": {
+            "items": "diamond:2 record_mellohi:1 record_stal:1 record_mall:1 spawn_egg:1:91 emerald:5",
+            "text": "2 diamonds, 1 spawn egg for sheep, 5 emeralds and music discs",
+            "xp": 150
+        }
+    }
+}
