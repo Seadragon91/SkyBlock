@@ -23,7 +23,7 @@ ISLAND_AREA = nil -- The island file
 
 function Initialize(Plugin)
 	Plugin:SetName("SkyBlock")
-	Plugin:SetVersion(3)
+	Plugin:SetVersion(4)
 
 	PLUGIN = Plugin
 	ISLAND_NUMBER = 0
