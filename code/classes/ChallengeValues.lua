@@ -22,9 +22,9 @@ function cChallengeValues:CalculateValue(a_PlayerName)
 				return
 			end
 
-			local position = self.m_Calculations[a_PlayerName]["position"]
-			local chunks = self.m_Calculations[a_PlayerName]["chunks"]
-			local points = self.m_Calculations[a_PlayerName]["points"]
+			local position = self.m_Calculations[a_PlayerName].position
+			local chunks = self.m_Calculations[a_PlayerName].chunks
+			local points = self.m_Calculations[a_PlayerName].points
 			local counter = 1
 
 			while true do
@@ -77,47 +77,42 @@ function cChallengeValues:CalculateValue(a_PlayerName)
 
 
 					-- ## Fastest solution: Needs extra code in cuberite (PC: 0 to 3ms, PI: 1 to 3 ms)
-					local blocksCounted = blockArea:CountAllNonAirBlocksAndMetas()
-					for idMeta, amount in pairs(blocksCounted) do
-						local tbIdMeta = StringSplit(idMeta, "-")
-						local id = tonumber(tbIdMeta[1])
-						local meta = tonumber(tbIdMeta[2])
-
-						if (BLOCK_VALUES[id] ~= nil) then
-							if BLOCK_VALUES[id][meta] == nil then
-								points = points + (BLOCK_VALUES[id][0] * amount)
-							else
-								points = points + (BLOCK_VALUES[id][meta] * amount)
-							end
-						end
-					end
+					-- local blocksCounted = blockArea:CountAllNonAirBlocksAndMetas()
+					-- for idMeta, amount in pairs(blocksCounted) do
+					-- 	local tbIdMeta = StringSplit(idMeta, "-")
+					-- 	local id = tonumber(tbIdMeta[1])
+					-- 	local meta = tonumber(tbIdMeta[2])
+--
+					-- 	if (BLOCK_VALUES[id] ~= nil) then
+					-- 		if BLOCK_VALUES[id][meta] == nil then
+					-- 			points = points + (BLOCK_VALUES[id][0] * amount)
+					-- 		else
+					-- 			points = points + (BLOCK_VALUES[id][meta] * amount)
+					-- 		end
+					-- 	end
+					-- end
 
 
 
 					-- ## Faster, but still slow (13 to 20 ms)
 					-- local sw = cStopWatch.new()
 					-- sw:Start()
-					-- for id, metaPoint in pairs(BLOCK_VALUES) do
-					-- 	for meta, point in pairs(metaPoint) do
-					-- 		-- local amount = 0
-					-- 		-- if tbCounted[id] ~= nil and tbCounted[id][meta] ~= nil then
-					-- 		-- amount = tbCounted[id][meta]
-					-- 		-- end
-					--
-					-- 		local amount = blockArea:CountSpecificBlocks(id, meta)
-					-- 		if (amount > 0) and (BLOCK_VALUES[id] ~= nil) then
-					-- 			if BLOCK_VALUES[id][meta] == nil then
-					-- 				points = points + (BLOCK_VALUES[id][0] * amount)
-					-- 			else
-					-- 				points = points + (BLOCK_VALUES[id][meta] * amount)
-					-- 			end
-					-- 		end
-					-- 	end
-					-- end
+					for id, metaPoint in pairs(BLOCK_VALUES) do
+						for meta, point in pairs(metaPoint) do
+							local amount = blockArea:CountSpecificBlocks(id, meta)
+							if (amount > 0) and (BLOCK_VALUES[id] ~= nil) then
+								if BLOCK_VALUES[id][meta] == nil then
+									points = points + (BLOCK_VALUES[id][0] * amount)
+								else
+									points = points + (BLOCK_VALUES[id][meta] * amount)
+								end
+							end
+						end
+					end
 				end
 
 				if (position + counter) == #chunks then
-					local value = round(self.m_Calculations[a_PlayerName]["points"] / 1000)
+					local value = round(self.m_Calculations[a_PlayerName].points / 1000)
 					self.m_Calculations[a_PlayerName] = nil
 					if (value >= self.m_Default.required.value) then
 						SKYBLOCK:DoWithPlayer(a_PlayerName,
@@ -133,15 +128,15 @@ function cChallengeValues:CalculateValue(a_PlayerName)
 
 					return
 				elseif counter == 1 then
-					self.m_Calculations[a_PlayerName]["position"] = position + counter
-					self.m_Calculations[a_PlayerName]["points"] = points
-					SKYBLOCK:ScheduleTask(1, self.callback)
+					self.m_Calculations[a_PlayerName].position = position + counter
+					self.m_Calculations[a_PlayerName].points = points
+					SKYBLOCK:ScheduleTask(5, self.callback)
 					return
 				end
 				counter = counter + 1
 			end
 		end
-	SKYBLOCK:ScheduleTask(1, self.callback)
+	SKYBLOCK:ScheduleTask(5, self.callback)
 end
 
 
@@ -161,11 +156,11 @@ function cChallengeValues:IsCompleted(a_Player)
 	local posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
 	local chunks = GetChunks(posX, posZ, ISLAND_DISTANCE / 2)
 	self.m_Calculations[a_Player:GetName()] = {}
-	self.m_Calculations[a_Player:GetName()]["position"] = 0
-	self.m_Calculations[a_Player:GetName()]["points"] = 0
-	self.m_Calculations[a_Player:GetName()]["chunks"] = chunks
+	self.m_Calculations[a_Player:GetName()].position = 0
+	self.m_Calculations[a_Player:GetName()].points = 0
+	self.m_Calculations[a_Player:GetName()].chunks = chunks
 
-	a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.info.calculatingStarted"))
+	a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.value.calculatingStarted"))
 	self:CalculateValue(a_Player:GetName())
 end
 

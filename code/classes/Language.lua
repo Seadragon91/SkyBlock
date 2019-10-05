@@ -35,18 +35,20 @@ function cLanguage:Create()
 
 	-- Help
 	self.m_Sentences.skyblock.help = {}
-	self.m_Sentences.skyblock.help.title = "--- Commands for the skyblock plugin ---"
-	self.m_Sentences.skyblock.help["1"] = "/skyblock join - Teleports yout to the spawn platform of the skyblock world."
-	self.m_Sentences.skyblock.help["2"] = "/skyblock play - Get an island and start playing."
+	self.m_Sentences.skyblock.help.title = "--- " .. cChatColor.Green .. "Commands for the skyblock plugin" .. cChatColor.White .. " ---"
+	self.m_Sentences.skyblock.help[1] = "/skyblock join - Teleports you to the spawn platform of the skyblock world."
+	self.m_Sentences.skyblock.help[2] = "/skyblock play - Get an island and start playing."
 
-	self.m_Sentences.skyblock.help["3"] = "/island home - Teleport back to your island"
-	self.m_Sentences.skyblock.help["4"] = "/island home set - Change your island home location"
-	self.m_Sentences.skyblock.help["5"] = "/island obsidian - Change obsidian back to lava"
-	self.m_Sentences.skyblock.help["6"] = "/island add <player> - Add a player to your friend list"
-	self.m_Sentences.skyblock.help["7"] = "/island remove <player> - Remove a player from your friend list"
-	self.m_Sentences.skyblock.help["8"] = "/island join <player> - Teleport to a friends island"
-	self.m_Sentences.skyblock.help["9"] = "/island list - List your friends and islands who you can join"
-	self.m_Sentences.skyblock.help["10"] = "/island restart - Start an new island"
+	self.m_Sentences.skyblock.help[3] = "/island home - Teleport back to your island"
+	self.m_Sentences.skyblock.help[4] = "/island home set - Change your island home location"
+	self.m_Sentences.skyblock.help[5] = "/island obsidian - Change obsidian back to lava"
+	self.m_Sentences.skyblock.help[6] = "/island add <player> - Add a player to your friend list"
+	self.m_Sentences.skyblock.help[7] = "/island remove <player> - Remove a player from your friend list"
+	self.m_Sentences.skyblock.help[8] = "/island join <player> - Teleport to a friends island"
+	self.m_Sentences.skyblock.help[9] = "/island list - List your friends and islands who you can join"
+	self.m_Sentences.skyblock.help[10] = "/island restart - Start an new island"
+
+	self.m_Sentences.skyblock.help[11] = "/challenges - Opens the challenge window"
 
 	-- Join
 	self.m_Sentences.skyblock.join = {}
@@ -71,20 +73,8 @@ function cLanguage:Create()
 	self.m_Sentences.skyblock.language.unknownLanguage = "There is no language file with that name."
 	self.m_Sentences.skyblock.language.changedLanguage = "Changed language to %1."
 
-
-	-- cmd_Challenges.lua
-
 	-- challenges
 	self.m_Sentences.challenges = {}
-
-	-- General
-	-- self.m_Indexes[2][2] = "General"
-	-- self.m_Sentences[2][2] = {}
-	-- self.m_Sentences[2][2]["level"] = "--- Level: %1 ---"
-	-- self.m_Sentences[2][2]["lockedLevels"] = "Locked levels: "
-	-- self.m_Sentences[2][2]["unknownName"] = "There is no challenge with that name."
-	-- self.m_Sentences[2][2]["unknownArg"] = "Unknwown argument."
-	-- self.m_Sentences[2][2]["unknownArg"] = "Unknwown argument."
 
 	-- ChallengeInfo.lua
 	self.m_Sentences.challenges.info = {}
@@ -93,9 +83,11 @@ function cLanguage:Create()
 	self.m_Sentences.challenges.info.completed = "Congrats you completed the challenge %1."
 	self.m_Sentences.challenges.info.allLevels = "You completed all levels and all challenges."
 	self.m_Sentences.challenges.info.nextLevel = "Congrats. You unlocked next level %1."
+	self.m_Sentences.challenges.info.itemsDropped = "Reward items dropped, as your inventory had not enough place."
 
 	-- ChallengeWindow.lua
 	self.m_Sentences.challenges.window = {}
+	self.m_Sentences.challenges.window.title = cChatColor.Green .. "Challenges"
 	self.m_Sentences.challenges.window.isRepeatable = cChatColor.LightBlue .. "This challenge is repeatable"
 	self.m_Sentences.challenges.window.isCompleted = cChatColor.LightPurple .. "This challenge has been completed"
 	self.m_Sentences.challenges.window.requiredItems = cChatColor.Yellow .. "This items are required:"
@@ -105,7 +97,9 @@ function cLanguage:Create()
 	self.m_Sentences.challenges.window.clickToComplete = cChatColor.Yellow .. "Click to complete this challenge"
 	self.m_Sentences.challenges.window.goBack = cChatColor.LightBlue .. "Click to go back"
 	self.m_Sentences.challenges.window.goForward = cChatColor.LightBlue .. "Click to go forward"
-	self.m_Sentences.challenges.window.moreToUnlock = "Complete %1 more to unlock"
+	self.m_Sentences.challenges.window.moreToUnlock = cChatColor.Yellow .. "Complete %1 more to unlock"
+	self.m_Sentences.challenges.window.nextLevel = cChatColor.LightBlue .. "Next Level: " .. cChatColor.Green .. " %1"
+	self.m_Sentences.challenges.window.levelInfo = cChatColor.Green .. "Level: %1"
 
 	-- ChallengeValues.lua
 	self.m_Sentences.challenges.value = {}
@@ -130,7 +124,7 @@ function cLanguage:Create()
 	-- General
 	self.m_Sentences.island.general = {}
 	self.m_Sentences.island.general.noIsland = "You have no island. Type /skyblock play first."
-	self.m_Sentences.island.general.unknownArg = "Unknown argument."
+	self.m_Sentences.island.general.unknownArg = "This command is unknown. Type /skyblock help for a list of commands and arguments."
 	self.m_Sentences.island.general.notHere = "This command only works in the world %1."
 	self.m_Sentences.island.general.noPlayer = "There is no player with that name."
 
@@ -166,7 +160,7 @@ function cLanguage:Create()
 	-- Restart
 	self.m_Sentences.island.restart = {}
 	self.m_Sentences.island.restart.running = "This command is running. Please wait..."
-	self.m_Sentences.island.restart.notOwner = "Restart not possible, you are not the real owner of this island. If you want to start an own one, type again /island.restart."
+	self.m_Sentences.island.restart.notOwner = "Restart not possible, you are not the real owner of this island. If you want to start an own one, type again /island restart."
 	self.m_Sentences.island.restart.wait = "Please wait 10s..."
 	self.m_Sentences.island.restart.newIsland = "Good luck with your new island."
 

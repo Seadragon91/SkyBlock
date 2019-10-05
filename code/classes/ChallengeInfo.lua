@@ -40,17 +40,13 @@ function cChallengeInfo:Complete(a_Player)
 	local isLevel = GetLevelAsNumber(playerInfo.m_IsLevel)
 
 	if (playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName]) then
-		for i = 1, #self.m_Repeat.reward.items do
-			a_Player:GetInventory():AddItem(self.m_Repeat.reward.items[i])
-		end
+		self:AddAndOrDropItems(a_Player, self.m_Repeat.reward.items)
 
 		a_Player:SendMessageSuccess(GetLanguage(a_Player):Get("challenges.info.repeated", { ["%1"] = self.m_ChallengeName}))
 		return
 	end
 
-	for i = 1, #self.m_Default.reward.items do
-		a_Player:GetInventory():AddItem(self.m_Default.reward.items[i])
-	end
+	self:AddAndOrDropItems(a_Player, self.m_Default.reward.items)
 
 	playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName] = true
 	a_Player:SendMessageSuccess(GetLanguage(a_Player):Get("challenges.info.completed", { ["%1"] = self.m_ChallengeName}))
@@ -73,6 +69,36 @@ function cChallengeInfo:Complete(a_Player)
 end
 
 
+
+function cChallengeInfo:AddAndOrDropItems(a_Player, a_Items)
+	-- Checks if the player has enough place for the reward items
+
+	-- First check if the items can fit
+	for i = #a_Items, 1, -1 do
+		local item = a_Items[i]
+		local amountAdded = a_Player:GetInventory():AddItem(item)
+		if amountAdded == item.m_ItemCount then
+			table.remove(a_Items, i)
+		elseif amountAdded > 0 then
+			item.m_ItemCount = item.m_ItemCount - amountAdded
+		end
+	end
+
+	if #a_Items == 0 then
+		-- Nothing more to do
+		return
+	end
+
+	-- Drop the rest of the items and send the player a message
+	local tbItems = cItems()
+	for _, item in ipairs(a_Items) do
+		tbItems:Add(item)
+	end
+	a_Player:GetWorld():SpawnItemPickups(tbItems, a_Player:GetPosition())
+	a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.info.itemsDropped"))
+end
+
+
 -- Overridden in inherited classes
 function cChallengeInfo:IsCompleted(a_Player)
 	LOGERROR("cChallengeInfo:IsCompleted(): missing override in class " .. self:ToString())
@@ -82,12 +108,6 @@ end
 -- Overridden in inherited classes
 function cChallengeInfo:GetChallengeType()
 	LOGERROR("cChallengeInfo:GetChallengeType(): missing override in class " .. self:ToString())
-end
-
-
--- Overridden in inherited classes
-function cChallengeInfo:Load(a_LevelIni)
-	LOGERROR("cChallengeInfo:Load(): missing override in class " .. self:ToString())
 end
 
 
@@ -138,7 +158,19 @@ function cChallengeInfo:Load(a_LevelName, a_ChallengeName, a_Json)
 	self.m_LevelName = a_LevelName
 	self.m_ChallengeName = a_ChallengeName
 	self.m_Description = a_Json.description
-	self.m_DisplayItem = a_Json.displayItem
+
+	local displayItem = cItem()
+	local tbIdMeta = StringSplit(a_Json.displayItem, ":")
+	local success = StringToItem(a_Json.displayItem, displayItem)
+
+	if not(success) then
+		print("Unknown item type: " .. a_Json.displayItem)
+		assert(true)
+	end
+	if #tbIdMeta == 2 then
+		displayItem.m_ItemMeta = tbIdMeta[2]
+	end
+	self.m_DisplayItem = displayItem
 
 	self.m_Default = self:Extract(a_Json)
 

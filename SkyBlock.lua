@@ -47,11 +47,6 @@ function Initialize(Plugin)
 	-- Load Config file
 	LoadConfiguration()
 
-	ISLAND_AREA = cBlockArea()
-	if not(ISLAND_AREA:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. ISLAND_SCHEMATIC)) then
-		ISLAND_AREA = nil
-	end
-
 	-- Check for world <WORLD NAME>
 	SKYBLOCK = cRoot:Get():GetWorld(WORLD_NAME)
 	if (SKYBLOCK == nil) then
@@ -60,6 +55,11 @@ function Initialize(Plugin)
 		LOGERROR("to the section [Worlds] in the settings.ini.")
 		LOGERROR("Then stop and start the server again.")
 		return false
+	end
+
+	ISLAND_AREA = cBlockArea()
+	if not(ISLAND_AREA:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. ISLAND_SCHEMATIC)) then
+		ISLAND_AREA = nil
 	end
 
 	-- Create language folder

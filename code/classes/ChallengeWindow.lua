@@ -4,9 +4,7 @@ cChallengeWindow.__index = cChallengeWindow
 
 
 function cChallengeWindow.Open(a_Player)
-	-- a_Player:OpenWindow(self.m_Inventories[self.m_WinChallengePosition])
-
-	local inv = cLuaWindow(cWindow.wtChest, 9, 4, cChatColor.DarkPurple .. "Challenges")
+	local inv = cLuaWindow(cWindow.wtChest, 9, 4, GetLanguage(a_Player):Get("challenges.window.title"))
 	inv:SetOnClicked(cChallengeWindow.OnChallengeWindowClick)
 
 	cChallengeWindow.UpdateView(a_Player, inv:GetContents())
@@ -25,7 +23,7 @@ function cChallengeWindow.UpdateView(a_Player, a_ItemGrid)
 	local level = LEVELS[playerInfo.m_WinChallengePosition]
 
 	local itemLevel = cItem(level.m_DisplayItem)
-	itemLevel.m_CustomName = "Level: " .. level.m_LevelName
+	itemLevel.m_CustomName = GetLanguage(a_Player):Get("challenges.window.levelInfo", { ["%1"] = level.m_LevelName })
 	a_ItemGrid:SetSlot(4, 0, itemLevel)
 
 	cChallengeWindow.AddItemBack(a_Player, a_ItemGrid, playerInfo)
@@ -79,7 +77,7 @@ function cChallengeWindow.CreateItem(a_Player, a_ChallengeInfo, a_Completed)
 
 	local itemDisplay
 	if a_Completed then
-		itemDisplay = cItem(a_ChallengeInfo.m_DisplayItem)
+		itemDisplay = a_ChallengeInfo.m_DisplayItem
 	else
 		itemDisplay = cItem(E_BLOCK_STAINED_GLASS_PANE, 1, 4)
 	end
@@ -114,7 +112,6 @@ function cChallengeWindow.CreateInfo(a_Player, a_TbInfo)
 		table.insert(tbRet, cChatColor.LightBlue .. line)
 	end
 
-	-- table.insert(tbRet, cChatColor.LightBlue .. a_TbInfo.reward.text)
 	table.insert(tbRet, GetLanguage(a_Player):Get("challenges.window.clickToComplete"))
 	return tbRet
 end
@@ -138,18 +135,17 @@ function cChallengeWindow.AddItemForward(a_Player, a_ItemGrid, a_PlayerInfo)
 		return
 	end
 
-	local lore = {}
+	local itemForward = cItem(E_ITEM_LAVA_BUCKET)
 	if a_PlayerInfo.m_WinChallengePosition + 1 > GetLevelAsNumber(a_PlayerInfo.m_IsLevel) then
 		local amountDone = GetAmount(a_PlayerInfo.m_CompletedChallenges[a_PlayerInfo.m_IsLevel])
 		local amountNeeded = LEVELS[a_PlayerInfo.m_WinChallengePosition].m_CompleteForNextLevel
 		local missing = amountNeeded - amountDone
-		table.insert(lore, GetLanguage(a_Player):Get("challenges.window.moreToUnlock", { ["%1"] = missing }))
+		itemForward.m_CustomName = GetLanguage(a_Player):Get("challenges.window.nextLevel",
+			{ ["%1"] = LEVELS[a_PlayerInfo.m_WinChallengePosition + 1].m_LevelName })
+		itemForward.m_LoreTable = { GetLanguage(a_Player):Get("challenges.window.moreToUnlock", { ["%1"] = missing }) }
+	else
+		itemForward.m_CustomName = GetLanguage(a_Player):Get("challenges.window.goForward")
 	end
-
-	local itemForward = cItem(E_ITEM_LAVA_BUCKET)
-	itemForward.m_CustomName = GetLanguage(a_Player):Get("challenges.window.goForward")
-	itemForward.m_LoreTable = lore
-
 	a_ItemGrid:SetSlot(5, 0, itemForward)
 end
 
@@ -158,6 +154,11 @@ end
 function cChallengeWindow.OnChallengeWindowClick(a_Window, a_Player, a_SlotNum, a_ClickAction, a_ClickedItem)
 	if a_ClickAction ~= 0 then
 		-- Only left click allowed
+		return true
+	end
+
+	if a_SlotNum >= a_Window:GetContents():GetNumSlots() then
+		-- Not clicked in challenge window
 		return true
 	end
 

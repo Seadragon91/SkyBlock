@@ -1,9 +1,5 @@
 -- Handle the island command
 function CommandIsland(a_Split, a_Player)
-	if (#a_Split == 1) then
-		return true
-	end
-
 	local playerInfo = GetPlayerInfo(a_Player)
 	local islandInfo = GetIslandInfo(playerInfo.m_IslandNumber)
 	if (islandInfo == nil) then
@@ -37,9 +33,6 @@ function CommandIsland(a_Split, a_Player)
 				a_Player:SendMessageSuccess(GetLanguage(a_Player):Get("island.home.set_changed"))
 				return true
 			end
-
-			a_Player:SendMessageInfo(GetLanguage(a_Player):Get("island.general.unknownArg"))
-			return true
 		end
 
 		TeleportToIsland(a_Player, islandInfo)
@@ -61,7 +54,7 @@ function CommandIsland(a_Split, a_Player)
 	if (a_Split[2] == "add") then
 		-- Add player
 		if (#a_Split == 2) then
-			a_Player:SendMessageInfo("/island.add <player>")
+			a_Player:SendMessageInfo("/island add <player>")
 			return true
 		end
 
@@ -100,7 +93,7 @@ function CommandIsland(a_Split, a_Player)
 	-- Remove player
 	if (a_Split[2] == "remove") then
 		if (#a_Split == 2) then
-			a_Player:SendMessageInfo("/island.remove <player>")
+			a_Player:SendMessageInfo("/island remove <player>")
 			return true
 		end
 
@@ -117,7 +110,7 @@ function CommandIsland(a_Split, a_Player)
 	-- Join island
 	if (a_Split[2] == "join") then
 		if (#a_Split == 2) then
-			a_Player:SendMessageInfo("/island.join <player>")
+			a_Player:SendMessageInfo("/island join <player>")
 			return true
 		end
 

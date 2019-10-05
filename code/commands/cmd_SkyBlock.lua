@@ -7,7 +7,7 @@ function CommandSkyBlock(a_Split, a_Player)
 
 	-- Show the skyblock.help
 	if (a_Split[2] == "help") then
-		a_Player:SendMessage("---" .. cChatColor.LightGreen .. GetLanguage(a_Player):Get("skyblock.help.title") .. cChatColor.White .. " ---")
+		a_Player:SendMessage(GetLanguage(a_Player):Get("skyblock.help.title"))
 
 		for _, sentence in ipairs(GetLanguage(a_Player).m_Sentences.skyblock.help) do
 			a_Player:SendMessageInfo(sentence)

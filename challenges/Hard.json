@@ -2,7 +2,7 @@
     "baker": {
         "challengeType": "items",
         "description": "Bake cakes, pumpkin pies, and cookies.",
-        "displayItem": 354,
+        "displayItem": "cake",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -29,7 +29,7 @@
     "eggfarmer": {
         "challengeType": "items",
         "description": "Collect eggs, lots of eggs",
-        "displayItem": 344,
+        "displayItem": "egg",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -55,7 +55,7 @@
     "expertbuilder": {
         "challengeType": "value",
         "description": "Reach island value 250.",
-        "displayItem": 41,
+        "displayItem": "brick_stairs",
         "required": {
             "text": "value 250",
             "value": 250
@@ -69,7 +69,7 @@
     "explorer": {
         "challengeType": "items",
         "description": "Collect items for exploration, nether items.",
-        "displayItem": 370,
+        "displayItem": "compass",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -95,7 +95,7 @@
     "homeowner": {
         "challengeType": "blocks",
         "description": "Build a house with furnishings.",
-        "displayItem": 324,
+        "displayItem": "wooden_door",
         "required": {
             "blocks": "::bed_block workbench glass wooden_door bookshelf torch",
             "text": "a bed, workbench, glass, wooden door, bookshelf and a torch"
@@ -109,7 +109,7 @@
     "netherportal": {
         "challengeType": "blocks",
         "description": "Build a nether portal on your island.",
-        "displayItem": 87,
+        "displayItem": "netherrack",
         "required": {
             "blocks": "::obsidian:10 portal:1",
             "text": "a active nether portal"
@@ -123,7 +123,7 @@
     "pearlcollector": {
         "challengeType": "items",
         "description": "Collect enderpearls from endermen.",
-        "displayItem": 368,
+        "displayItem": "ender_pearl",
         "repeatable": {
             "enabled": true,
             "required": {

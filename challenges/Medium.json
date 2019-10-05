@@ -2,7 +2,7 @@
     "adeptbuilder": {
         "challengeType": "value",
         "description": "Reach island value 100",
-        "displayItem": 42,
+        "displayItem": "stone_stairs",
         "required": {
             "text": "value 100",
             "value": 100
@@ -16,7 +16,7 @@
     "cookielover": {
         "challengeType": "items",
         "description": "Make cookies and a bucket of milk",
-        "displayItem": 357,
+        "displayItem": "cookie",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -42,7 +42,7 @@
     "expertfarmer": {
         "challengeType": "items",
         "description": "Harvest many different farming resources",
-        "displayItem": 60,
+        "displayItem": "farmland",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -68,7 +68,7 @@
     "fisherman": {
         "challengeType": "items",
         "description": "Catch different types of fish.",
-        "displayItem": 349,
+        "displayItem": "fish",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -94,7 +94,7 @@
     "lumberjack": {
         "challengeType": "items",
         "description": "Collect all types of wood logs.",
-        "displayItem": 17,
+        "displayItem": "log",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -119,8 +119,8 @@
     },
     "monsterslayer": {
         "challengeType": "items",
-        "description": "Kill monsters and collect their parts.",
-        "displayItem": 367,
+        "description": "Kill monsters and collect their drops.",
+        "displayItem": "stone_sword",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -146,7 +146,7 @@
     "shroompicker": {
         "challengeType": "items",
         "description": "Collect red and brown mushrooms.",
-        "displayItem": 40,
+        "displayItem": "red_mushroom",
         "repeatable": {
             "enabled": true,
             "required": {

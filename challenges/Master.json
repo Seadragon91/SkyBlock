@@ -2,7 +2,7 @@
     "emeraldcollector": {
         "challengeType": "items",
         "description": "Collect emeralds.",
-        "displayItem": 388,
+        "displayItem": "emerald",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -28,7 +28,7 @@
     "glassmaker": {
         "challengeType": "items",
         "description": "Collect every color of stained glass.",
-        "displayItem": 95,
+        "displayItem": "stained_glass:5",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -54,7 +54,7 @@
     "maestro": {
         "challengeType": "items",
         "description": "Make a jukebox and collect all music discs.",
-        "displayItem": 2256,
+        "displayItem": "record_far",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -79,7 +79,7 @@
     "masterfarmer": {
         "challengeType": "items",
         "description": "Collect a large amount of farmed items.",
-        "displayItem": 293,
+        "displayItem": "diamond_hoe",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -105,7 +105,7 @@
     "skylord": {
         "challengeType": "value",
         "description": "Get an island value of 1000.",
-        "displayItem": 57,
+        "displayItem": "diamond_block",
         "required": {
             "text": "value 1000",
             "value": 1000
@@ -119,7 +119,7 @@
     "topchef": {
         "challengeType": "items",
         "description": "Collect every kind of edible food.",
-        "displayItem": 391,
+        "displayItem": "golden_carrot",
         "repeatable": {
             "enabled": true,
             "required": {
@@ -127,7 +127,7 @@
                 "text": "a potatoe, bread, cake, cooked chicken, cooked fish, cooked salmon, raw fish, cooked popkchop, cookie, golden apple, golden carrot, mushroom soup, pumpkin pie, steak, melon slice and a carrot"
             },
             "reward": {
-                "items": "gold_ingot:3 spawn_egg:96 emerald:5",
+                "items": "gold_ingot:3 spawn_egg:96 emerald:5 golden_carrot",
                 "text": "3 gold, 1 mushroom cow and 5 emeralds",
                 "xp": 20
             }
@@ -145,7 +145,7 @@
     "woolcollector": {
         "challengeType": "items",
         "description": "Collect every color of wool.",
-        "displayItem": 35,
+        "displayItem": "wool:1",
         "repeatable": {
             "enabled": true,
             "required": {
