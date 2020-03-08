@@ -22,9 +22,8 @@ function cChallengeWindow.UpdateView(a_Player, a_ItemGrid)
 
 	local level = LEVELS[playerInfo.m_WinChallengePosition]
 
-	local itemLevel = cItem(level.m_DisplayItem)
-	itemLevel.m_CustomName = GetLanguage(a_Player):Get("challenges.window.levelInfo", { ["%1"] = level.m_LevelName })
-	a_ItemGrid:SetSlot(4, 0, itemLevel)
+	level.m_DisplayItem.m_CustomName = GetLanguage(a_Player):Get("challenges.window.levelInfo", { ["%1"] = level.m_LevelName })
+	a_ItemGrid:SetSlot(4, 0, level.m_DisplayItem)
 
 	cChallengeWindow.AddItemBack(a_Player, a_ItemGrid, playerInfo)
 	cChallengeWindow.AddItemForward(a_Player, a_ItemGrid, playerInfo)

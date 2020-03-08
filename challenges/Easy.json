@@ -1,5 +1,6 @@
 {
     "applecollector": {
+		"challengeType": "items",
         "description": "Collect apples from trees.",
         "displayItem": "apple",
         "repeatable": {
@@ -159,11 +160,11 @@
     "sugarfarmer": {
         "challengeType": "items",
         "description": "Harvest sugar canes from a farm.",
-        "displayItem": "reeds",
+        "displayItem": "sugarcane",
         "repeatable": {
             "enabled": true,
             "required": {
-                "items": "reeds:70",
+                "items": "sugarcane:70",
                 "text": "70 sugar canes"
             },
             "reward": {
@@ -173,7 +174,7 @@
             }
         },
         "required": {
-            "items": "reeds:64",
+            "items": "sugarcane:64",
             "text": "64 sugar canes"
         },
         "reward": {

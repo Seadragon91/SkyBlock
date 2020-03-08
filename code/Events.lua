@@ -122,7 +122,6 @@ function OnWorldLoaded(a_World)
 			end
 
 			local valid, posYHeight = SKYBLOCK:TryGetHeight(0, 0)
-			print(valid, posYHeight)
 			if valid then
 				if fromSchematic then
 					-- 16 blocks below, because of fire and water blocks above
@@ -154,7 +153,7 @@ function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
 		local posX = a_Player:GetPosX()
 		local posZ = a_Player:GetPosZ()
 
-		if(a_Player:GetEquippedItem().m_ItemType == 280) then -- TODO: USE E_ITEM_*
+		if(a_Player:GetEquippedItem().m_ItemType == E_ITEM_STICK) then
 			local islandNumber = GetIslandNumber(posX, posZ)
 			if (islandNumber == 0) then
 				a_Player:SendMessageInfo(GetLanguage(a_Player):Get("nocommand.messages.spawnArea"))

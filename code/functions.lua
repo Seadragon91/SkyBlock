@@ -33,7 +33,10 @@ function ParseStringToItems(a_ToParse)
 
 		 -- Check if valid item name
 		if (StringToItem(values[1], itemCurrent)) then
-			local amount = tonumber(values[2])
+			local amount = 1
+			if (#values == 2) then
+				amount = tonumber(values[2])
+			end
 
 			 -- Check if valid number
 			if (amount ~= nil) then
@@ -59,7 +62,7 @@ function ParseStringToItems(a_ToParse)
 				table.insert(arrItems, itemCurrent)
 			else
 				-- TODO: Amount
-				assert(a_ToParse)
+				assert(false, a_ToParse)
 			end
 		else
 			print(a_ToParse)

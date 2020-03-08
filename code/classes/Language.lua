@@ -99,7 +99,7 @@ function cLanguage:Create()
 	self.m_Sentences.challenges.window.goForward = cChatColor.LightBlue .. "Click to go forward"
 	self.m_Sentences.challenges.window.moreToUnlock = cChatColor.Yellow .. "Complete %1 more to unlock"
 	self.m_Sentences.challenges.window.nextLevel = cChatColor.LightBlue .. "Next Level: " .. cChatColor.Green .. " %1"
-	self.m_Sentences.challenges.window.levelInfo = cChatColor.Green .. "Level: %1"
+	self.m_Sentences.challenges.window.levelInfo = cChatColor.LightBlue .. "Level: " .. cChatColor.Green .. "%1"
 
 	-- ChallengeValues.lua
 	self.m_Sentences.challenges.value = {}

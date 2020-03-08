@@ -20,7 +20,13 @@ function cLevel:Load(a_LevelName, a_Json)
 	fileChallenge:close()
 
 	self.m_LevelName = a_LevelName
-	self.m_DisplayItem = a_Json.displayItem
+
+	-- Check if display item is valid
+	local itemLevel = cItem()
+	if not(StringToItem(a_Json.displayItem, itemLevel)) then
+		assert(false, "This item name is not valid: " .. a_Json.displayItem)
+	end
+	self.m_DisplayItem = itemLevel
 
 	if a_Json.completeForNextLevel ~= nil then
 		self.m_CompleteForNextLevel = a_Json.completeForNextLevel or nil

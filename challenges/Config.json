@@ -1,22 +1,22 @@
 {
 	"levels": [ "Easy", "Medium", "Hard", "Master" ],
 	"Easy": {
-		"displayItem": 3,
+		"displayItem": "dirt",
 		"file": "Easy.json",
 		"completeForNextLevel": 7
 	},
 	"Medium": {
-		"displayItem": 42,
+		"displayItem": "iron_block",
 		"file": "Medium.json",
 		"completeForNextLevel": 5
 	},
 	"Hard": {
-		"displayItem": 41,
+		"displayItem": "gold_block",
 		"file": "Hard.json",
 		"completeForNextLevel": 5
 	},
 	"Master": {
-		"displayItem": 57,
+		"displayItem": "diamond_block",
 		"file": "Master.json"
 	}
 }
