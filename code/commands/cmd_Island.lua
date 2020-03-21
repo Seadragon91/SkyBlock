@@ -180,7 +180,9 @@ function CommandIsland(a_Split, a_Player)
 
 		if (playerInfo.m_IsRestarting == nil) then
 			playerInfo.m_IsRestarting = false
-			local posX, posZ, islandNumber = ReserveIsland(playerInfo.m_IslandNumber)
+
+			-- Player was friend to a other player and now wants to start a own island
+			local posX, posZ, islandNumber = ReserveIsland(-1)
 
 			SKYBLOCK:ChunkStay(
 				{ unpack(GetChunks(posX, posZ, 16)) },
@@ -188,16 +190,19 @@ function CommandIsland(a_Split, a_Player)
 				function()
 					CreateIsland(a_Player, posX, posZ)
 
-					local islandInfo = cIslandInfo.new(islandNumber)
-					islandInfo:SetOwner(a_Player)
-					islandInfo:Save()
+					local islandInfoNew = cIslandInfo.new(islandNumber)
+					islandInfoNew:SetOwner(a_Player)
+					islandInfoNew:Save()
 
 					if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-						a_Player:ScheduleMoveToWorld(SKYBLOCK, Vector3d(posX, 151, posZ))
+						a_Player:MoveToWorld(SKYBLOCK, Vector3d(posX, 151, posZ))
 					end
 
 					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get("skyblock.play.welcome"))
+					playerInfo.m_IslandNumber = islandInfoNew.m_IslandNumber
 					playerInfo:Save()
+
+					TeleportToIsland(a_Player, islandInfoNew)
 				end
 			)
 			return true
