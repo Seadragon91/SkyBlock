@@ -23,11 +23,14 @@ ISLAND_AREA = nil -- The island file
 
 ISLAND_RESTART_SCHEDULER = nil  -- Scheduler for restarting a island
 
+PATH_PLUGIN_DATA = nil -- Folder to store players, islands folders and config file
+
 function Initialize(Plugin)
 	Plugin:SetName("SkyBlock")
 	Plugin:SetVersion(4)
 
 	PLUGIN = Plugin
+	PATH_PLUGIN_DATA = "PluginData/SkyBlock"
 	ISLAND_NUMBER = 0
 	ISLAND_DISTANCE = 96
 	ISLAND_SCHEMATIC = ""
@@ -37,7 +40,7 @@ function Initialize(Plugin)
 	ISLANDS = {}
 	WORLD_NAME = "skyblock"
 	LEVELS = {}
-	CONFIG_FILE = PLUGIN:GetLocalFolder() .. "/Config.ini"
+	CONFIG_FILE = PATH_PLUGIN_DATA .. "/Config.ini"
 	BLOCK_VALUES = {}
 	LANGUAGES = {}
 	LANGUAGE_DEFAULT = "english.ini"
@@ -45,6 +48,10 @@ function Initialize(Plugin)
 
 	-- Load all lua files
 	LoadLuaFiles()
+
+	if (not (cFile:IsFolder(PATH_PLUGIN_DATA))) then
+		cFile:CreateFolderRecursive(PATH_PLUGIN_DATA)
+	end
 
 	-- Load Config file
 	LoadConfiguration()
@@ -112,25 +119,25 @@ end
 
 function LoadConfiguration()
 	-- Create players folder
-	if (not cFile:IsFolder(PLUGIN:GetLocalFolder() .. "/players/")) then
-		cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/players/")
+	if (not cFile:IsFolder(PATH_PLUGIN_DATA .. "/players/")) then
+		cFile:CreateFolder(PATH_PLUGIN_DATA .. "/players/")
 	end
 
 	-- Create islands folder
-	if (not cFile:IsFolder(PLUGIN:GetLocalFolder() .. "/islands/")) then
-		cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/islands/")
+	if (not cFile:IsFolder(PATH_PLUGIN_DATA .. "/islands/")) then
+		cFile:CreateFolder(PATH_PLUGIN_DATA .. "/islands/")
 	end
 
 	local configIni = cIniFile()
 	configIni:ReadFile(CONFIG_FILE)
-	ISLAND_NUMBER = configIni:GetValueI("Island", "Number")
-	ISLAND_DISTANCE = configIni:GetValueI("Island", "Distance")
-	ISLAND_SCHEMATIC = "schematics/" .. configIni:GetValue("Schematic", "Island")
-	SPAWN_SCHEMATIC = "schematics/" .. configIni:GetValue("Schematic", "Spawn")
-	WORLD_NAME = configIni:GetValue("General", "Worldname")
-	SPAWN_CREATED = configIni:GetValueB("PluginValues", "SpawnCreated")
-	LANGUAGE_DEFAULT = configIni:GetValue("Language", "Default")
-	LANGUAGE_OTHERS = configIni:GetValueB("Language", "EnableOthers")
+	ISLAND_NUMBER = configIni:GetValueSetI("Island", "Number", 0)
+	ISLAND_DISTANCE = configIni:GetValueSetI("Island", "Distance", 96)
+	ISLAND_SCHEMATIC = "schematics/" .. configIni:GetValueSet("Schematic", "Island", "island.schematic")
+	SPAWN_SCHEMATIC = "schematics/" .. configIni:GetValueSet("Schematic", "Spawn", "spawn.schematic")
+	WORLD_NAME = configIni:GetValueSet("General", "Worldname", "skyblock")
+	SPAWN_CREATED = configIni:GetValueSetB("PluginValues", "SpawnCreated", false)
+	LANGUAGE_DEFAULT = configIni:GetValueSet("Language", "Default", "english.ini")
+	LANGUAGE_OTHERS = configIni:GetValueSetB("Language", "EnableOthers", true)
 
 	-- Reminder: Any new settings who gets added in new versions, should be added, to the config file trough the plugin, if not existent
 end
