@@ -63,6 +63,11 @@ function OnPlayerSpawn(a_Player)
 			return -- His island, return here then he gets to the last position
 		end
 
+		-- Check if player is on spawn plattform
+		if (GetIslandNumber(a_Player:GetPosX(), a_Player:GetPosZ()) == 0) then
+			return
+		end
+
 		local posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
 		local playerName = a_Player:GetName()
 

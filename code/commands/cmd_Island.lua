@@ -211,39 +211,20 @@ function CommandIsland(a_Split, a_Player)
 		playerInfo.m_IsRestarting = true
 		TeleportToIsland(a_Player) -- spawn platform
 
-		local posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
-		RemoveIsland(posX, posZ) -- Recreates all chunks in the area of the island
+		-- Reset challenges
+		playerInfo.m_IsLevel = LEVELS[1].m_LevelName
+		playerInfo.m_CompletedChallenges = {}
+		playerInfo.m_CompletedChallenges[playerInfo.m_IsLevel] = {}
+		playerInfo:Save()
 
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("island.restart.wait"));
-		local playerName = a_Player:GetName()
+		-- Clear inventory
+		a_Player:GetInventory():Clear()
 
-		local Callback = function (a_World)
-			a_World:DoWithPlayer(playerName,
-				function(a_FoundPlayer)
-					a_FoundPlayer:GetInventory():Clear()
-					local playerInfo = GetPlayerInfo(a_Player)
-					CreateIsland(a_FoundPlayer, posX, posZ)
+		ISLAND_RESTART_SCHEDULER:AddIslandNumber(islandInfo.m_IslandNumber)
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("island.restart.wait", { ["%1"] = (#ISLAND_RESTART_SCHEDULER.m_Islands * 10) }));
 
-					SKYBLOCK:ChunkStay(
-						{ unpack(GetChunks(posX, posZ, 16)) },
-						nil,
-						function()
-							a_FoundPlayer:TeleportToCoords(posX, 151, posZ);
-							a_FoundPlayer:SetFoodLevel(20)
-							a_FoundPlayer:SetHealth(a_FoundPlayer:GetMaxHealth())
-							a_FoundPlayer:SendMessageSuccess(GetLanguage(a_Player):Get("island.restart.newIsland"))
-
-							playerInfo.m_IsRestarting  = false
-							playerInfo.m_IsLevel = LEVELS[1].m_LevelName
-							playerInfo.m_CompletedChallenges = {}
-							playerInfo.m_CompletedChallenges[playerInfo.m_IsLevel] = {}
-							playerInfo:Save()
-						end
-					)
-				end)
-			end
-
-		a_Player:GetWorld():ScheduleTask(200, Callback)
+		-- Start island restart scheduler
+		ISLAND_RESTART_SCHEDULER:Start()
 		return true
 	end
 

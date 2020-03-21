@@ -21,6 +21,8 @@ LANGUAGE_DEFAULT = nil -- Default language file
 LANGUAGE_OTHERS = nil -- Enable other language files
 ISLAND_AREA = nil -- The island file
 
+ISLAND_RESTART_SCHEDULER = nil  -- Scheduler for restarting a island
+
 function Initialize(Plugin)
 	Plugin:SetName("SkyBlock")
 	Plugin:SetVersion(4)
@@ -56,6 +58,8 @@ function Initialize(Plugin)
 		LOGERROR("Then stop and start the server again.")
 		return false
 	end
+
+	ISLAND_RESTART_SCHEDULER = cIslandRestartScheduler.new()
 
 	ISLAND_AREA = cBlockArea()
 	if not(ISLAND_AREA:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. ISLAND_SCHEMATIC)) then

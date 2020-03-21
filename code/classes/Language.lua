@@ -161,7 +161,7 @@ function cLanguage:Create()
 	self.m_Sentences.island.restart = {}
 	self.m_Sentences.island.restart.running = "This command is running. Please wait..."
 	self.m_Sentences.island.restart.notOwner = "Restart not possible, you are not the real owner of this island. If you want to start an own one, type again /island restart."
-	self.m_Sentences.island.restart.wait = "Please wait 10s..."
+	self.m_Sentences.island.restart.wait = "Please wait up to %1s..."
 	self.m_Sentences.island.restart.newIsland = "Good luck with your new island."
 
 	-- Events.lua
