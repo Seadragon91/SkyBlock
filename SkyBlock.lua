@@ -138,8 +138,7 @@ function LoadConfiguration()
 	SPAWN_CREATED = configIni:GetValueSetB("PluginValues", "SpawnCreated", false)
 	LANGUAGE_DEFAULT = configIni:GetValueSet("Language", "Default", "english.ini")
 	LANGUAGE_OTHERS = configIni:GetValueSetB("Language", "EnableOthers", true)
-
-	-- Reminder: Any new settings who gets added in new versions, should be added, to the config file trough the plugin, if not existent
+	configIni:WriteFile(CONFIG_FILE)
 end
 
 -- Save settings who gets changed trough the plugin
