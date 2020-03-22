@@ -102,7 +102,9 @@ function Initialize(Plugin)
 
 	-- Command Bindings
 	cPluginManager:BindCommand("/skyblock", "skyblock.command", CommandSkyBlock , " - Access to the skyblock plugin")
+	cPluginManager:BindCommand("/sb", "skyblock.command", CommandSkyBlock , " - Access to the skyblock plugin")
 	cPluginManager:BindCommand("/island", "skyblock.command", CommandIsland , " - Access to the island commands")
+	cPluginManager:BindCommand("/is", "skyblock.command", CommandIsland , " - Access to the island commands")
 	cPluginManager:BindCommand("/challenges", "skyblock.command",
 		function(a_Split, a_Player)
 			cChallengeWindow.Open(a_Player)
