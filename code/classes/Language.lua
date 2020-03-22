@@ -49,10 +49,10 @@ function cLanguage:Create()
 
 	self.m_Sentences[1][3]["6"] = "/island home - Teleport back to your home location of the island"
 	self.m_Sentences[1][3]["7"] = "/island home set - Change home location on island"
-	self.m_Sentences[1][3]["8"] = "/island obsidian - Change obsidian backt to lava"
+	self.m_Sentences[1][3]["8"] = "/island obsidian - Change obsidian back to lava"
 	self.m_Sentences[1][3]["9"] = "/island add <player> - Add player to your friend list"
 	self.m_Sentences[1][3]["10"] = "/island remove <player> - Remove player from your friend list"
-	self.m_Sentences[1][3]["11"] = "/island join <player> - Teleport to a friends island"
+	self.m_Sentences[1][3]["11"] = "/island join <player> - Teleport to a friend's island"
 	self.m_Sentences[1][3]["12"] = "/island list - List your friends and islands who you can join"
 	self.m_Sentences[1][3]["13"] = "/island restart - Start an new island"
 
@@ -102,7 +102,7 @@ function cLanguage:Create()
 	-- Info = 3
 	self.m_Indexes[2][3] = "Info"
 	self.m_Sentences[2][3] = {}
-	self.m_Sentences[2][3]["gatherItems"] = cChatColor.LightGreen .. "Gather this items: " .. cChatColor.White
+	self.m_Sentences[2][3]["gatherItems"] = cChatColor.LightGreen .. "Gather these items: " .. cChatColor.White
 	self.m_Sentences[2][3]["forCompletion"] = cChatColor.Gold .. "You get for completion: " .. cChatColor.White
 	self.m_Sentences[2][3]["forRepeating"] = "For repeating:"
 
@@ -129,7 +129,7 @@ function cLanguage:Create()
 
 	-- ChallengeItems.lua
 	self.m_Sentences[2][4]["notRequiredItems"] = "You don't have the required items."
-	self.m_Sentences[2][4]["itemsInfo"] = "Gather this items: "
+	self.m_Sentences[2][4]["itemsInfo"] = "Gather these items: "
 
 	-- ChallengeValues.lua
 	self.m_Sentences[2][4]["calculated"] = "Your island value is %1, you need %2 for completing."
@@ -166,7 +166,7 @@ function cLanguage:Create()
 	-- Obsidian = 4
 	self.m_Indexes[3][4] = "Obsidian"
 	self.m_Sentences[3][4] = {}
-	self.m_Sentences[3][4]["right-Click"] = "Make now an right-click on the obsidian block without any items."
+	self.m_Sentences[3][4]["right-Click"] = "Now right-click on the obsidian block without any items."
 
 	-- Add = 5
 	self.m_Indexes[3][5] = "Add"
