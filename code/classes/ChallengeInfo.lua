@@ -48,8 +48,10 @@ function cChallengeInfo:Complete(a_Player)
 
 	self:AddAndOrDropItems(a_Player, self.m_Default.reward.items)
 
+	CallHook("OnChallengeCompleted", a_Player, self.m_LevelName, self.m_ChallengeName)
 	playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName] = true
 	a_Player:SendMessageSuccess(GetLanguage(a_Player):Get("challenges.info.completed", { ["%1"] = self.m_ChallengeName}))
+
 
 	local amountDone = GetAmount(playerInfo.m_CompletedChallenges[playerInfo.m_IsLevel])
 	local amountNeeded = LEVELS[GetLevelAsNumber(self.m_LevelName)].m_CompleteForNextLevel

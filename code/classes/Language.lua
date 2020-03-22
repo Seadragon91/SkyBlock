@@ -36,19 +36,21 @@ function cLanguage:Create()
 	-- Help
 	self.m_Sentences.skyblock.help = {}
 	self.m_Sentences.skyblock.help.title = "--- " .. cChatColor.Green .. "Commands for the skyblock plugin" .. cChatColor.White .. " ---"
-	self.m_Sentences.skyblock.help[1] = "/skyblock join - Teleports you to the spawn platform of the skyblock world."
-	self.m_Sentences.skyblock.help[2] = "/skyblock play - Get an island and start playing."
+	self.m_Sentences.skyblock.help.join = "/skyblock join - Teleports you to the spawn platform of the skyblock world."
+	self.m_Sentences.skyblock.help.play = "/skyblock play - Get an island and start playing."
 
-	self.m_Sentences.skyblock.help[3] = "/island home - Teleport back to your island"
-	self.m_Sentences.skyblock.help[4] = "/island home set - Change your island home location"
-	self.m_Sentences.skyblock.help[5] = "/island obsidian - Change obsidian back to lava"
-	self.m_Sentences.skyblock.help[6] = "/island add <player> - Add a player to your friend list"
-	self.m_Sentences.skyblock.help[7] = "/island remove <player> - Remove a player from your friend list"
-	self.m_Sentences.skyblock.help[8] = "/island join <player> - Teleport to a friends island"
-	self.m_Sentences.skyblock.help[9] = "/island list - List your friends and islands who you can join"
-	self.m_Sentences.skyblock.help[10] = "/island restart - Start an new island"
+	self.m_Sentences.skyblock.help.isHome = "/island home - Teleport back to your island"
+	self.m_Sentences.skyblock.help.isHomeSet = "/island home set - Change your island home location"
+	self.m_Sentences.skyblock.help.isObsidian = "/island obsidian - Change obsidian back to lava"
+	self.m_Sentences.skyblock.help.isAddFriend = "/island add <player> - Add a player to your friend list"
+	self.m_Sentences.skyblock.help.isAddGuest = "/island inv <player> - Invite a player as a guest"
+	self.m_Sentences.skyblock.help.isInviteAsk = "/island ask <player> - Ask the player if you can visit his island"
+	self.m_Sentences.skyblock.help.IsRemove = "/island remove <player> - Remove a player from your friend list"
+	self.m_Sentences.skyblock.help.IsJoin = "/island join <player> - Teleport to a friends island"
+	self.m_Sentences.skyblock.help.isList = "/island list - List your friends and islands who you can join"
+	self.m_Sentences.skyblock.help.isRestart = "/island restart - Start an new island"
 
-	self.m_Sentences.skyblock.help[11] = "/challenges - Opens the challenge window"
+	self.m_Sentences.skyblock.help.challenges = "/challenges - Opens the challenge window"
 
 	-- Join
 	self.m_Sentences.skyblock.join = {}
@@ -146,9 +148,18 @@ function cLanguage:Create()
 	self.m_Sentences.island.remove = {}
 	self.m_Sentences.island.remove.removedPlayer = "Removed player from friend list."
 
+	-- Inv
+	self.m_Sentences.island.inv = {}
+	self.m_Sentences.island.inv.playerSend = "The player %1 has sent you a invite."
+	self.m_Sentences.island.inv.inviteSend = "Send a invite to player %1."
+
+	-- Req
+	self.m_Sentences.island.ask = {}
+	self.m_Sentences.island.ask.inviteAsk = "The player %1 wants to visit your island. Use /island inv <player> to invite him."
+
 	-- Join
 	self.m_Sentences.island.join = {}
-	self.m_Sentences.island.join.notInFriendlist = "You are not in his friend list."
+	self.m_Sentences.island.join.notInFriendlist = "You are not invited or not in his friend list."
 	self.m_Sentences.island.join.removedFromFriendList = "You have been removed from his friend list."
 	self.m_Sentences.island.join.toIsland = "Teleported you to the island."
 
@@ -189,12 +200,12 @@ function cLanguage:WriteDefault()
 		end
 	end
 
-	languageIni:WriteFile(PLUGIN:GetLocalFolder() .. "/languages/" .. self.m_Language)
+	languageIni:WriteFile(PATH_PLUGIN_DATA .. "/languages/" .. self.m_Language)
 end
 
 function cLanguage:Load()
 	local languageIni = cIniFile()
-	if (not languageIni:ReadFile(PLUGIN:GetLocalFolder() .. "/languages/" .. self.m_Language)) then
+	if (not languageIni:ReadFile(PATH_PLUGIN_DATA .. "/languages/" .. self.m_Language)) then
 		self:WriteDefault()
 		return
 	end
@@ -215,7 +226,7 @@ function cLanguage:Load()
 	end
 
 	if (toWrite) then
-		languageIni:WriteFile(PLUGIN:GetLocalFolder() .. "/languages/" .. self.m_Language)
+		languageIni:WriteFile(PATH_PLUGIN_DATA .. "/languages/" .. self.m_Language)
 	end
 end
 

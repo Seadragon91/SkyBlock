@@ -25,6 +25,8 @@ ISLAND_RESTART_SCHEDULER = nil  -- Scheduler for restarting a island
 
 PATH_PLUGIN_DATA = nil -- Folder to store players, islands folders and config file
 
+ISLAND_GUESTS = nil -- Invite list for island guests
+
 function Initialize(Plugin)
 	Plugin:SetName("SkyBlock")
 	Plugin:SetVersion(4)
@@ -45,6 +47,7 @@ function Initialize(Plugin)
 	LANGUAGES = {}
 	LANGUAGE_DEFAULT = "english.ini"
 	LANGUAGE_OTHERS = 1
+	ISLAND_GUESTS = {}
 
 	-- Load all lua files
 	LoadLuaFiles()
@@ -73,8 +76,6 @@ function Initialize(Plugin)
 		ISLAND_AREA = nil
 	end
 
-	-- Create language folder
-	cFile:CreateFolder(PLUGIN:GetLocalFolder() .. "/languages/")
 	LoadLanguageFiles()
 
 	-- Load the points for block / meta
@@ -195,23 +196,39 @@ function LoadBlockValues()
 			BLOCK_VALUES[id][meta] = point
 		end
 	end
+
+	f:close()
 end
 
 function LoadLanguageFiles()
-	local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/languages")
+	if not cFile:IsFile(PATH_PLUGIN_DATA .. "/languages/english.ini") then
+		if not cFile:IsFolder(PATH_PLUGIN_DATA .. "/languages/") then
+			cFile:CreateFolder(PATH_PLUGIN_DATA .. "/languages/")
+		end
 
-	if
-		#files == 0 or
-		not(cFile:IsFile(PLUGIN:GetLocalFolder() .. "/languages/english.ini"))
-	then
-		 -- Write Default language file
-	    LANGUAGES["english.ini"] = cLanguage.new()
+		-- Copy other language files
+		local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. "/languages")
+		for _, file in pairs(files) do
+			if (string.sub(file, #file -3, #file) == ".ini") then
+				if not cFile:IsFile(PATH_PLUGIN_DATA .. "/languages/" .. file) then
+					cFile:Copy(PLUGIN:GetLocalFolder() .. "/languages/" .. file, PATH_PLUGIN_DATA .. "/languages/" .. file)
+				end
+			end
+		end
+
+		-- Write english language file
+		LANGUAGES["english.ini"] = cLanguage.new()
+
+		if (LANGUAGE_DEFAULT ~= "english.ini") then
+			LANGUAGES[LANGUAGE_DEFAULT] = cLanguage.new(LANGUAGE_DEFAULT)
+		end
 	    return
 	end
 
 	if (LANGUAGE_OTHERS) then
-	    for i = 1, #files do
-	        if (cFile:IsFile(PLUGIN:GetLocalFolder() .. "/languages/" .. files[i])) then
+		local files = cFile:GetFolderContents(PATH_PLUGIN_DATA .. "/languages")
+		for i = 1, #files do
+	        if (cFile:IsFile(PATH_PLUGIN_DATA .. "/languages/" .. files[i])) then
 	            LANGUAGES[files[i]] = cLanguage.new(files[i])
 	        end
 	    end
@@ -221,7 +238,7 @@ function LoadLanguageFiles()
 end
 
 function LoadLuaFiles()
-	local folders =  { "/code", "/code/classes", "/code/commands" }
+	local folders =  { "/code", "/code/classes", "/code/commands", "/code/API" }
 
 	for _, folder in pairs(folders) do
 		local files = cFile:GetFolderContents(PLUGIN:GetLocalFolder() .. folder)

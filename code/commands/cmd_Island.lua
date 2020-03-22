@@ -51,6 +51,22 @@ function CommandIsland(a_Split, a_Player)
 		return true
 	end
 
+	if (a_Split[2] == "ask") then
+		if (#a_Split == 2) then
+			a_Player:SendMessageInfo("/island ask <player>")
+			return true
+		end
+
+		local toAsk = a_Split[3]
+		a_Player:GetWorld():DoWithPlayer(toAsk,
+		function (a_FoundPlayer)
+			a_FoundPlayer:SendMessageSuccess(GetLanguage(a_FoundPlayer):Get("island.ask.inviteAsk", { ["%1"] = a_Player:GetName() }))
+			return true
+		end)
+
+		return true
+	end
+
 	if (a_Split[2] == "add") then
 		-- Add player
 		if (#a_Split == 2) then
@@ -90,6 +106,33 @@ function CommandIsland(a_Split, a_Player)
 		return true
 	end
 
+	if (a_Split[2] == "inv") then
+		-- Invite a player as a guest
+		if (#a_Split == 2) then
+			a_Player:SendMessageInfo("/island inv <player>")
+			return true
+		end
+
+		if (a_Player:GetName():lower() == a_Split[3]:lower()) then
+			return true
+		end
+
+		local toAdd = a_Split[3]
+		a_Player:GetWorld():DoWithPlayer(toAdd,
+			function (a_FoundPlayer)
+				if (ISLAND_GUESTS[a_Player:GetName():lower()] == nil) then
+					ISLAND_GUESTS[a_Player:GetName():lower()] = {}
+				end
+				ISLAND_GUESTS[a_Player:GetName():lower()][a_FoundPlayer:GetName()] = islandInfo.m_IslandNumber
+
+				a_FoundPlayer:SendMessageSuccess(GetLanguage(a_FoundPlayer):Get("island.inv.playerSend", { ["%1"] = a_Player:GetName() }))
+				a_Player:SendMessageInfo(GetLanguage(a_Player):Get("island.inv.inviteSend", { ["%1"] = a_FoundPlayer:GetName() }))
+				return true
+			end)
+
+		return true
+	end
+
 	-- Remove player
 	if (a_Split[2] == "remove") then
 		if (#a_Split == 2) then
@@ -116,6 +159,14 @@ function CommandIsland(a_Split, a_Player)
 
 		local toJoin = a_Split[3]
 		if (playerInfo.m_InFriendList[toJoin:lower()] == nil) then
+			-- Check if the player has been invited
+			if (ISLAND_GUESTS[toJoin:lower()] ~= nil and ISLAND_GUESTS[toJoin:lower()][a_Player:GetName()] ~= nil) then
+				local islandInfoInv = GetIslandInfo(ISLAND_GUESTS[toJoin:lower()][a_Player:GetName()])
+				ISLAND_GUESTS[toJoin:lower()][a_Player:GetName()] = nil
+				TeleportToIsland(a_Player, islandInfoInv)
+				return true
+			end
+
 			a_Player:SendMessageInfo(GetLanguage(a_Player):Get("island.join.notInFriendlist"))
 			return true
 		end

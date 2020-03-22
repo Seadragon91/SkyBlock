@@ -9,9 +9,15 @@ function CommandSkyBlock(a_Split, a_Player)
 	if (a_Split[2] == "help") then
 		a_Player:SendMessage(GetLanguage(a_Player):Get("skyblock.help.title"))
 
-		for _, sentence in ipairs(GetLanguage(a_Player).m_Sentences.skyblock.help) do
-			a_Player:SendMessageInfo(sentence)
-		end
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isHome)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isHomeSet)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isObsidian)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isAddFriend)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isAddGuest)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.IsRemove)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.IsJoin)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isList)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isRestart)
 		return true
 	end
 

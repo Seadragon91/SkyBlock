@@ -118,12 +118,14 @@ function cChallengeValues:CalculateValue(a_PlayerName)
 						SKYBLOCK:DoWithPlayer(a_PlayerName,
 							function(a_Player)
 								self:Complete(a_Player)
+								CallHook("OnIslandValueCalculated", a_Player, value)
 							end)
 						return
 					end
 					SKYBLOCK:DoWithPlayer(a_PlayerName,
 						function(a_Player)
 							a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.value.calculated", { ["%1"] = value, ["%2"] = self.m_Default.required.value}))
+							CallHook("OnIslandValueCalculated", a_Player, value)
 						end)
 
 					return

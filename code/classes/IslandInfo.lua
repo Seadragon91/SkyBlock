@@ -10,6 +10,7 @@ function cIslandInfo.new(a_IslandNumber)
 	self.m_IslandFile = PATH_PLUGIN_DATA .. "/islands/" .. a_IslandNumber .. ".ini"
 	self.m_IslandNumber = tonumber(a_IslandNumber)
 	self.m_Friends = {}
+	self.m_Guests = {}
 	self.m_HomeLocation = nil
 
 	return self
