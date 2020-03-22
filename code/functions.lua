@@ -34,7 +34,7 @@ function ParseStringToItems(a_ToParse)
 		 -- Check if valid item name
 		if (StringToItem(values[1], itemCurrent)) then
 			local amount = 1
-			if (#values == 2) then
+			if (#values >= 2) then
 				amount = tonumber(values[2])
 			end
 

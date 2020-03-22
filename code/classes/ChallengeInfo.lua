@@ -75,25 +75,34 @@ end
 function cChallengeInfo:AddAndOrDropItems(a_Player, a_Items)
 	-- Checks if the player has enough place for the reward items
 
+	local tbItemsCopy = {}
+	for _, item in ipairs(a_Items) do
+		table.insert(tbItemsCopy, cItem(item))
+	end
+
+	for i = #tbItemsCopy, 1, -1 do
+		print(tbItemsCopy[i].m_ItemType)
+	end
+
 	-- First check if the items can fit
-	for i = #a_Items, 1, -1 do
-		local item = a_Items[i]
+	for i = #tbItemsCopy, 1, -1 do
+		local item = tbItemsCopy[i]
 		local amountAdded = a_Player:GetInventory():AddItem(item)
 		if amountAdded == item.m_ItemCount then
-			table.remove(a_Items, i)
+			table.remove(tbItemsCopy, i)
 		elseif amountAdded > 0 then
 			item.m_ItemCount = item.m_ItemCount - amountAdded
 		end
 	end
 
-	if #a_Items == 0 then
+	if #tbItemsCopy == 0 then
 		-- Nothing more to do
 		return
 	end
 
 	-- Drop the rest of the items and send the player a message
 	local tbItems = cItems()
-	for _, item in ipairs(a_Items) do
+	for _, item in ipairs(tbItemsCopy) do
 		tbItems:Add(item)
 	end
 	a_Player:GetWorld():SpawnItemPickups(tbItems, a_Player:GetPosition())
@@ -177,6 +186,7 @@ function cChallengeInfo:Load(a_LevelName, a_ChallengeName, a_Json)
 	self.m_Default = self:Extract(a_Json)
 
 	if (a_Json.repeatable ~= nil) then
+
 		-- If repeatable.enabled is missing, default true otherwise false
 		if (a_Json.repeatable.enabled == nil or
 			a_Json.repeatable.enabled == true)
