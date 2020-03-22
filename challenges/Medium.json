@@ -1,0 +1,172 @@
+{
+    "adeptbuilder": {
+        "challengeType": "value",
+        "description": "Reach island value 100",
+        "displayItem": "stone_stairs",
+        "required": {
+            "text": "value 100",
+            "value": 100
+        },
+        "reward": {
+            "items": "obsidian:12",
+            "text": "12 obsidian",
+            "xp": 100
+        }
+    },
+    "cookielover": {
+        "challengeType": "items",
+        "description": "Make cookies and a bucket of milk",
+        "displayItem": "cookie",
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "milk_bucket:1 cookie:150",
+                "text": "milk bucket and 150 cookies"
+            },
+            "reward": {
+                "items": "redstone:2 iron_ore:1 bucket:1",
+                "text": "2 redstone, 1 iron, 1 bucket",
+                "xp": 10
+            }
+        },
+        "required": {
+            "items": "milk_bucket:1 cookie:128",
+            "text": "milk bucket and 128 cookies"
+        },
+        "reward": {
+            "items": "redstone:16 iron_ore:5 bucket:1",
+            "text": "16 redstone, 5 iron, 1 bucket",
+            "xp": 30
+        }
+    },
+    "expertfarmer": {
+        "challengeType": "items",
+        "description": "Harvest many different farming resources",
+        "displayItem": "farmland",
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "melon:70 sugar:70 wheat:70 potato:70 carrot:70 pumpkin:70 cactus:70",
+                "text": "70 melon slices, sugar, wheat, potatoes, carrots, pupmkins and cactus"
+            },
+            "reward": {
+                "items": "redstone:2 dye:1:3 spawn_egg:1:90 spawn_egg:1:92 spawn_egg:1:93 clay:5",
+                "text": "2 redstone, 1 cocoa, 3 animals, 5 clay",
+                "xp": 10
+            }
+        },
+        "required": {
+            "items": "melon:64 sugar:64 wheat:64 potato:64 carrot:64 pumpkin:64 cactus:64",
+            "text": "64 melon slices, sugar, wheat, potatoes, carrots, pupmkins and cactus"
+        },
+        "reward": {
+            "items": "redstone:16 dye:1:3 spawn_egg:1:90 spawn_egg:1:92 spawn_egg:1:93",
+            "text": "16 redstone, 1 cocoa, 3 animals",
+            "xp": 30
+        }
+    },
+    "fisherman": {
+        "challengeType": "items",
+        "description": "Catch different types of fish.",
+        "displayItem": "fish",
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "fish:7:0 fish:7:1 fish:4:3 fish:1:2",
+                "text": "7 raw fish, 7 raw salmon, 4 pufferfish and 1 clownfish"
+            },
+            "reward": {
+                "items": "redstone:2 dye:2 iron_ore:1",
+                "text": "2 redstone, 2 inksac, 1 iron",
+                "xp": 10
+            }
+        },
+        "required": {
+            "items": "fish:5:0 fish:5:1 fish:3:3 fish:1:2",
+            "text": "5 raw fish, 5 raw salmon, 3 pufferfish and 1 clownfish"
+        },
+        "reward": {
+            "items": "redstone:16 iron_ore:5 dye:5",
+            "text": "16 redstone, 5 inksac, 5 iron",
+            "xp": 30
+        }
+    },
+    "lumberjack": {
+        "challengeType": "items",
+        "description": "Collect all types of wood logs.",
+        "displayItem": "log",
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "log:20:0 log:20:1 log:20:2 log:20:3 log2:20:0 log2:20:1",
+                "text": "20 oak, spruce, birch, jungle, acacia and dark oak wood"
+            },
+            "reward": {
+                "items": "redstone:2 iron_ore:1",
+                "text": "2 redstone, 1 iron",
+                "xp": 10
+            }
+        },
+        "required": {
+            "items": "log:16:0 log:16:1 log:16:2 log:16:3 log2:16:0 log2:16:1",
+            "text": "16 oak, spruce, birch, jungle, acacia and dark oak wood"
+        },
+        "reward": {
+            "items": "redstone:16 iron_ore:5 spawn_egg:1:95",
+            "text": "16 redstone, 5 iron, 1 wolf",
+            "xp": 30
+        }
+    },
+    "monsterslayer": {
+        "challengeType": "items",
+        "description": "Kill monsters and collect their drops.",
+        "displayItem": "stone_sword",
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "rotten_flesh:70 string:38 gunpowder:22 arrow:38 bone:38 spider_eye:8",
+                "text": "70 rotten flesh, 38 strings, 22 gun powder, 38 arrows, 38 bones and 8 spider eyes"
+            },
+            "reward": {
+                "items": "redstone:2 flint:1 iron_ore:1",
+                "text": "2 redstone, 1 flint, and 1 iron",
+                "xp": 10
+            }
+        },
+        "required": {
+            "items": "rotten_flesh:64 string:32 gunpowder:16 arrow:32 bone:32 spider_eye:5",
+            "text": "64 rotten flesh, 32 strings, 16 gun powder, 32 arrows, 32 bones and 5 spider eyes"
+        },
+        "reward": {
+            "items": "redstone:16 flint:1 iron_ore:5",
+            "text": "16 redstone, 1 flint, and 5 iron",
+            "xp": 30
+        }
+    },
+    "shroompicker": {
+        "challengeType": "items",
+        "description": "Collect red and brown mushrooms.",
+        "displayItem": "red_mushroom",
+        "repeatable": {
+            "enabled": true,
+            "required": {
+                "items": "red_mushroom:70 brown_mushroom:70",
+                "text": "70 red and brown mushrooms"
+            },
+            "reward": {
+                "items": "mycelium:1 dirt:2:2",
+                "text": "1 mycelium and 2 podzol",
+                "xp": 10
+            }
+        },
+        "required": {
+            "items": "red_mushroom:64 brown_mushroom:64",
+            "text": "64 red and brown mushrooms"
+        },
+        "reward": {
+            "items": "mycelium:1",
+            "text": "1 mycelium",
+            "xp": 30
+        }
+    }
+}

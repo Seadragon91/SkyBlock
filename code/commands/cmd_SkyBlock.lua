@@ -1,30 +1,23 @@
 -- Handle the skyblock command
 function CommandSkyBlock(a_Split, a_Player)
 	if (#a_Split == 1) then
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 2, "skyblock"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.general.skyblock"))
 		return true
 	end
 
-	-- Show the skyblock help
+	-- Show the skyblock.help
 	if (a_Split[2] == "help") then
-		a_Player:SendMessage("---" .. cChatColor.LightGreen .. GetLanguage(a_Player):Get(1, 3, "title") .. cChatColor.White .. " ---")
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "1"))
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "2"))
+		a_Player:SendMessage(GetLanguage(a_Player):Get("skyblock.help.title"))
 
-		-- cmd_Challenges.lua
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "3"))
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "4"))
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "5"))
-
-		-- cmd_Island.lua
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "6"))
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "7"))
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "8"))
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "9"))
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "10"))
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "11"))
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "12"))
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 3, "13"))
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isHome)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isHomeSet)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isObsidian)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isAddFriend)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isAddGuest)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.IsRemove)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.IsJoin)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isList)
+		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isRestart)
 		return true
 	end
 
@@ -51,7 +44,7 @@ function CommandSkyBlock(a_Split, a_Player)
 					islandInfo:Save()
 
 					TeleportToIsland(a_Player, islandInfo)
-					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 5, "welcome"))
+					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get("skyblock.play.welcome"))
 					playerInfo:Save()
 				end
 			)
@@ -66,7 +59,7 @@ function CommandSkyBlock(a_Split, a_Player)
 	-- Recreate spawn
 	if (a_Split[2] == "recreate") then
 		if (not a_Player:HasPermission("skyblock.admin.recreate")) then
-			a_Player:SendMessageFailure(GetLanguage(a_Player):Get(1, 2, "noPermission"))
+			a_Player:SendMessageFailure(GetLanguage(a_Player):Get("skyblock.general.noPermission"))
 			return true
 		end
 
@@ -78,41 +71,42 @@ function CommandSkyBlock(a_Split, a_Player)
 			local wez = weOffset.z
 
 			area:Write(SKYBLOCK, 0 - wex, 169 - wey, 0 - wez, 3) -- Paste the schematic
-			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 6, "recreatedSpawn"))
+			a_Player:SendMessageSuccess(GetLanguage(a_Player):Get("skyblock.recreate.recreatedSpawn"))
 		else
-			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 6, "schematicError"))
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.recreate.schematicError"))
 		end
 		return true
 	end
 
-    if (a_Split[2] == "language") then
-        if (#a_Split == 2) then
-            local amount = GetAmount(LANGUAGES)
-            local counter = 0
-            local list = ""
-            for language, _ in pairs(LANGUAGES) do
-                list = list .. language
-                counter = counter + 1
-                if (counter ~= amount) then
-                   list = list .. ", "
-                end
-            end
-            a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 7, "languageFiles", { ["%1"] = list }))
-            return true
-        end
+	if (a_Split[2] == "language") then
+	    if (#a_Split == 2) then
+	        local amount = GetAmount(LANGUAGES)
+	        local counter = 0
+	        local list = ""
+	        for language, _ in pairs(LANGUAGES) do
+	            list = list .. language
+	            counter = counter + 1
+	            if (counter ~= amount) then
+	               list = list .. ", "
+	            end
+	        end
+	        a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.language.languageFiles", { ["%1"] = list }))
+	        return true
+	    end
 
-        local language = a_Split[3]
-        if (LANGUAGES[language] == nil) then
-            a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 7, "unknownLanguage"))
-            return true
-        end
+		local language = a_Split[3]
+	    if (LANGUAGES[language] == nil) then
+	        a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.language.unknownLanguage"))
+	        return true
+	    end
 
-        local pi = GetPlayerInfo(a_Player)
-        pi.language = language
-        a_Player:SendMessageSuccess(GetLanguage(a_Player):Get(1, 7, "changedLanguage", { ["%1"] = language }))
-        return true
-    end
+	    local pi = GetPlayerInfo(a_Player)
+		pi.m_Language = language
+		pi:Save()
+	    a_Player:SendMessageSuccess(GetLanguage(a_Player):Get("skyblock.language.changedLanguage", { ["%1"] = language }))
+	    return true
+	end
 
-	a_Player:SendMessageInfo(GetLanguage(a_Player):Get(1, 2, "unknownArg"))
+	a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.general.unknownArg"))
 	return true
 end

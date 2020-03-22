@@ -1,0 +1,199 @@
+-- Challenge class for blocks in the island area
+
+cChallengeBlocks = {}
+cChallengeBlocks.__index = cChallengeBlocks
+
+function cChallengeBlocks.new()
+	local self = setmetatable({}, cChallengeBlocks)
+	setmetatable(cChallengeBlocks, {__index = cChallengeInfo})
+
+	self.m_CheckingBlocks = {}
+	return self
+end
+
+
+function cChallengeBlocks:CalculateValue(a_PlayerName)
+	self.callback =
+		function(a_World)
+			local foundPlayer = SKYBLOCK:DoWithPlayer(a_PlayerName, function() end)
+			if not(foundPlayer) then
+				-- Player left the skyblock world, abort checking for the blocks
+				return
+			end
+
+			local position = self.m_CheckingBlocks[a_PlayerName]["position"]
+			local chunks = self.m_CheckingBlocks[a_PlayerName]["chunks"]
+			local points = self.m_CheckingBlocks[a_PlayerName]["points"]
+			local counter = 1
+
+			while true do
+				local cx = chunks[position + counter][1] * 16
+				local cz = chunks[position + counter][2] * 16
+				local blockArea = cBlockArea()
+
+				blockArea:Read(SKYBLOCK, cx, cx + 15, 0, 255, cz, cz + 15, 3)
+
+				-- Let's calculate
+				if blockArea:CountNonAirBlocks() > 0 then
+
+					-- ## Very slow... (35 to 62ms)
+					-- local sw = cStopWatch.new()
+					-- sw:Start()
+					-- local tbCounted = {}
+					-- local maxX, maxY, maxZ = blockArea:GetSize()
+					-- for x = 0, maxX - 1 do
+					-- 	for y = 0, maxY - 1 do
+					-- 		for z = 0, maxZ - 1 do
+					-- 			local id, meta = blockArea:GetRelBlockTypeMeta(x, y, z)
+					-- 			if id ~= 0 then
+					-- 				if tbCounted[id] == nil then
+					-- 					tbCounted[id] = {}
+					-- 				end
+					--
+					-- 				if tbCounted[id][meta] == nil then
+					-- 					tbCounted[id][meta] = 1
+					-- 				else
+					-- 					tbCounted[id][meta] = tbCounted[id][meta] + 1
+					-- 				end
+					-- 			end
+					-- 		end
+					-- 	end
+					-- end
+					-- print("Calc: ", sw:GetElapsedMilliseconds())
+
+					-- for id, metaAmount in pairs(tbCounted) do
+					-- 	for meta, amount in pairs(metaAmount) do
+					-- 		if BLOCK_VALUES[id] ~= nil then
+					-- 			if BLOCK_VALUES[id][meta] == nil then
+					-- 				points = points + (BLOCK_VALUES[id][0] * amount)
+					-- 			else
+					-- 				points = points + (BLOCK_VALUES[id][meta] * amount)
+					-- 			end
+					-- 		end
+					-- 	end
+					-- end
+
+
+
+					-- ## Fastest solution: Needs extra code in cuberite (PC: 0 to 3ms, PI: 1 to 3 ms)
+					local blocksCounted = blockArea:CountAllNonAirBlocksAndMetas()
+					for idMeta, amount in pairs(blocksCounted) do
+						local tbIdMeta = StringSplit(idMeta, "-")
+						local id = tonumber(tbIdMeta[1])
+						local meta = tonumber(tbIdMeta[2])
+
+
+
+						-- if (BLOCK_VALUES[id] ~= nil) then
+						-- 	if BLOCK_VALUES[id][meta] == nil then
+						-- 		points = points + (BLOCK_VALUES[id][0] * amount)
+						-- 	else
+						-- 		points = points + (BLOCK_VALUES[id][meta] * amount)
+						-- 	end
+						-- end
+					end
+
+
+
+					-- ## Faster, but still slow (13 to 20 ms)
+					-- local sw = cStopWatch.new()
+					-- sw:Start()
+					-- for id, metaPoint in pairs(BLOCK_VALUES) do
+					-- 	for meta, point in pairs(metaPoint) do
+					-- 		-- local amount = 0
+					-- 		-- if tbCounted[id] ~= nil and tbCounted[id][meta] ~= nil then
+					-- 		-- amount = tbCounted[id][meta]
+					-- 		-- end
+					--
+					-- 		local amount = blockArea:CountSpecificBlocks(id, meta)
+					-- 		if (amount > 0) and (BLOCK_VALUES[id] ~= nil) then
+					-- 			if BLOCK_VALUES[id][meta] == nil then
+					-- 				points = points + (BLOCK_VALUES[id][0] * amount)
+					-- 			else
+					-- 				points = points + (BLOCK_VALUES[id][meta] * amount)
+					-- 			end
+					-- 		end
+					-- 	end
+					-- end
+					print("Calc: ", sw:GetElapsedMilliseconds())
+				end
+
+				if (position + counter) == #chunks then
+					local value = round(self.m_CheckingBlocks[a_PlayerName]["points"] / 1000)
+					self.m_CheckingBlocks[a_PlayerName] = nil
+					if (value >= self.m_Default.required.value) then
+						SKYBLOCK:DoWithPlayer(a_PlayerName,
+							function(a_Player)
+								self:Complete(a_Player)
+							end)
+						return
+					end
+					SKYBLOCK:DoWithPlayer(a_PlayerName,
+						function(a_Player)
+							a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.info.calculated", { ["%1"] = value, ["%2"] = self.m_Default.required.value}))
+						end)
+
+					return
+				elseif counter == 1 then
+					self.m_CheckingBlocks[a_PlayerName]["position"] = position + counter
+					self.m_CheckingBlocks[a_PlayerName]["points"] = points
+					SKYBLOCK:ScheduleTask(1, self.callback)
+					return
+				end
+				counter = counter + 1
+			end
+		end
+	SKYBLOCK:ScheduleTask(1, self.callback)
+end
+
+
+-- Override
+function cChallengeBlocks:IsCompleted(a_Player)
+	local playerInfo = GetPlayerInfo(a_Player)
+
+	if (self.m_CheckingBlocks[a_Player:GetName()] ~= nil) then
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.info.calculatingWait"))
+		return
+	end
+
+	if (not self:HasRequirements(a_Player)) then
+		return
+	end
+
+	local posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
+	local chunks = GetChunks(posX, posZ, ISLAND_DISTANCE / 2)
+	self.m_CheckingBlocks[a_Player:GetName()] = {}
+	self.m_CheckingBlocks[a_Player:GetName()]["position"] = 0
+	self.m_CheckingBlocks[a_Player:GetName()]["points"] = 0
+	self.m_CheckingBlocks[a_Player:GetName()]["chunks"] = chunks
+
+	a_Player:SendMessageInfo(GetLanguage(a_Player):Get("challenges.info.calculatingStarted"))
+	self:CalculateValue(a_Player:GetName())
+end
+
+
+-- Override
+function cChallengeBlocks:GetChallengeType()
+	return "BLOCKS"
+end
+
+
+-- Override
+function cChallengeBlocks:InfoText(a_Player)
+	return GetLanguage(a_Player):Get("challenges.info.valueInfo")
+end
+
+
+-- Override
+function cChallengeBlocks:ToString()
+	return "cChallengeBlocks"
+end
+
+
+-- Override
+function cChallengeBlocks:Load(a_LevelName, a_ChallengeName, a_Json)
+	-- Read basic info from challenge
+	cChallengeInfo.Load(self, a_LevelName, a_ChallengeName, a_Json)
+
+	self.m_Default.required.value = tonumber(a_Json.required.value)
+end

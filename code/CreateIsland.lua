@@ -3,11 +3,13 @@ function ReserveIsland(a_IslandNumber)
 	if (a_IslandNumber == -1) then -- New island for a player
 		-- Increase island number
 		ISLAND_NUMBER = ISLAND_NUMBER + 1
+		local islandNumber = ISLAND_NUMBER
+
 		-- Save Config file to save island number
 		SaveConfiguration()
 		-- Get island position
-		local posX, posZ = GetIslandPosition(ISLAND_NUMBER)
-		return posX, posZ, ISLAND_NUMBER
+		local posX, posZ = GetIslandPosition(islandNumber)
+		return posX, posZ, islandNumber
 	else -- Use his island number
 		local posX, posZ = GetIslandPosition(a_IslandNumber)
 		return posX, posZ, a_IslandNumber

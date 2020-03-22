@@ -45,7 +45,7 @@ end
 
 -- Override
 function cChallengeLocation:InfoText(a_Player)
-	return GetLanguage(a_Player):Get(2, 4, "locationInfo")
+	return GetLanguage(a_Player):Get("challenges.info.locationInfo")
 end
 
 

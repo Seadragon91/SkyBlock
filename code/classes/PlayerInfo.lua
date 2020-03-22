@@ -9,13 +9,14 @@ function cPlayerInfo.new(a_Player)
 	self.m_PlayerUUID = a_Player:GetUUID()
 	self.m_PlayerName = a_Player:GetName()
 	self.m_IslandNumber = -1 -- Set to -1 for no island
-	self.m_PlayerFile = PLUGIN:GetLocalFolder() .. "/players/" .. a_Player:GetUUID() .. ".ini"
+	self.m_PlayerFile = PATH_PLUGIN_DATA .. "/players/" .. a_Player:GetUUID() .. ".ini"
 	self.m_IsLevel = LEVELS[1].m_LevelName -- Set first level
 	self.m_CompletedChallenges = {}
 	self.m_CompletedChallenges[self.m_IsLevel] = {}
 	self.m_InFriendList = {}
 	self.m_IsRestarting = false
 	self.m_Language = ""
+	self.m_WinChallengePosition = 1
 
 	self:Load(a_Player) -- Check if there is a player file, if yes load it
 	if (self.m_IslandNumber ~= -1) then -- Load island file
@@ -23,6 +24,8 @@ function cPlayerInfo.new(a_Player)
 	end
 	return self
 end
+
+
 
 -- Check if player has completed the challenge
 function cPlayerInfo:HasCompleted(a_LevelName, a_ChallengeName)

@@ -1,16 +1,22 @@
 -- Air generator
 function OnChunkGenerating(a_World, a_ChunkX, a_ChunkZ, a_ChunkDesc)
 	if (a_World:GetName() == WORLD_NAME) then
-		FillBlocks(a_ChunkDesc) -- fill entire chunk with air
+		FillBlocks(a_ChunkDesc, a_ChunkX, a_ChunkZ) -- fill entire chunk with air
 	end
 end
 
-function FillBlocks(a_ChunkDesc)
+function FillBlocks(a_ChunkDesc, a_ChunkX, a_ChunkZ)
 	a_ChunkDesc:FillBlocks(E_BLOCK_AIR, 0)
 	a_ChunkDesc:SetUseDefaultBiomes(false)
 	a_ChunkDesc:SetUseDefaultHeight(false)
 	a_ChunkDesc:SetUseDefaultComposition(false)
 	a_ChunkDesc:SetUseDefaultFinish(false)
+
+	for x = 0, 15 do
+		for y = 0, 15 do
+			a_ChunkDesc:SetBiome(x, y, biPlains)
+		end
+	end
 end
 
 -- Player quits
@@ -57,6 +63,11 @@ function OnPlayerSpawn(a_Player)
 			return -- His island, return here then he gets to the last position
 		end
 
+		-- Check if player is on spawn plattform
+		if (GetIslandNumber(a_Player:GetPosX(), a_Player:GetPosZ()) == 0) then
+			return
+		end
+
 		local posX, posZ = GetIslandPosition(playerInfo.m_IslandNumber)
 		local playerName = a_Player:GetName()
 
@@ -72,10 +83,10 @@ function OnPlayerSpawn(a_Player)
 end
 
 function OnPlayerChangedWorld(a_Entity, a_FromWorld)
-	if (not a_Entity:IsPlayer()) then
+	if (not a_Entity:IsPlayer()) then -- TODO: Missing world check?
 		return
 	end
-	RemovePlayer(a_Entity, a_FromWorld:GetName())
+	RemovePlayer(a_Entity, a_FromWorld:GetName()) -- TODO
 end
 
 -- Handle the spawn schematic
@@ -90,9 +101,10 @@ function OnWorldLoaded(a_World)
 
 	-- Load chunks for spawn tower
 	SKYBLOCK:ChunkStay(
-		{ {0,0}, {-1,0}, {-1,-1}, {0,-1} },
+		{ {0, 0}, {-1, 0}, {-1, -1}, {0, -1} },
 		nil,
 		function()
+			local fromSchematic = true
 			local area = cBlockArea()
 			if (area:LoadFromSchematicFile(PLUGIN:GetLocalFolder() .. "/" .. SPAWN_SCHEMATIC)) then
 				local weOffset = area:GetWEOffset()
@@ -104,6 +116,7 @@ function OnWorldLoaded(a_World)
 				SPAWN_CREATED = true
 				SaveConfiguration()
 			else -- Error or no schematic found, create default spawn
+				fromSchematic = false
 				for x = -5,5 do
 					for z = -5,5 do
 						SKYBLOCK:SetBlock(x, 169, z, E_BLOCK_STONE, 0)
@@ -111,6 +124,18 @@ function OnWorldLoaded(a_World)
 				end
 				SPAWN_CREATED = true
 				SaveConfiguration()
+			end
+
+			local valid, posYHeight = SKYBLOCK:TryGetHeight(0, 0)
+			if valid then
+				if fromSchematic then
+					-- 16 blocks below, because of fire and water blocks above
+					SKYBLOCK:SetSpawn(0, posYHeight - 16, 0)
+				else
+					SKYBLOCK:SetSpawn(0, posYHeight, 0)
+				end
+			else
+				SKYBLOCK:SetSpawn(0, 169, 0)
 			end
 		end
 	)
@@ -133,23 +158,23 @@ function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
 		local posX = a_Player:GetPosX()
 		local posZ = a_Player:GetPosZ()
 
-		if(a_Player:GetEquippedItem().m_ItemType == 280) then
+		if(a_Player:GetEquippedItem().m_ItemType == E_ITEM_STICK) then
 			local islandNumber = GetIslandNumber(posX, posZ)
 			if (islandNumber == 0) then
-				a_Player:SendMessageInfo(GetLanguage(a_Player):Get(4, 2, "spawnArea"))
+				a_Player:SendMessageInfo(GetLanguage(a_Player):Get("nocommand.messages.spawnArea"))
 				return true
 			end
 
 			local islandInfo = GetIslandInfo(islandNumber)
 			if (islandInfo == nil) then
-				a_Player:SendMessageInfo(GetLanguage(a_Player):Get(4, 2, "unknownArea"))
+				a_Player:SendMessageInfo(GetLanguage(a_Player):Get("nocommand.messages.unknownArea"))
 				return true
 			end
 
-			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(4, 2, "islandNumber", { ["%1"] = islandInfo.m_IslandNumber }))
-			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(4, 2, "islandOwner", { ["%1"] = islandInfo.m_OwnerName }))
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get("nocommand.messages.islandNumber", { ["%1"] = islandInfo.m_IslandNumber }))
+			a_Player:SendMessageInfo(GetLanguage(a_Player):Get("nocommand.messages.islandOwner", { ["%1"] = islandInfo.m_OwnerName }))
 
-			local friends = GetLanguage(a_Player):Get(4, 2, "friends")
+			local friends = GetLanguage(a_Player):Get("nocommand.messages.friends")
 			local amount = GetAmount(islandInfo.m_Friends)
 			local counter = 0
 			for _, playerName in pairs(islandInfo.m_Friends) do
@@ -160,7 +185,9 @@ function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
 				end
 			end
 
-			a_Player:SendMessageInfo(friends)
+			if counter > 0 then
+				a_Player:SendMessageInfo(friends)
+			end
 			return true
 		end
 		return CancelEvent(a_Player, posX, posZ)
@@ -182,7 +209,7 @@ function OnPlayerRightClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
 	if (a_Player:GetWorld():GetBlock(a_BlockX, a_BlockY, a_BlockZ) == E_BLOCK_OBSIDIAN) then
 		a_Player:GetWorld():SetBlock(a_BlockX, a_BlockY, a_BlockZ, E_BLOCK_LAVA, 0)
 		playerInfo.m_ResetObsidian = false
-		a_Player:SendMessageInfo(GetLanguage(a_Player):Get(4, 2, "obsidianToLava"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("nocommand.messages.obsidianToLava"))
 	end
 end
 

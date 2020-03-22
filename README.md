@@ -1,4 +1,4 @@
-SkyBlock V3
+SkyBlock V4
 ===========
 
 SkyBlock lua plugin for Cuberite, the c++ minecraft server.

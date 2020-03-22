@@ -14,37 +14,44 @@ function cChallengeItems:IsCompleted(a_Player)
 	local playerInfo = GetPlayerInfo(a_Player)
 
 	if (not self:HasRequirements(a_Player)) then
-		return
+		return false
 	end
 
 	if (playerInfo.m_CompletedChallenges[self.m_LevelName][self.m_ChallengeName]) then
-		for i = 1, #self.m_RptRequiredItems do
-			if (not a_Player:GetInventory():HasItems(self.m_RptRequiredItems[i])) then
-				a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "notRequiredItems"))
-				return
+		local tbItems = CollectItems(self.m_Repeat.required.items)
+
+		for id, metaAmount in pairs(tbItems) do
+			for meta, amount in pairs(metaAmount) do
+				if a_Player:GetInventory():HowManyItems(cItem(id, meta)) < amount then
+					return false
+				end
 			end
 		end
 
-		for i = 1, #self.m_RptRequiredItems do
-			a_Player:GetInventory():RemoveItem(self.m_RptRequiredItems[i])
+		for _, item in pairs(self.m_Repeat.required.items) do
+			a_Player:GetInventory():RemoveItem(item)
 		end
 
 		self:Complete(a_Player)
-		return
+		return true
 	end
 
-	for i = 1, #self.m_RequiredItems do
-		if (not a_Player:GetInventory():HasItems(self.m_RequiredItems[i])) then
-			a_Player:SendMessageInfo(GetLanguage(a_Player):Get(2, 4, "notRequiredItems"))
-			return
+	local tbItems = CollectItems(self.m_Default.required.items)
+
+	for id, metaAmount in pairs(tbItems) do
+		for meta, amount in pairs(metaAmount) do
+			if a_Player:GetInventory():HowManyItems(cItem(id, meta)) < amount then
+				return false
+			end
 		end
 	end
 
-	for i = 1, #self.m_RequiredItems do
-		a_Player:GetInventory():RemoveItem(self.m_RequiredItems[i])
+	for _, item in pairs(self.m_Default.required.items) do
+		a_Player:GetInventory():RemoveItem(item)
 	end
 
 	self:Complete(a_Player)
+	return true
 end
 
 
@@ -56,7 +63,7 @@ end
 
 -- Override
 function cChallengeItems:InfoText(a_Player)
-	return GetLanguage(a_Player):Get(2, 4, "itemsInfo")
+	return GetLanguage(a_Player):Get("challenges.info.itemsInfo")
 end
 
 
@@ -67,11 +74,13 @@ end
 
 
 -- Override
-function cChallengeItems:Load(a_LevelIni)
-	self.m_RequiredItems = ParseStringToItems(a_LevelIni:GetValue(self.m_ChallengeName, "requiredItems"))
+function cChallengeItems:Load(a_LevelName, a_ChallengeName, a_Json)
+	-- Read basic info from challenge
+	cChallengeInfo.Load(self, a_LevelName, a_ChallengeName, a_Json)
 
-	if (self.m_IsRepeatable) then
-		self.m_RptRequiredItems = ParseStringToItems(a_LevelIni:GetValue(self.m_ChallengeName, "rpt_requiredItems"))
+	self.m_Default.required.items = ParseStringToItems(a_Json.required.items)
+
+	if self.m_IsRepeatable then
+		self.m_Repeat.required.items = ParseStringToItems(a_Json.repeatable.required.items)
 	end
-	return true
 end
