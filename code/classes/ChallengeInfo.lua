@@ -80,10 +80,6 @@ function cChallengeInfo:AddAndOrDropItems(a_Player, a_Items)
 		table.insert(tbItemsCopy, cItem(item))
 	end
 
-	for i = #tbItemsCopy, 1, -1 do
-		print(tbItemsCopy[i].m_ItemType)
-	end
-
 	-- First check if the items can fit
 	for i = #tbItemsCopy, 1, -1 do
 		local item = tbItemsCopy[i]
@@ -186,7 +182,6 @@ function cChallengeInfo:Load(a_LevelName, a_ChallengeName, a_Json)
 	self.m_Default = self:Extract(a_Json)
 
 	if (a_Json.repeatable ~= nil) then
-
 		-- If repeatable.enabled is missing, default true otherwise false
 		if (a_Json.repeatable.enabled == nil or
 			a_Json.repeatable.enabled == true)
