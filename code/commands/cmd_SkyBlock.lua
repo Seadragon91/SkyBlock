@@ -9,15 +9,18 @@ function CommandSkyBlock(a_Split, a_Player)
 	if (a_Split[2] == "help") then
 		a_Player:SendMessage(GetLanguage(a_Player):Get("skyblock.help.title"))
 
-		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isHome)
-		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isHomeSet)
-		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isObsidian)
-		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isAddFriend)
-		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isAddGuest)
-		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.IsRemove)
-		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.IsJoin)
-		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isList)
-		a_Player:SendMessageInfo(self.m_Sentences.skyblock.help.isRestart)
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.help.join"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.help.play"))
+
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.help.isHome"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.help.isHomeSet"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.help.isObsidian"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.help.isAddFriend"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.help.isAddGuest"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.help.IsRemove"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.help.IsJoin"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.help.isList"))
+		a_Player:SendMessageInfo(GetLanguage(a_Player):Get("skyblock.help.isRestart"))
 		return true
 	end
 
