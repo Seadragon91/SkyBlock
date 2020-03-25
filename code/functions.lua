@@ -147,6 +147,12 @@ end
 
 
 function TeleportToIsland(a_Player, a_IslandInfo)
+    if not(a_Player:GetWorld():GetDimension() == dimOverworld) then
+        a_Player:MoveToWorld(SKYBLOCK, true)
+        SKYBLOCK:ScheduleTask(2, function ()
+        TeleportToIsland(a_Player, a_IslandInfo)
+        end)
+    end
 	local playerInfo = GetPlayerInfo(a_Player)
 	local posX, posY, posZ, yaw, pitch
 	if (a_IslandInfo == nil) then
