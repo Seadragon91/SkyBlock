@@ -171,7 +171,7 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 				posY = a_Player:GetWorld():GetSpawnY()
 
 				if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
-					a_Player:MoveToWorld(SKYBLOCK, Vector3d(posX, posY, posZ))
+					a_Player:MoveToWorld(SKYBLOCK, true, Vector3d(posX, posY, posZ))
 					a_Player:SendMessageSuccess(GetLanguage(a_Player):Get("skyblock.join.welcome"))
 				else
 					a_Player:TeleportToCoords(posX, posY, posZ)
@@ -183,7 +183,7 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 			local worldChange = false
 			if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
 				worldChange = true
-				a_Player:MoveToWorld(SKYBLOCK, Vector3d(posX, posY, posZ))
+				a_Player:MoveToWorld(SKYBLOCK, true, Vector3d(posX, posY, posZ))
 			else
 				a_Player:TeleportToCoords(posX, posY, posZ)
 			end
