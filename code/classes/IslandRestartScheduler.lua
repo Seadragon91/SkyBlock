@@ -50,8 +50,9 @@ function cIslandRestartScheduler:ScheduleRestart()
 
     local islandInfo = GetIslandInfo(self.m_Islands[1])
 
-    local posX, posZ = GetIslandPosition(islandInfo.m_IslandNumber)
-    RemoveIsland(posX, posZ) -- Recreates all chunks in the area of the island
+    -- local posX, posZ = GetIslandPosition(islandInfo.m_IslandNumber)
+    -- RemoveIsland(posX, posZ) -- Recreates all chunks in the area of the island
+    local posX, posZ, islandNumber = ReserveIsland(-1)
 
     local playerName = islandInfo.m_OwnerName
 
@@ -68,6 +69,17 @@ function cIslandRestartScheduler:ScheduleRestart()
                     { unpack(GetChunks(posX, posZ, 16)) },
                     nil,
                     function()
+                        CreateIsland(a_FoundPlayer, posX, posZ)
+                        playerInfo.m_IslandNumber = islandNumber
+                        playerInfo:Save()
+
+                        local islandInfo = cIslandInfo.new(islandNumber)
+                        islandInfo:SetOwner(a_FoundPlayer)
+                        islandInfo:Save()
+
+                        TeleportToIsland(a_FoundPlayer, islandInfo)
+                        -- a_Player:SendMessageSuccess(GetLanguage(a_Player):Get("skyblock.play.welcome"))
+
                         a_FoundPlayer:TeleportToCoords(posX, 151, posZ);
                         a_FoundPlayer:SetFoodLevel(20)
                         a_FoundPlayer:SetHealth(a_FoundPlayer:GetMaxHealth())
