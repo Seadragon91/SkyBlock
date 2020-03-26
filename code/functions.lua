@@ -168,7 +168,7 @@ function TeleportToIsland(a_Player, a_IslandInfo)
 		nil,
 		function()
 			if (a_IslandInfo == nil) then
-				posY = a_Player:GetWorld():GetSpawnY()
+				posY = SKYBLOCK:GetSpawnY()
 
 				if (a_Player:GetWorld():GetName() ~= WORLD_NAME) then
 					a_Player:MoveToWorld(SKYBLOCK, true, Vector3d(posX, posY, posZ))
