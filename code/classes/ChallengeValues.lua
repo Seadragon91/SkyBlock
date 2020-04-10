@@ -32,7 +32,7 @@ function cChallengeValues:CalculateValue(a_PlayerName)
 				local cz = chunks[position + counter][2] * 16
 				local blockArea = cBlockArea()
 
-				blockArea:Read(SKYBLOCK, cx, cx + 15, 0, 255, cz, cz + 15, 3)
+				blockArea:Read(SKYBLOCK, cx - 15, cx + 15, 0, 255, cz - 15, cz + 15, 3)
 
 				-- Let's calculate
 				if blockArea:CountNonAirBlocks() > 0 then
