@@ -7,14 +7,15 @@ cLanguage.__index = cLanguage
 function cLanguage.new(a_Language)
 	local self = setmetatable({}, cLanguage)
 
-	self.Create(self)
+	self:Create()
 
 	if (a_Language == nil) then
 		self.m_Language = "english.ini"
 	else
 		self.m_Language = a_Language
 	end
-	self.Load(self)
+
+	self:Load()
 	return self
 end
 
@@ -24,244 +25,222 @@ function cLanguage:Create()
 
 	-- cmd_SkyBlock.lua
 
-	-- skyblock = 1
-	self.m_Indexes[1] = {}
-	self.m_Indexes[1][1] = "skyblock"
-	self.m_Sentences[1] = {}
+	-- skyblock
+	self.m_Sentences.skyblock = {}
 
-	-- General = 2
-	self.m_Indexes[1][2] = "General"
-	self.m_Sentences[1][2] = {}
-	self.m_Sentences[1][2]["skyblock"] = "Command for the skyblock plugin. Type skyblock help for a list of commands and arguments."
-	self.m_Sentences[1][2]["noPermission"] = "You don't have the permission for that command."
-	self.m_Sentences[1][2]["unknownArg"] = "Unknown argument."
+	self.m_Sentences.skyblock.general = {}
+	self.m_Sentences.skyblock.general.skyblock = "Command for the skyblock plugin. Type /skyblock help for a list of commands and arguments."
+	self.m_Sentences.skyblock.general.noPermission = "You don't have the permission for this command."
+	self.m_Sentences.skyblock.general.unknownArg = "Unknown argument."
 
-	-- Help = 3
-	self.m_Indexes[1][3] = "Help"
-	self.m_Sentences[1][3] = {}
-	self.m_Sentences[1][3]["title"] = "--- Commands for the skyblock plugin ---"
-	self.m_Sentences[1][3]["1"] = "/skyblock join - Join the world skyblock and comes to a spawn platform."
-	self.m_Sentences[1][3]["2"] = "/skyblock play - Get an island and start playing."
+	-- Help
+	self.m_Sentences.skyblock.help = {}
+	self.m_Sentences.skyblock.help.title = "--- " .. cChatColor.Green .. "Commands for the skyblock plugin" .. cChatColor.White .. " ---"
+	self.m_Sentences.skyblock.help.join = "/skyblock join - Teleports you to the spawn platform of the skyblock world."
+	self.m_Sentences.skyblock.help.play = "/skyblock play - Get an island and start playing."
 
-	self.m_Sentences[1][3]["3"] = "/challenges - List all challenges"
-	self.m_Sentences[1][3]["4"] = "/challenges info <name> - Shows informations to the challenge"
-	self.m_Sentences[1][3]["5"] = "/challenges complete <name> - Complete the challenge"
+	self.m_Sentences.skyblock.help.isHome = "/island home - Teleport back to your island"
+	self.m_Sentences.skyblock.help.isHomeSet = "/island home set - Change your island home location"
+	self.m_Sentences.skyblock.help.isObsidian = "/island obsidian - Change obsidian back to lava"
+	self.m_Sentences.skyblock.help.isAddFriend = "/island add <player> - Add a player to your friend list"
+	self.m_Sentences.skyblock.help.isAddGuest = "/island inv <player> - Invite a player as a guest"
+	self.m_Sentences.skyblock.help.isInviteAsk = "/island ask <player> - Ask the player if you can visit his island"
+	self.m_Sentences.skyblock.help.IsRemove = "/island remove <player> - Remove a player from your friend list"
+	self.m_Sentences.skyblock.help.IsJoin = "/island join <player> - Teleport to a friends island"
+	self.m_Sentences.skyblock.help.isList = "/island list - List your friends and islands who you can join"
+	self.m_Sentences.skyblock.help.isRestart = "/island restart - Start an new island"
 
-	self.m_Sentences[1][3]["6"] = "/island home - Teleport back to your home location of the island"
-	self.m_Sentences[1][3]["7"] = "/island home set - Change home location on island"
-	self.m_Sentences[1][3]["8"] = "/island obsidian - Change obsidian backt to lava"
-	self.m_Sentences[1][3]["9"] = "/island add <player> - Add player to your friend list"
-	self.m_Sentences[1][3]["10"] = "/island remove <player> - Remove player from your friend list"
-	self.m_Sentences[1][3]["11"] = "/island join <player> - Teleport to a friends island"
-	self.m_Sentences[1][3]["12"] = "/island list - List your friends and islands who you can join"
-	self.m_Sentences[1][3]["13"] = "/island restart - Start an new island"
+	self.m_Sentences.skyblock.help.challenges = "/challenges - Opens the challenge window"
 
-	-- Join = 4
-	self.m_Indexes[1][4] = "Join"
-	self.m_Sentences[1][4] = {}
-	self.m_Sentences[1][4]["welcomeBack"] = "Welcome back to the spawn platform."
-	self.m_Sentences[1][4]["welcome"] = "Welcome to the world skyblock. Type /skyblock play to get an island."
-	self.m_Sentences[1][4]["missingWorld"] = "Command failed. Couldn't find the world %1."
+	-- Join
+	self.m_Sentences.skyblock.join = {}
+	self.m_Sentences.skyblock.join.welcomeBack = "Welcome back to the spawn platform."
+	self.m_Sentences.skyblock.join.welcome = "Welcome to the world skyblock. Type /skyblock play to get an island."
+	self.m_Sentences.skyblock.join.missingWorld = "Command failed. Couldn't find the world %1."
 
-	-- Play = 5
-	self.m_Indexes[1][5] = "Play"
-	self.m_Sentences[1][5] = {}
-	self.m_Sentences[1][5]["welcome"] = "Welcome to your island. Do not fall and make no obsidian :-)"
-	self.m_Sentences[1][5]["welcomeBack"] = "Welcome back %1"
-	self.m_Sentences[1][5]["welcomeTo"] = "Welcome to the island from %1!" -- functions.lua
+	-- Play
+	self.m_Sentences.skyblock.play = {}
+	self.m_Sentences.skyblock.play.welcome = "Welcome to your island. Do not fall and make no obsidian :-)"
+	self.m_Sentences.skyblock.play.welcomeBack = "Welcome back %1"
+	self.m_Sentences.skyblock.play.welcomeTo = "Welcome to the island from %1." -- functions.lua
 
-	-- Recreate = 6
-	self.m_Indexes[1][6] = "Recreate"
-	self.m_Sentences[1][6] = {}
-	self.m_Sentences[1][6]["recreatedSpawn"] = "Recreated spawn from schematic file."
-	self.m_Sentences[1][6]["schematicError"] = "Schematic not found or error occurred."
+	-- Recreate
+	self.m_Sentences.skyblock.recreate = {}
+	self.m_Sentences.skyblock.recreate.recreatedSpawn = "Recreated spawn from schematic file."
+	self.m_Sentences.skyblock.recreate.schematicError = "Schematic not found or error occurred."
 
-	-- Language = 7
-	self.m_Indexes[1][7] = "Language"
-	self.m_Sentences[1][7] = {}
-	self.m_Sentences[1][7]["languageFiles"] = "Language files: %1"
-	self.m_Sentences[1][7]["unknownLanguage"] = "There is no language file with that name."
-	self.m_Sentences[1][7]["changedLanguage"] = "Changed language to %1."
+	-- Language
+	self.m_Sentences.skyblock.language = {}
+	self.m_Sentences.skyblock.language.languageFiles = "Language files: %1"
+	self.m_Sentences.skyblock.language.unknownLanguage = "There is no language file with that name."
+	self.m_Sentences.skyblock.language.changedLanguage = "Changed language to %1."
 
-
-	-- cmd_Challenges.lua
-
-	-- challenges = 2.1
-	self.m_Indexes[2] = {}
-	self.m_Indexes[2][1] = "challenges"
-	self.m_Sentences[2] = {}
-
-	-- General = 2
-	self.m_Indexes[2][2] = "General"
-	self.m_Sentences[2][2] = {}
-	self.m_Sentences[2][2]["level"] = "--- Level: %1 ---"
-	self.m_Sentences[2][2]["lockedLevels"] = "Locked levels: "
-	self.m_Sentences[2][2]["unknownName"] = "There is no challenge with that name."
-	self.m_Sentences[2][2]["unknownArg"] = "Unknwown argument."
-
-	-- Info = 3
-	self.m_Indexes[2][3] = "Info"
-	self.m_Sentences[2][3] = {}
-	self.m_Sentences[2][3]["gatherItems"] = cChatColor.LightGreen .. "Gather this items: " .. cChatColor.White
-	self.m_Sentences[2][3]["forCompletion"] = cChatColor.Gold .. "You get for completion: " .. cChatColor.White
-	self.m_Sentences[2][3]["forRepeating"] = "For repeating:"
-
-	-- Complete = 4
-	self.m_Indexes[2][4] = "Complete"
-	self.m_Sentences[2][4] = {}
-	self.m_Sentences[2][4]["noIsland"] = "You have no island. Type /skyblock play first."
-	self.m_Sentences[2][4]["unknownName"] = "Unknown challenge name."
-
-	-- Check = 5
-	self.m_Indexes[2][5] = "Check"
-	self.m_Sentences[2][5] = {}
-	self.m_Sentences[2][5]["noRepeatableItems"] = "This challenge has no repeatable items."
-	self.m_Sentences[2][5]["gotRequiredItems"] = "You got the required items."
-	self.m_Sentences[2][5]["gotRewardItems"] = "You got the reward items."
+	-- challenges
+	self.m_Sentences.challenges = {}
 
 	-- ChallengeInfo.lua
-	self.m_Sentences[2][4]["notLevel"] = "You don't have the level to complete that challenge."
-	self.m_Sentences[2][4]["notRepeatable"] = "This challenge is not repeatable."
-	self.m_Sentences[2][4]["repeated"] = "Congrats you repeated the challenge %1."
-	self.m_Sentences[2][4]["completed"] = "Congrats you completed the challenge %1."
-	self.m_Sentences[2][4]["allLevels"] = "You completed all levels and all challenges."
-	self.m_Sentences[2][4]["nextLevel"] = "Congrats. You unlocked next level %1."
+	self.m_Sentences.challenges.info = {}
+	self.m_Sentences.challenges.info.notLevel = "You don't have the level to complete that challenge."
+	self.m_Sentences.challenges.info.repeated = "Congrats you repeated the challenge %1."
+	self.m_Sentences.challenges.info.completed = "Congrats you completed the challenge %1."
+	self.m_Sentences.challenges.info.allLevels = "You completed all levels and all challenges."
+	self.m_Sentences.challenges.info.nextLevel = "Congrats. You unlocked next level %1."
+	self.m_Sentences.challenges.info.itemsDropped = "Reward items dropped, as your inventory had not enough place."
 
-	-- ChallengeItems.lua
-	self.m_Sentences[2][4]["notRequiredItems"] = "You don't have the required items."
-	self.m_Sentences[2][4]["itemsInfo"] = "Gather this items: "
+	-- ChallengeWindow.lua
+	self.m_Sentences.challenges.window = {}
+	self.m_Sentences.challenges.window.title = cChatColor.Green .. "Challenges"
+	self.m_Sentences.challenges.window.isRepeatable = cChatColor.LightBlue .. "This challenge is repeatable"
+	self.m_Sentences.challenges.window.isCompleted = cChatColor.LightPurple .. "This challenge has been completed"
+	self.m_Sentences.challenges.window.requiredItems = cChatColor.Yellow .. "This items are required:"
+	self.m_Sentences.challenges.window.requiredIslandValue = cChatColor.Yellow .. "This island value is required:"
+	self.m_Sentences.challenges.window.requiredBlocks = cChatColor.Gray .. "This blocks are required:"
+	self.m_Sentences.challenges.window.reward = cChatColor.Green .. "Reward"
+	self.m_Sentences.challenges.window.clickToComplete = cChatColor.Yellow .. "Click to complete this challenge"
+	self.m_Sentences.challenges.window.goBack = cChatColor.LightBlue .. "Click to go back"
+	self.m_Sentences.challenges.window.goForward = cChatColor.LightBlue .. "Click to go forward"
+	self.m_Sentences.challenges.window.moreToUnlock = cChatColor.Yellow .. "Complete %1 more to unlock"
+	self.m_Sentences.challenges.window.nextLevel = cChatColor.LightBlue .. "Next Level: " .. cChatColor.Green .. " %1"
+	self.m_Sentences.challenges.window.levelInfo = cChatColor.LightBlue .. "Level: " .. cChatColor.Green .. "%1"
 
 	-- ChallengeValues.lua
-	self.m_Sentences[2][4]["calculated"] = "Your island value is %1, you need %2 for completing."
-	self.m_Sentences[2][4]["calculatingWait"] = "Your island value is already calculating. Please wait..."
-	self.m_Sentences[2][4]["calculatingStarted"] = "Your island value is calculating..."
-	self.m_Sentences[2][4]["valueInfo"] = "Reach that island value: "
+	self.m_Sentences.challenges.value = {}
+	self.m_Sentences.challenges.value.calculated = "Your island value is %1, you need %2 for completing."
+	self.m_Sentences.challenges.value.calculatingWait = "Calculating your island value already. Please wait..."
+	self.m_Sentences.challenges.value.calculatingStarted = "Calculating your island value..."
+
+	-- ChallengeBlocks.lua
+	self.m_Sentences.challenges.blocks = {}
+	self.m_Sentences.challenges.blocks.checkingStarted = "Checking the island for the blocks. Please wait..."
+	self.m_Sentences.challenges.blocks.checkingWait = "Checking your island for the blocks already. Please wait..."
+	self.m_Sentences.challenges.blocks.checked = "This blocks are missing: %1"
 
 	-- ChallengeLocation.lua
-	self.m_Sentences[2][4]["locationInfo"] = "Reach that location: "
+	-- self.m_Sentences[2][4]["locationInfo"] = "Reach that location: "
 
 	-- cmd_Island.lua
 
-	-- island = 3.1
-	self.m_Indexes[3] = {}
-	self.m_Indexes[3][1] = "island"
-	self.m_Sentences[3] = {}
+	-- island
+	self.m_Sentences.island = {}
 
-	-- General = 2
-	self.m_Indexes[3][2] = "General"
-	self.m_Sentences[3][2] = {}
-	self.m_Sentences[3][2]["noIsland"] = "You have no island. Type /skyblock play first."
-	self.m_Sentences[3][2]["unknownArg"] = "Unknown argument."
-	self.m_Sentences[3][2]["notHere"] = "This command works only in the world %1."
-	self.m_Sentences[3][2]["missingWorld"] = "Command failed. Couldn't find the world %1."
-	self.m_Sentences[3][2]["noPlayer"] = "There is no player with that name."
+	-- General
+	self.m_Sentences.island.general = {}
+	self.m_Sentences.island.general.noIsland = "You have no island. Type /skyblock play first."
+	self.m_Sentences.island.general.unknownArg = "This command is unknown. Type /skyblock help for a list of commands and arguments."
+	self.m_Sentences.island.general.notHere = "This command only works in the world %1."
+	self.m_Sentences.island.general.noPlayer = "There is no player with that name."
 
-	-- Home = 3
-	self.m_Indexes[3][3] = "Home"
-	self.m_Sentences[3][3] = {}
-	self.m_Sentences[3][3]["set_ownIsland"] = "You can use this command only on your own island."
-	self.m_Sentences[3][3]["set_changed"] = "Island home location changed."
-	self.m_Sentences[3][3]["welcomeBack"] = "Welcome back %1."
+	-- Home
+	self.m_Sentences.island.home = {}
+	self.m_Sentences.island.home.set_ownIsland = "You can use this command only on your own island."
+	self.m_Sentences.island.home.set_changed = "Your islands home location has been changed."
+	self.m_Sentences.island.home.welcomeBack = "Welcome back %1."
 
-	-- Obsidian = 4
-	self.m_Indexes[3][4] = "Obsidian"
-	self.m_Sentences[3][4] = {}
-	self.m_Sentences[3][4]["right-Click"] = "Make now an right-click on the obsidian block without any items."
+	-- Obsidian
+	self.m_Sentences.island.obsidian = {}
+	self.m_Sentences.island.obsidian.right_Click = "Make now an right-click on the obsidian block without any items."
 
-	-- Add = 5
-	self.m_Indexes[3][5] = "Add"
-	self.m_Sentences[3][5] = {}
-	self.m_Sentences[3][5]["addedPlayer"] = "Added player %1 to your island."
+	-- Add
+	self.m_Sentences.island.add = {}
+	self.m_Sentences.island.add.addedPlayer = "Added player %1 to your island."
 
-	-- Remove = 6
-	self.m_Indexes[3][6] = "Remove"
-	self.m_Sentences[3][6] = {}
-	self.m_Sentences[3][6]["removedPlayer"] = "Removed player from friend list."
+	-- Remove
+	self.m_Sentences.island.remove = {}
+	self.m_Sentences.island.remove.removedPlayer = "Removed player from friend list."
 
-	-- Join = 7
-	self.m_Indexes[3][7] = "Join"
-	self.m_Sentences[3][7] = {}
-	self.m_Sentences[3][7]["notInFriendlist"] = "You are not in his friend list."
-	self.m_Sentences[3][7]["removedFromFriendList"] = "You have been removed from his friend list."
-	self.m_Sentences[3][7]["toIsland"] = "Teleported you to the island."
+	-- Inv
+	self.m_Sentences.island.inv = {}
+	self.m_Sentences.island.inv.playerSend = "The player %1 has sent you a invite."
+	self.m_Sentences.island.inv.inviteSend = "Send a invite to player %1."
 
-	-- List = 8
-	self.m_Indexes[3][8] = "List"
-	self.m_Sentences[3][8] = {}
-	self.m_Sentences[3][8]["friends"] = "Your friends: "
-	self.m_Sentences[3][8]["canEnter"] = "Islands you can enter: "
+	-- Req
+	self.m_Sentences.island.ask = {}
+	self.m_Sentences.island.ask.inviteAsk = "The player %1 wants to visit your island. Use /island inv <player> to invite him."
 
-	-- Restart = 9
-	self.m_Indexes[3][9] = "Restart"
-	self.m_Sentences[3][9] = {}
-	self.m_Sentences[3][9]["running"] = "This command is running. Please wait..."
-	self.m_Sentences[3][9]["notOwner"] = "Restart not possible, you are not the real owner of this island. If you want to start an own one, type again /island restart."
-	self.m_Sentences[3][9]["wait"] = "Please wait 10s..."
-	self.m_Sentences[3][9]["newIsland"] = "Good luck with your new island."
+	-- Join
+	self.m_Sentences.island.join = {}
+	self.m_Sentences.island.join.notInFriendlist = "You are not invited or not in his friend list."
+	self.m_Sentences.island.join.removedFromFriendList = "You have been removed from his friend list."
+	self.m_Sentences.island.join.toIsland = "Teleported you to the island."
+
+	-- List
+	self.m_Sentences.island.list = {}
+	self.m_Sentences.island.list.friends = "Your friends: "
+	self.m_Sentences.island.list.canEnter = "Islands you can enter: "
+
+	-- Restart
+	self.m_Sentences.island.restart = {}
+	self.m_Sentences.island.restart.running = "This command is running. Please wait..."
+	self.m_Sentences.island.restart.notOwner = "Restart not possible, you are not the real owner of this island. If you want to start an own one, type again /island restart."
+	self.m_Sentences.island.restart.wait = "Please wait up to %1s..."
+	self.m_Sentences.island.restart.newIsland = "Good luck with your new island."
 
 	-- Events.lua
-	self.m_Indexes[4] = {}
-	self.m_Indexes[4][1] = "nocommand"
-	self.m_Sentences[4] = {}
+	self.m_Sentences.nocommand = {}
 
-	self.m_Indexes[4][2] = "Messages"
-	self.m_Sentences[4][2] = {}
-	self.m_Sentences[4][2]["spawnArea"] = "This is the spawn area."
-	self.m_Sentences[4][2]["unknownArea"] = "Unknown area."
-	self.m_Sentences[4][2]["islandNumber"] = "Island number: %1"
-	self.m_Sentences[4][2]["islandOwner"] = "Island owner: %1"
-	self.m_Sentences[4][2]["friends"] = "Friends: "
-	self.m_Sentences[4][2]["obsidianToLava"] = "Changed obsidian back to lava"
-	self.m_Sentences[4][2]["languageCommand"] = "Use the command /skyblock language for a list of language files."
+	self.m_Sentences.nocommand.messages = {}
+	self.m_Sentences.nocommand.messages.spawnArea = "This is the spawn area."
+	self.m_Sentences.nocommand.messages.unknownArea = "Unknown area."
+	self.m_Sentences.nocommand.messages.islandNumber = "Island number: %1"
+	self.m_Sentences.nocommand.messages.islandOwner = "Island owner: %1"
+	self.m_Sentences.nocommand.messages.friends = "Friends: "
+	self.m_Sentences.nocommand.messages.obsidianToLava = "Changed obsidian back to lava"
+	self.m_Sentences.nocommand.messages.languageCommand = "Use the command /skyblock language for a list of language files."
+
 end
 
 function cLanguage:WriteDefault()
 	local languageIni = cIniFile()
 
-	for cmd = 1, #self.m_Indexes do
-		for arg = 2, #self.m_Indexes[cmd] do
-			for path, sentence in pairs(self.m_Sentences[cmd][arg]) do
-				languageIni:SetValue(self.m_Indexes[cmd][1] .. ":" .. self.m_Indexes[cmd][arg], path, sentence, true)
+	for baseKey, tbBaseSentences in pairs(self.m_Sentences) do
+		for subKey, tbSentences in pairs(tbBaseSentences) do
+			for path, sentence in pairs(tbSentences) do
+				languageIni:SetValue(baseKey .. ":" .. subKey, path, sentence, true)
 			end
 		end
 	end
 
-	languageIni:WriteFile(PLUGIN:GetLocalFolder() .. "/languages/" .. self.m_Language)
+	languageIni:WriteFile(PATH_PLUGIN_DATA .. "/languages/" .. self.m_Language)
 end
 
 function cLanguage:Load()
 	local languageIni = cIniFile()
-	if (not languageIni:ReadFile(PLUGIN:GetLocalFolder() .. "/languages/" .. self.m_Language)) then
-		self.WriteDefault(self)
+	if (not languageIni:ReadFile(PATH_PLUGIN_DATA .. "/languages/" .. self.m_Language)) then
+		self:WriteDefault()
 		return
 	end
 
 	local toWrite = false
-	for cmd = 1, #self.m_Indexes do
-		for arg = 2, #self.m_Indexes[cmd] do
-			for path, sentence in pairs(self.m_Sentences[cmd][arg]) do
-				local temp = languageIni:GetValue(self.m_Indexes[cmd][1] .. ":" .. self.m_Indexes[cmd][arg], path)
+	for baseKey, tbBaseSentences in pairs(self.m_Sentences) do
+		for subKey, tbSentences in pairs(tbBaseSentences) do
+			for path, sentence in pairs(tbSentences) do
+				local temp = languageIni:GetValue(baseKey .. ":" .. subKey, path)
 				if (temp == "") then
 					toWrite = true
-					languageIni:SetValue(self.m_Indexes[cmd][1] .. ":" .. self.m_Indexes[cmd][arg], path, sentence, true)
+					languageIni:SetValue(baseKey .. ":" .. subKey, path, sentence, true)
 				else
-					self.m_Sentences[cmd][arg][path] = temp
+					self.m_Sentences[baseKey][subKey][path] = temp
 				end
 			end
 		end
 	end
 
 	if (toWrite) then
-		languageIni:WriteFile(PLUGIN:GetLocalFolder() .. "/languages/" .. self.m_Language)
+		languageIni:WriteFile(PATH_PLUGIN_DATA .. "/languages/" .. self.m_Language)
 	end
 end
 
-function cLanguage:Get(a_Command, a_Argument, a_Path, a_Replacement)
+function cLanguage:Get(a_Path, a_Replacement)
+	local arr = StringSplit(a_Path, ".")
+	local baseKey = arr[1]
+	local subKey = arr[2]
+	local path = arr[3]
+
 	if (a_Replacement == nil) then
-		return self.m_Sentences[a_Command][a_Argument][a_Path]
+		return self.m_Sentences[baseKey][subKey][path]
 	end
 
-	local newSentence = self.m_Sentences[a_Command][a_Argument][a_Path]
+	local newSentence = self.m_Sentences[baseKey][subKey][path]
 	for find, replace in pairs(a_Replacement) do
 		newSentence = string.gsub(newSentence, "%" .. find, replace)
 	end

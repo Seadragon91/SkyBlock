@@ -7,9 +7,10 @@ cIslandInfo.__index = cIslandInfo
 function cIslandInfo.new(a_IslandNumber)
 	local self = setmetatable({}, cIslandInfo)
 
-	self.m_IslandFile = PLUGIN:GetLocalFolder() .. "/islands/" .. a_IslandNumber .. ".ini"
+	self.m_IslandFile = PATH_PLUGIN_DATA .. "/islands/" .. a_IslandNumber .. ".ini"
 	self.m_IslandNumber = tonumber(a_IslandNumber)
 	self.m_Friends = {}
+	self.m_Guests = {}
 	self.m_HomeLocation = nil
 
 	return self
