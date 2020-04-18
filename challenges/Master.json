@@ -127,7 +127,7 @@
                 "text": "a potatoe, bread, cake, cooked chicken, cooked fish, cooked salmon, raw fish, cooked popkchop, cookie, golden apple, golden carrot, mushroom soup, pumpkin pie, steak, melon slice and a carrot"
             },
             "reward": {
-                "items": "gold_ingot:3 spawn_egg:96 emerald:5 golden_carrot",
+                "items": "gold_ingot:3 spawn_egg:1:96 emerald:5 golden_carrot",
                 "text": "3 gold, 1 mushroom cow and 5 emeralds",
                 "xp": 20
             }
@@ -137,7 +137,7 @@
             "text": "a potatoe, bread, cake, cooked chicken, cooked fish, cooked salmon, raw fish, cooked popkchop, cookie, golden apple, golden carrot, mushroom soup, pumpkin pie, steak, melon slice and a carrot"
         },
         "reward": {
-            "items": "diamond:2 record_cat:1 record_blocks:1 record_far:1 spawn_egg:96 emerald:5",
+            "items": "diamond:2 record_cat:1 record_blocks:1 record_far:1 spawn_egg:1:96 emerald:5",
             "text": "2 diamonds, 3 music discs, 1 spawn egg for mushroom cow and 5 emeralds",
             "xp": 150
         }

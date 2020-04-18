@@ -87,7 +87,7 @@
             "text": "64 nether rack, 32 soul sand, 1 ghast tear, 1 map, 1 compass and 1 clock"
         },
         "reward": {
-            "items": "golden_rail:32 rail:256 diamond:1 spawn_egg:98",
+            "items": "golden_rail:32 rail:256 diamond:1 spawn_egg:1:98",
             "text": "288 rails, 1 ocelot, 1 diamond",
             "xp": 100
         }
