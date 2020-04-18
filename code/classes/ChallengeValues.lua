@@ -31,7 +31,6 @@ function cChallengeValues:CalculateValue(a_PlayerName)
 				local cx = chunks[position + counter][1] * 16
 				local cz = chunks[position + counter][2] * 16
 				local blockArea = cBlockArea()
-
 				blockArea:Read(SKYBLOCK, cx, cx + 15, 0, 255, cz, cz + 15, 3)
 
 				-- Let's calculate
@@ -99,7 +98,7 @@ function cChallengeValues:CalculateValue(a_PlayerName)
 					-- sw:Start()
 					for id, metaPoint in pairs(BLOCK_VALUES) do
 						for meta, point in pairs(metaPoint) do
-							local amount = blockArea:CountSpecificBlocks(id, meta)
+							local amount = blockArea:CountSpecificBlocks(id)
 							if (amount > 0) and (BLOCK_VALUES[id] ~= nil) then
 								if BLOCK_VALUES[id][meta] == nil then
 									points = points + (BLOCK_VALUES[id][0] * amount)

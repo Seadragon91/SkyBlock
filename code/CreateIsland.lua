@@ -22,9 +22,9 @@ function GetChunks(a_PosX, a_PosZ, a_Radius)
 	local radius = a_Radius
 	local list = {}
 
-	for x = -radius, radius, 16 do
+	for x = -radius, (radius - 16), 16 do
 		local cx = (a_PosX + x) / 16
-		for z = -radius, radius, 16 do
+		for z = -radius, (radius - 16), 16 do
 			local cz = (a_PosZ + z) / 16
 			table.insert(list, {math.floor(cx), math.floor(cz)})
 		end
@@ -185,9 +185,9 @@ end
 function RemoveIsland(a_PosX, a_PosZ)
 	local radius = ISLAND_DISTANCE / 2
 
-	for x = -radius,radius,16 do
+	for x = -radius,(radius - 16),16 do
 		local cx = (a_PosX + x) / 16
-		for z = -radius,radius,16 do
+		for z = -radius,(radius - 16),16 do
 			local cz = (a_PosZ + z) / 16
 			SKYBLOCK:RegenerateChunk(cx, cz)
 		end
